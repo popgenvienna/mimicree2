@@ -1,7 +1,9 @@
 package mim2.qt;
 
 
-import qmimcore.misc.MimicreeThreadPool;
+import mim2.CommandFormater;
+import mimcore.misc.MimicreeLogFactory;
+import mimcore.misc.MimicreeThreadPool;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +19,7 @@ public class SimulationCommandLineParser {
 	 * @param args the command line arguments
 	 * @return
 	 */
-	public static void runMimicreeSimulations(LinkedList<String> args)
+	public static void runQTSimulations(LinkedList<String> args)
 	{
 
 		String haplotypeFile="";
@@ -100,14 +102,7 @@ public class SimulationCommandLineParser {
         }
 
 		// Create a logger to System.err
-		Logger logger= Logger.getLogger("Mimicree Logger");
-		java.util.logging.ConsoleHandler mimhandler =new java.util.logging.ConsoleHandler();
-		mimhandler.setLevel(Level.INFO);
-		if(detailedLog)mimhandler.setLevel(Level.FINEST);
-		mimhandler.setFormatter(new qmimcore.misc.MimicreeLogFormatter());
-		logger.addHandler(mimhandler);
-		logger.setUseParentHandlers(false);
-		logger.setLevel(Level.ALL);
+		Logger logger= MimicreeLogFactory.getLogger(detailedLog);
 
     
         // Parse the string with the generations
@@ -118,26 +113,25 @@ public class SimulationCommandLineParser {
 				effectSizeFile,heritability,selectionRegimFile,outputFile,simMode,replicateRuns,logger);
         
         mimframe.run();
-		logger.info("Thank you for using qtMimicree");
-		System.exit(0);
 	}
 	
 	
 	public static void printHelpMessage()
 	{
 		StringBuilder sb=new StringBuilder();
-		sb.append("--haplotypes-g0				(file) the haplotype file\n");
-		sb.append("--recombination-rate			(file) the recombination rate for windows of fixed size\n");
-		sb.append("--effect-size				(file) the causative SNPs and their effect sizes\n");
-		sb.append("--heritability				(double) the heritability\n");
-		sb.append("--chromosome-definition			(string) which chromosomes parts constitute a chromosome\n");
-		sb.append("--output-mode				(string) a coma separated list of generations to output\n");
-		sb.append("--replicate-runs			(int) how often should the simulation be repeated\n");
-		sb.append("--output-file				(file) the output file\n");
-		sb.append("--selection-regime				(file the selection regime\n");
-		sb.append("--detailed-log				print detailed log messages\n");
-		sb.append("--threads				the number of threads to use\n");
-		sb.append("--help					print the help\n");
+		sb.append("qt: Simulate truncating selection for a quantitative trait\n");
+		sb.append(CommandFormater.format("--haplotypes-g0","the haplotype file",null));
+		sb.append(CommandFormater.format("--recombination-rate","the recombination rate for windows of fixed size",null));
+		sb.append(CommandFormater.format("--effect-size","the causative SNPs and their effect sizes",null));
+		sb.append(CommandFormater.format("--heritability","the heritability",null));
+		sb.append(CommandFormater.format("--chromosome-definition","which chromosomes parts constitute a chromosome",null));
+		sb.append(CommandFormater.format("--output-mode","a coma separated list of generations to output",null));
+		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));
+		sb.append(CommandFormater.format("--output-file","the output file",null));
+		sb.append(CommandFormater.format("--selection-regime","the selection regime",null));
+		sb.append(CommandFormater.format("--detailed-log","print detailed log messages",null));
+		sb.append(CommandFormater.format("--threads","the number of threads to use",null));
+		sb.append(CommandFormater.format("--help","print the help",null));
 		System.out.print(sb.toString());
 		System.exit(1);
 	}

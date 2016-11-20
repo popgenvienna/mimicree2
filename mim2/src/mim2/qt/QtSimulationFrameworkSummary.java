@@ -1,11 +1,15 @@
 package mim2.qt;
 
-import qmimcore.data.*;
-import qmimcore.data.fitness.*;
-import qmimcore.data.recombination.*;
-import qmimcore.data.statistic.PopulationAlleleCount;
-import qmimcore.io.*;
-import qmimcore.io.misc.*;
+import mimcore.data.*;
+import mimcore.data.fitness.*;
+import mimcore.data.fitness.FitnessCalculatorDefault;
+import mimcore.data.fitness.quantitative.*;
+import mimcore.data.fitness.survival.*;
+import mimcore.data.recombination.*;
+import mimcore.data.statistic.PopulationAlleleCount;
+import mimcore.io.*;
+import mimcore.io.selectionregime.*;
+import mimcore.io.misc.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,15 +76,16 @@ public class QtSimulationFrameworkSummary {
 		RecombinationGenerator recGenerator = new RecombinationGenerator(new RecombinationRateReader(this.recombinationFile,this.logger).getRecombinationRate(),
 				new ChromosomeDefinitionReader(this.chromosomeDefinition).getRandomAssortmentGenerator());
 
-		ArrayList<DiploidGenome> dipGenomes=new qmimcore.io.DiploidGenomeReader(this.haplotypeFile,"",this.logger).readGenomes();
+		ArrayList<DiploidGenome> dipGenomes=new mimcore.io.DiploidGenomeReader(this.haplotypeFile,"",this.logger).readGenomes();
 
 		GenotypeCalculator genotypeCalculator=new GenotypeCalculatorReader(this.effectSizeFile,this.logger).readAdditiveFitness();
 		PhenotypeCalculator phenotypeCalculator=getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.heritability);
-
+		IFitnessCalculator fitnessCalculator=new FitnessCalculatorDefault();
 
 		ISelectionRegime selectionRegime=new SelectionRegimeReader(this.selectionRegimeFile,this.logger).readSelectionRegime();
+		ISurvivalFunction survivalFunction=new SurvivalRegimeTruncatingSelection(selectionRegime);
 
-		ArrayList<PopulationAlleleCount> pacs=new MultiSimulationTimestamp(dipGenomes,genotypeCalculator,phenotypeCalculator,selectionRegime,
+		ArrayList<PopulationAlleleCount> pacs=new MultiSimulationTimestamp(dipGenomes,genotypeCalculator,phenotypeCalculator,fitnessCalculator,survivalFunction,
 			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger).run();
 
 		ISummaryWriter sw = new SyncWriter(this.outputFile,this.logger);

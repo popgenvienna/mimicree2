@@ -1,12 +1,15 @@
-package inbredbasepop.simulate;
+package mim2.inbredBasePop.simulate;
 
-import qmimcore.data.DiploidGenome;
-import qmimcore.data.MatePair;
-import qmimcore.data.Population;
-import qmimcore.data.Specimen;
-import qmimcore.data.fitness.*;
-import qmimcore.data.recombination.RecombinationGenerator;
-import qmimcore.data.statistic.PACReducer;
+import mimcore.data.DiploidGenome;
+import mimcore.data.MatePair;
+import mimcore.data.Population;
+import mimcore.data.Specimen;
+import mimcore.data.fitness.FitnessCalculatorDefault;
+import mimcore.data.fitness.IFitnessCalculator;
+import mimcore.data.fitness.mating.MatingFunctionRandomMating;
+import mimcore.data.fitness.quantitative.*;
+import mimcore.data.recombination.RecombinationGenerator;
+import mimcore.data.statistic.PACReducer;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -21,6 +24,7 @@ public class SimulationInbreedingSingleIsofemaleLine {
 	private Logger logger;
 	private IGenotypeCalculator gc;
 	private IPhenotypeCalculator pc;
+	private IFitnessCalculator fc;
 	private final int runnumber;    //// TODO
 
 	//new SimulationInbreedingSingleIsofemaleLine(this.matepair,this.sizeisofemaleLine,this.geninbreeding,targets.get(k),this.recGenerator,this.logger)
@@ -35,12 +39,14 @@ public class SimulationInbreedingSingleIsofemaleLine {
 		this.gc=new GenotypeCalculatorDefault();
 		this.pc=new PhenotypeCalculatorDefault();
 		this.runnumber=runnumber;
+		this.fc=new FitnessCalculatorDefault();
 		
 	}
 
 	
 	public ArrayList<DiploidGenome> run()
 	{
+
 
 			Population startingPopulation=getStartingPopulation(new Random());
 			int startpopulationsize=startingPopulation.size();
@@ -53,11 +59,11 @@ public class SimulationInbreedingSingleIsofemaleLine {
 			for(int i=1; i<=this.geninbreeding; i++)
 			{
 				this.logger.info("Processing generation "+i+ " of isofemale line "+runnumber);
-				nextPopulation=nextPopulation.getNextGeneration(this.gc,this.pc,new MatingFunctionSmallNe(),recGenerator,this.sizeisofemaleLine);
+				nextPopulation=nextPopulation.getNextGeneration(this.gc,this.pc,fc,new MatingFunctionRandomMating(),recGenerator,this.sizeisofemaleLine);
 			}
 
 		this.logger.info("Propagating final isofemale line to a size of "+ targetCensus);
-		Population propagatedPopulation= nextPopulation.getNextGeneration(this.gc,this.pc,new MatingFunctionSmallNe(),recGenerator,this.targetCensus);
+		Population propagatedPopulation= nextPopulation.getNextGeneration(this.gc,this.pc,fc,new MatingFunctionRandomMating(),recGenerator,this.targetCensus);
 		ArrayList<DiploidGenome> genomes=new ArrayList<DiploidGenome>();
 
 
@@ -76,7 +82,8 @@ public class SimulationInbreedingSingleIsofemaleLine {
 			DiploidGenome f1child=matepair.getChild(this.recGenerator,random);
 			double genotype =this.gc.getGenotype(f1child);
 			double phenotype=this.pc.getPhenotype(genotype,random);
-			Specimen s=new Specimen(genotype,phenotype,f1child);
+			double fitness=this.fc.getFitness(f1child);
+			Specimen s=new Specimen(genotype,phenotype,fitness,f1child);
 		specs.add(s);
 		}
 		return new Population(specs);

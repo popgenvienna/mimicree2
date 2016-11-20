@@ -1,6 +1,10 @@
 package mim2.qt;
 
-import mimcore.data.fitness.*;
+
+import mimcore.data.fitness.IFitnessCalculator;
+import mimcore.data.fitness.mating.MatingFunctionRandomMating;
+import mimcore.data.fitness.quantitative.*;
+import mimcore.data.fitness.survival.ISurvivalFunction;
 import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.data.statistic.PACReducer;
 import mimcore.data.statistic.PopulationAlleleCount;
@@ -16,21 +20,23 @@ public class MultiSimulationTimestamp {
 	private final ArrayList<DiploidGenome> dipGenomes;
 	private final GenotypeCalculator gc;
 	private final PhenotypeCalculator pc;
-	private final ISelectionRegime sr;
+	private final IFitnessCalculator fc;
+	private final ISurvivalFunction sf;
 	private final RecombinationGenerator recGenerator;
 	private final HashSet<Integer> outputGenerations;
 	private final int maxGeneration;
 	private final int replicateRuns;
 	private Logger logger;
 
-	public MultiSimulationTimestamp(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator gc, PhenotypeCalculator pc, ISelectionRegime sr, RecombinationGenerator recGenerator,
+	public MultiSimulationTimestamp(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf, RecombinationGenerator recGenerator,
 									ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
 	{
 
 		this.dipGenomes=dipGenomes;
 		this.pc=pc;
 		this.gc=gc;
-		this.sr=sr;
+		this.sf=sf;
+		this.fc=fc;
 		
 		int max=0;
 		HashSet<Integer> toOutput=new HashSet<Integer>();
@@ -53,11 +59,11 @@ public class MultiSimulationTimestamp {
 		ArrayList<PopulationAlleleCount> pacs=new ArrayList<PopulationAlleleCount>();
 		for(int k =0; k<this.replicateRuns; k++)
 		{
-			Population startingPopulation=Population.loadPopulation(dipGenomes,gc,pc,new Random());
+			Population startingPopulation=Population.loadPopulation(dipGenomes,gc,pc,fc,new Random());
 			int startpopulationsize=startingPopulation.size();
 			int simulationNumber=k+1;
 			this.logger.info("Starting simulation replicate number " + simulationNumber);
-			this.logger.info("qtMimicree will proceed with forward simulations until generation " + this.maxGeneration);
+			this.logger.info("MimicrEE2 will proceed with forward simulations until generation " + this.maxGeneration);
 			this.logger.info("Average genotype of starting population "+startingPopulation.getAverageGenotype()+"; average phenotype of starting population "+startingPopulation.getAveragePhenotype());
 
 			this.logger.info("Recording base population at generation of replicate " + simulationNumber);
@@ -67,9 +73,9 @@ public class MultiSimulationTimestamp {
 			for(int i=1; i<=this.maxGeneration; i++)
 			{
 				this.logger.info("Processing generation "+i+ " of replicate run "+simulationNumber);
-				Population phenTail=nextPopulation.getPenotypicTail(sr.getSelectionIntensity(i,simulationNumber));
-				this.logger.info("Selection intensity " +sr.getSelectionIntensity(i,simulationNumber) +"; Selected "+phenTail.size()+ " for next generation; average genotype "+phenTail.getAverageGenotype() +"; average phenotype "+phenTail.getAveragePhenotype());
-				nextPopulation=phenTail.getNextGeneration(gc,pc,new MatingFunctionLargeNe(),this.recGenerator,startpopulationsize);
+				Population phenTail=sf.getSurvivors(nextPopulation, i, simulationNumber);
+				this.logger.info("Selection intensity " +sf.getSurvivorFraction(i, simulationNumber) +"; Selected "+phenTail.size()+ " for next generation; average genotype "+phenTail.getAverageGenotype() +"; average phenotype "+phenTail.getAveragePhenotype());
+				nextPopulation=phenTail.getNextGeneration(gc,pc,fc,new MatingFunctionRandomMating(),this.recGenerator,startpopulationsize);
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype());
 				if(outputGenerations.contains(i))
 				{

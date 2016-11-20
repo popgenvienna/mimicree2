@@ -1,7 +1,7 @@
-package inbredbasepop.simulate;
+package mim2.inbredBasePop.simulate;
 
 
-import qmimcore.misc.MimicreeThreadPool;
+import mimcore.misc.MimicreeThreadPool;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -101,7 +101,7 @@ public class SimulationCommandLineParser {
 		java.util.logging.ConsoleHandler mimhandler =new java.util.logging.ConsoleHandler();
 		mimhandler.setLevel(Level.INFO);
 		if(detailedLog)mimhandler.setLevel(Level.FINEST);
-		mimhandler.setFormatter(new qmimcore.misc.MimicreeLogFormatter());
+		mimhandler.setFormatter(new mimcore.misc.MimicreeLogFormatter());
 		logger.addHandler(mimhandler);
 		logger.setUseParentHandlers(false);
 		logger.setLevel(Level.ALL);

@@ -1,4 +1,4 @@
-package inbredbasepop;
+package mim2.inbredBasePop;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -18,7 +18,7 @@ public class inbredBasePop {
 
 		// Parse command lines to determine the analysis mode and the LOG
 		LinkedList<String> rawarguments=new LinkedList<String>(Arrays.asList(args));
-		inbredbasepop.simulate.SimulationCommandLineParser.runMimicreeSimulations(rawarguments);
+		mim2.inbredBasePop.simulate.SimulationCommandLineParser.runMimicreeSimulations(rawarguments);
 	}
 
 

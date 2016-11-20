@@ -1,8 +1,8 @@
-package inbredbasepop.simulate;
+package mim2.inbredBasePop.simulate;
 
-import qmimcore.data.MatePair;
-import qmimcore.data.recombination.RecombinationGenerator;
-import qmimcore.data.DiploidGenome;
+import mimcore.data.MatePair;
+import mimcore.data.recombination.RecombinationGenerator;
+import mimcore.data.DiploidGenome;
 
 
 import java.util.ArrayList;

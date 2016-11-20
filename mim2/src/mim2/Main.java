@@ -21,7 +21,7 @@ public class Main {
 			String subtask=rawarguments.remove(0);
 			if(subtask.toLowerCase().equals("qt"))
 			{
-				SimulationCommandLineParser.parseCommandline(rawarguments);
+				SimulationCommandLineParser.runQTSimulations(rawarguments);
 			}
 			else
 			{

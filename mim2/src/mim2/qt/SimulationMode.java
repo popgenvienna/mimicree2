@@ -1,4 +1,4 @@
-package qtmimicree.simulate;
+package mim2.qt;
 
 import java.util.ArrayList;
 

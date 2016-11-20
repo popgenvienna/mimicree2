@@ -1,11 +1,11 @@
-package inbredbasepop.simulate;
+package mim2.inbredBasePop.simulate;
 
-import qmimcore.data.*;
-import qmimcore.data.fitness.*;
-import qmimcore.data.recombination.*;
-import qmimcore.io.*;
-import qmimcore.io.haplotypes.DiploidGenomeWriter;
-import qmimcore.io.misc.*;
+import mimcore.data.*;
+import mimcore.data.fitness.*;
+import mimcore.data.recombination.*;
+import mimcore.io.*;
+import mimcore.io.haplotypes.DiploidGenomeWriter;
+import mimcore.io.misc.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,11 +71,11 @@ public class InbredBasePopFramework {
 		RecombinationGenerator recGenerator = new RecombinationGenerator(new RecombinationRateReader(this.recombinationFile,this.logger).getRecombinationRate(),
 				new ChromosomeDefinitionReader("").getRandomAssortmentGenerator());
 
-		ArrayList<DiploidGenome> dipGenomes=new qmimcore.io.DiploidGenomeReader(this.haplotypeFile,"",this.logger).readGenomes();
+		ArrayList<DiploidGenome> dipGenomes=new mimcore.io.DiploidGenomeReader(this.haplotypeFile,"",this.logger).readGenomes();
 		if(dipGenomes.size()!=2) throw new IllegalArgumentException("Only two diploid genomes are allowed");
 
 
-	 	MatePair matepair=new MatePair(new Specimen(1.0,1.0,dipGenomes.get(0)),new Specimen(1.0,1.0,dipGenomes.get(1)));
+	 	MatePair matepair=new MatePair(new Specimen(1.0,1.0,1.0,dipGenomes.get(0)),new Specimen(1.0,1.0,1.0,dipGenomes.get(1)));
 
 		ArrayList<DiploidGenome> basepopulation=new SimulationInbreeding(matepair, isofemaleLines, sizeBasePop, sizeisofemaleLine, geninbreeding, recGenerator, this.logger).run();
 		this.logger.info("Writing final base population of size "+basepopulation.size());
