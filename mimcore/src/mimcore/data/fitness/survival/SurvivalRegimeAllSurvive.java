@@ -11,8 +11,10 @@ public class SurvivalRegimeAllSurvive implements ISurvivalFunction {
 	{
 
 	}
-	public  Population selectSuitable(Population population, int generation, int replicate)
+	public  Population getSurvivors(Population population, int generation, int replicate)
 	{
 		return population;
 	}
+
+	public double getSurvivorFraction(int generation, int replicate){return 1.0;}
 }

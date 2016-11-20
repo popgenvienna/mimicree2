@@ -5,6 +5,7 @@ package mimcore.data;
 import mimcore.data.fitness.mating.IMatingFunction;
 import mimcore.data.fitness.quantitative.IGenotypeCalculator;
 import mimcore.data.fitness.quantitative.IPhenotypeCalculator;
+import mimcore.data.fitness.IFitnessCalculator;
 import mimcore.data.recombination.*;
 import mimcore.misc.MimicreeThreadPool;
 
@@ -63,7 +64,8 @@ public class Population {
 		{
 			double genotype=gc.getGenotype(genome);
 			double phenotype=pc.getPhenotype(genotype,random);
-			Specimen s=new Specimen(genotype,phenotype,genome);
+			double fitness=fc.getFitness(genome);
+			Specimen s=new Specimen(genotype,phenotype,fitness,genome);
 			specimens.add(s);
 
 		}
@@ -72,31 +74,7 @@ public class Population {
 		return new Population(specimens);
 	}
 
-	/**
-	 * Get the fraction of individuals having the most extreme phenotypes
-	 * @param selectedFraction
-	 * @return
-	 */
-	public Population getPenotypicTail(double selectedFraction)
-	{
-		ArrayList<Specimen>  specs=new ArrayList<Specimen>(this.specimen);
-		Collections.sort(specs,new Comparator<Specimen>() {
-			@Override
-			public int compare(Specimen s1, Specimen s2) {
-				if(s1.phenotype() < s2.phenotype()) return 1;
-				if(s1.phenotype() > s2.phenotype()) return -1;
-				return 0;
-			}
-		});
 
-		ArrayList<Specimen> toret=new ArrayList<Specimen>();
-		int toselect=(int)((double)specs.size()*selectedFraction);
-		for(int i=0; i<toselect; i++)
-		{
-			   toret.add(specs.get(i));
-		}
-		return new Population(toret);
-	}
 
 
 	
@@ -104,11 +82,11 @@ public class Population {
 	 * Obtain the next generation of the population;
 	 * @return
 	 */
-	public Population getNextGeneration( IGenotypeCalculator gc, IPhenotypeCalculator pc, IMatingFunction matingfunction,  RecombinationGenerator recGenerator, int targetN)
+	public Population getNextGeneration( IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, IMatingFunction matingfunction,  RecombinationGenerator recGenerator, int targetN)
 	{
 		// the selected ones: go and mate ..populate the earth
 		IMatingFunction mf=matingfunction.factory(this);
-		SpecimenGenerator specGen=new SpecimenGenerator(mf,gc,pc,recGenerator,targetN);
+		SpecimenGenerator specGen=new SpecimenGenerator(mf,gc,pc,fc,recGenerator,targetN);
 
 		return new Population(specGen.getSpecimen());
 	}
@@ -179,12 +157,13 @@ class SpecimenGenerator
 {
 	private final IGenotypeCalculator gc;
 	private final IPhenotypeCalculator pc;
+	private final IFitnessCalculator fc;
 	private final IMatingFunction mf;
 	private final int populationSize;
 	private final RecombinationGenerator recGen;
 
 	
-	public SpecimenGenerator(IMatingFunction mf, IGenotypeCalculator gc, IPhenotypeCalculator pc, RecombinationGenerator recGen, int populationSize )
+	public SpecimenGenerator(IMatingFunction mf, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, RecombinationGenerator recGen, int populationSize )
 	{
 		//	 * (mf,gc,pc,recGenerator,this.size());
 
@@ -193,6 +172,7 @@ class SpecimenGenerator
 		this.gc=gc;
 		this.pc=pc;
 		this.recGen=recGen;
+		this.fc=fc;
 
 
 	}
@@ -205,7 +185,7 @@ class SpecimenGenerator
 
 		for(int i=0; i<this.populationSize; i++)
 		{
-			call.add(Executors.callable(new SingleSpecimenGenerator(this.mf,this.gc,this.pc,this.recGen,col,MimicreeThreadPool.getRandomForThread(i))));
+			call.add(Executors.callable(new SingleSpecimenGenerator(this.mf,this.gc,this.pc,this.fc,this.recGen,col,MimicreeThreadPool.getRandomForThread(i))));
 		}
 
 		try
@@ -271,13 +251,15 @@ class SingleSpecimenGenerator implements Runnable
 	private final SpecimenCollector collector;
 	private final IGenotypeCalculator gc;
 	private final IPhenotypeCalculator pc;
+	private final IFitnessCalculator fc;
 	private final Random random;
 	private final RecombinationGenerator recGenerator;
-	public SingleSpecimenGenerator(IMatingFunction mf, IGenotypeCalculator gc, IPhenotypeCalculator pc, RecombinationGenerator recGen, SpecimenCollector collector, Random random)
+	public SingleSpecimenGenerator(IMatingFunction mf, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, RecombinationGenerator recGen, SpecimenCollector collector, Random random)
 	{
 		this.mf=mf;
 		this.pc=pc;
 		this.gc=gc;
+		this.fc=fc;
 		this.collector=collector;
 		this.recGenerator=recGen;
 		this.random = random;
@@ -289,7 +271,8 @@ class SingleSpecimenGenerator implements Runnable
 		DiploidGenome fertilizedEgg=mp.getChild(recGenerator,this.random);
 		double genotype=gc.getGenotype(fertilizedEgg);
 		double phenotype=pc.getPhenotype(genotype,random);
-		Specimen spec=   new Specimen(genotype,phenotype,fertilizedEgg);
+		double fitness=fc.getFitness(fertilizedEgg);
+		Specimen spec=   new Specimen(genotype,phenotype,fitness,fertilizedEgg);
 		collector.addSpecimen(spec);
 	}
 	

@@ -45,7 +45,9 @@ public class MatingFunctionRandomMating implements IMatingFunction {
 
 	
 	/**
-	 * Choose a couple for mating
+	 * Choose a couple for mating; Allow selfing
+	 * Note that most simulations tools allow selfing, so for the sake of comparability we do this too.
+	 * (Although it would be simple to forbid)
 	 * @return
 	 */
 	public MatePair getCouple(Random random)
@@ -53,14 +55,6 @@ public class MatingFunctionRandomMating implements IMatingFunction {
 		if(leng==0) throw new IllegalStateException("Can not obtain mate pairs for empty mating functions");
 		int i1   =   random.nextInt(this.leng);
 		int i2   = 	random.nextInt(this.leng);
-
-		int breakcounter=0;
-		while(i1==i2)
-		{
-			if(breakcounter>1000) throw new IllegalArgumentException("Something is fucked up; is the population shrinking");
-			i2=random.nextInt(this.leng);
-		breakcounter++;
-		}
 		MatePair mp=new MatePair(this.spec.get(i1),this.spec.get(i2));
 		return mp;
 
