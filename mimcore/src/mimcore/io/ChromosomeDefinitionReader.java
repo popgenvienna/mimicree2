@@ -1,7 +1,7 @@
-package qmimcore.io;
+package mimcore.io;
 
-import qmimcore.data.*;
-import qmimcore.data.recombination.*;
+import mimcore.data.*;
+import mimcore.data.recombination.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;

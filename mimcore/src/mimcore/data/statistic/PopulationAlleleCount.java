@@ -1,7 +1,7 @@
-package qmimcore.data.statistic;
+package mimcore.data.statistic;
 
-import qmimcore.data.haplotypes.SNP;
-import qmimcore.data.haplotypes.SNPCollection;
+import mimcore.data.haplotypes.SNP;
+import mimcore.data.haplotypes.SNPCollection;
 
 /**
  * Represents summary statistics for a single populatio

@@ -1,7 +1,7 @@
-package qmimcore.io;
+package mimcore.io;
 
-import qmimcore.data.Chromosome;
-import qmimcore.data.recombination.*;
+import mimcore.data.Chromosome;
+import mimcore.data.recombination.*;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

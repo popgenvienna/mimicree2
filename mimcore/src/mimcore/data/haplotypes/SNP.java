@@ -1,6 +1,6 @@
-package qmimcore.data.haplotypes;
+package mimcore.data.haplotypes;
 
-import qmimcore.data.GenomicPosition;
+import mimcore.data.GenomicPosition;
 
 
 /**

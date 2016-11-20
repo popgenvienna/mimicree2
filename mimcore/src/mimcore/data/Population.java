@@ -1,10 +1,12 @@
-package qmimcore.data;
+package mimcore.data;
 
 
 
-import qmimcore.data.recombination.*;
-import qmimcore.data.fitness.*;
-import qmimcore.misc.MimicreeThreadPool;
+import mimcore.data.fitness.mating.IMatingFunction;
+import mimcore.data.fitness.quantitative.IGenotypeCalculator;
+import mimcore.data.fitness.quantitative.IPhenotypeCalculator;
+import mimcore.data.recombination.*;
+import mimcore.misc.MimicreeThreadPool;
 
 
 import java.util.*;
@@ -34,7 +36,7 @@ public class Population {
 		double toret=0.0;
 		for(Specimen s: this.specimen)
 		{
-			toret+=s.phenotype();
+			toret+=s.quantPhenotype();
 		}
 		return toret/this.size();
 	}
@@ -44,7 +46,7 @@ public class Population {
 		double toret=0.0;
 		for(Specimen s: this.specimen)
 		{
-			toret+=s.genotype();
+			toret+=s.quantGenotype();
 		}
 		return toret/this.size();
 	}
@@ -53,7 +55,7 @@ public class Population {
 
 
 
-	public static Population loadPopulation(ArrayList<DiploidGenome> genomes, IGenotypeCalculator gc, IPhenotypeCalculator pc, Random random)
+	public static Population loadPopulation(ArrayList<DiploidGenome> genomes, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, Random random)
 	{
 		ArrayList<Specimen> specimens=new ArrayList<Specimen>();
 		ArrayList<Double> genotypes=new ArrayList<Double>();

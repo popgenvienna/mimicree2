@@ -1,4 +1,4 @@
-package qmimcore.data.BitArray;
+package mimcore.data.BitArray;
 
 /** 
  * Share resources for all BitArrays

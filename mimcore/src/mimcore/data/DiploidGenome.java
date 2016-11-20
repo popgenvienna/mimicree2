@@ -1,6 +1,6 @@
-package qmimcore.data;
+package mimcore.data;
 
-import qmimcore.data.haplotypes.HaploidGenome;
+import mimcore.data.haplotypes.HaploidGenome;
 
 /**
  * Immutable representation of a diploid genome

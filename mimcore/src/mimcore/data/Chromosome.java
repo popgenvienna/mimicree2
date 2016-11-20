@@ -1,4 +1,4 @@
-package qmimcore.data;
+package mimcore.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,7 +1,7 @@
-package qmimcore.io;
+package mimcore.io;
 
-import qmimcore.data.*;
-import qmimcore.data.haplotypes.*;
+import mimcore.data.*;
+import mimcore.data.haplotypes.*;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;

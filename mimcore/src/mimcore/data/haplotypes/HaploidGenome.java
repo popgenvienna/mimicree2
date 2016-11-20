@@ -1,8 +1,8 @@
-package qmimcore.data.haplotypes;
+package mimcore.data.haplotypes;
 
-import qmimcore.data.BitArray.BitArray;
-import qmimcore.data.BitArray.BitArrayBuilder;
-import qmimcore.data.GenomicPosition;
+import mimcore.data.BitArray.BitArray;
+import mimcore.data.BitArray.BitArrayBuilder;
+import mimcore.data.GenomicPosition;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -1,11 +1,11 @@
-package qtmimicree.simulate;
+package mim2.qt;
 
-import qmimcore.data.fitness.*;
-import qmimcore.data.recombination.RecombinationGenerator;
-import qmimcore.data.statistic.PACReducer;
-import qmimcore.data.statistic.PopulationAlleleCount;
-import qmimcore.data.DiploidGenome;
-import qmimcore.data.Population;
+import mimcore.data.fitness.*;
+import mimcore.data.recombination.RecombinationGenerator;
+import mimcore.data.statistic.PACReducer;
+import mimcore.data.statistic.PopulationAlleleCount;
+import mimcore.data.DiploidGenome;
+import mimcore.data.Population;
 
 import java.util.ArrayList;
 import java.util.HashSet;

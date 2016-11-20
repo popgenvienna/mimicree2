@@ -1,5 +1,7 @@
 package mim2;
 
+import mim2.qt.SimulationCommandLineParser;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -19,7 +21,7 @@ public class Main {
 			String subtask=rawarguments.remove(0);
 			if(subtask.toLowerCase().equals("qt"))
 			{
-				PpileupParser.parseCommandline(rawarguments);
+				SimulationCommandLineParser.parseCommandline(rawarguments);
 			}
 			else
 			{
@@ -40,7 +42,9 @@ public class Main {
 			sb.append(CommandFormater.format("qt","simulate truncating selection for a quantitative trait",null));
 
 			sb.append("\n== Secondary tasks ==\n");
-			sb.append(CommandFormater.format("se2pe","obtain a paired-end bam-file for individually mapped (e.g. bwasw) output files",null));
+			sb.append(CommandFormater.format("todo","todo",null));
+			sb.append("\nMimicrEE2 Version "+getVersionNumber());
+
 
 
 			//sb.append(String.format("%-22s%s","filter","filter TE insertions\n"));
@@ -50,7 +54,7 @@ public class Main {
 
 		public static String getVersionNumber()
 		{
-			return "v1.10.05";
+			return "v0.2";
 		}
 
 

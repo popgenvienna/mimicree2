@@ -1,10 +1,10 @@
-package qmimcore.io.haplotypes;
+package mimcore.io.haplotypes;
 
-import qmimcore.data.Chromosome;
-import qmimcore.data.GenomicPosition;
-import qmimcore.data.haplotypes.SNP;
-import qmimcore.data.haplotypes.SNPCollection;
-import qmimcore.data.statistic.*;
+import mimcore.data.Chromosome;
+import mimcore.data.GenomicPosition;
+import mimcore.data.haplotypes.SNP;
+import mimcore.data.haplotypes.SNPCollection;
+import mimcore.data.statistic.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;

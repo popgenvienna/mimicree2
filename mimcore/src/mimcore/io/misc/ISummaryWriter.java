@@ -1,6 +1,6 @@
-package qmimcore.io.misc;
+package mimcore.io.misc;
 
-import qmimcore.data.statistic.PopulationAlleleCount;
+import mimcore.data.statistic.PopulationAlleleCount;
 
 import java.util.ArrayList;
 

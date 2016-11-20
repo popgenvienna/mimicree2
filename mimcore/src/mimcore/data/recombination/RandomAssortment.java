@@ -1,6 +1,6 @@
-package qmimcore.data.recombination;
+package mimcore.data.recombination;
 
-import qmimcore.data.*;
+import mimcore.data.*;
 
 import java.util.HashMap;
 

@@ -1,8 +1,8 @@
-package qmimcore.data;
+package mimcore.data;
 
 
-import qmimcore.data.recombination.*;
-import qmimcore.data.haplotypes.HaploidGenome;
+import mimcore.data.recombination.*;
+import mimcore.data.haplotypes.HaploidGenome;
 import java.util.Random;
 
 /**
@@ -17,14 +17,16 @@ public class Specimen {
 
 
 
-	private final double genotype;
-	private final double phenotype;
+	private final double quantGenotype;
+	private final double quantPhenotype;
+	private final double fitness;
 	private final DiploidGenome genome;
 
-	public Specimen( double genotype, double phenotype, DiploidGenome genome)
+	public Specimen( double quantGenotype, double quantPhenotype, double fitness, DiploidGenome genome)
 	{
-		this.genotype=genotype;
-		this.phenotype=phenotype;
+		this.quantGenotype=quantGenotype;
+		this.quantPhenotype=quantPhenotype;
+		this.fitness=fitness;
 		this.genome=genome;
 	}
 
@@ -44,14 +46,19 @@ public class Specimen {
 		return recEv.getGamete(this.genome);
 	}
 	
-	public double genotype()
+	public double quantGenotype()
 	{
-		return this.genotype;
+		return this.quantGenotype;
 	}
 	
-	public double phenotype()
+	public double quantPhenotype()
 	{
-		 return this.phenotype;
+		 return this.quantPhenotype;
+	}
+
+	public double fitness()
+	{
+		return this.fitness;
 	}
 
 

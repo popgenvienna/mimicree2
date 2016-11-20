@@ -1,4 +1,4 @@
-package qmimcore.misc;
+package mimcore.misc;
 
 /**
  * Log formater for MimicrEE

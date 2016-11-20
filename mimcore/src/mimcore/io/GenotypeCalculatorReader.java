@@ -1,8 +1,9 @@
-package qmimcore.io;
+package mimcore.io;
 
-import qmimcore.data.Chromosome;
-import qmimcore.data.GenomicPosition;
-import qmimcore.data.fitness.*;
+import mimcore.data.Chromosome;
+import mimcore.data.GenomicPosition;
+import mimcore.data.fitness.quantitative.AdditiveSNPeffect;
+import mimcore.data.fitness.quantitative.GenotypeCalculator;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

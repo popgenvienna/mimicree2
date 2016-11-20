@@ -1,6 +1,6 @@
-package qmimcore.data;
+package mimcore.data;
 
-import qmimcore.data.haplotypes.*;
+import mimcore.data.haplotypes.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

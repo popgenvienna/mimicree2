@@ -1,4 +1,4 @@
-package qmimcore.data;
+package mimcore.data;
 
 
 /**

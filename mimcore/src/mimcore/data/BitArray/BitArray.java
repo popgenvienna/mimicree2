@@ -1,4 +1,4 @@
-package qmimcore.data.BitArray;
+package mimcore.data.BitArray;
 
 /** 
  * Immutable representation of BitArray;

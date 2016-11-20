@@ -1,4 +1,4 @@
-package qmimcore.data.statistic;
+package mimcore.data.statistic;
 
 /**
  * Created with IntelliJ IDEA.

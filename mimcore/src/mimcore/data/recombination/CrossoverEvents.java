@@ -1,8 +1,8 @@
-package qmimcore.data.recombination;
+package mimcore.data.recombination;
 
-import qmimcore.data.Chromosome;
-import qmimcore.data.DiploidGenome;
-import qmimcore.data.GenomicPosition;
+import mimcore.data.Chromosome;
+import mimcore.data.DiploidGenome;
+import mimcore.data.GenomicPosition;
 
 
 import java.util.ArrayList;

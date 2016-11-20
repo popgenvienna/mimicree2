@@ -1,7 +1,7 @@
-package qmimcore.data.statistic;
+package mimcore.data.statistic;
 
-import qmimcore.data.*;
-import qmimcore.data.haplotypes.*;
+import mimcore.data.*;
+import mimcore.data.haplotypes.*;
 
 import java.util.ArrayList;
 

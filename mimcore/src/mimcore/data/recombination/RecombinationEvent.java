@@ -1,10 +1,10 @@
-package qmimcore.data.recombination;
+package mimcore.data.recombination;
 
-import qmimcore.data.*;
-import qmimcore.data.BitArray.BitArrayBuilder;
-import qmimcore.data.haplotypes.HaploidGenome;
-import qmimcore.data.haplotypes.SNP;
-import qmimcore.data.haplotypes.SNPCollection;
+import mimcore.data.*;
+import mimcore.data.BitArray.BitArrayBuilder;
+import mimcore.data.haplotypes.HaploidGenome;
+import mimcore.data.haplotypes.SNP;
+import mimcore.data.haplotypes.SNPCollection;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

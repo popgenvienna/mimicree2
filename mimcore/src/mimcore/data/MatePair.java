@@ -1,7 +1,7 @@
-package qmimcore.data;
+package mimcore.data;
 
-import qmimcore.data.haplotypes.HaploidGenome;
-import qmimcore.data.recombination.RecombinationGenerator;
+import mimcore.data.haplotypes.HaploidGenome;
+import mimcore.data.recombination.RecombinationGenerator;
 import java.util.Random;
 
 /**

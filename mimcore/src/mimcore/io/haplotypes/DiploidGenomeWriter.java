@@ -1,7 +1,7 @@
-package qmimcore.io.haplotypes;
+package mimcore.io.haplotypes;
 
-import qmimcore.data.*;
-import qmimcore.data.haplotypes.*;
+import mimcore.data.*;
+import mimcore.data.haplotypes.*;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;

@@ -1,9 +1,9 @@
-package qmimcore.io.misc;
+package mimcore.io.misc;
 
-import qmimcore.data.fitness.*;
-import qmimcore.data.haplotypes.SNP;
-import qmimcore.data.haplotypes.SNPCollection;
-import qmimcore.data.statistic.*;
+import mimcore.data.fitness.*;
+import mimcore.data.haplotypes.SNP;
+import mimcore.data.haplotypes.SNPCollection;
+import mimcore.data.statistic.*;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

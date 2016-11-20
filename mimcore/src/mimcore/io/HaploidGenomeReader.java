@@ -1,8 +1,8 @@
-package qmimcore.io;
+package mimcore.io;
 
-import qmimcore.data.*;
-import qmimcore.data.haplotypes.*;
-import qmimcore.io.haplotypes.HaplotypeReader;
+import mimcore.data.*;
+import mimcore.data.haplotypes.*;
+import mimcore.io.haplotypes.HaplotypeReader;
 import java.io.File;
 import java.util.ArrayList;
 

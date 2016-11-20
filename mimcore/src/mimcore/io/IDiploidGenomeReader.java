@@ -1,6 +1,6 @@
-package qmimcore.io;
+package mimcore.io;
 
-import qmimcore.data.DiploidGenome;
+import mimcore.data.DiploidGenome;
 
 import java.util.ArrayList;
 
