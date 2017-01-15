@@ -1,4 +1,4 @@
-package mim2.qt;
+package mim2.qt_sync;
 
 import mimcore.data.*;
 import mimcore.data.fitness.*;
@@ -69,7 +69,7 @@ public class QtSimulationFrameworkSummary {
 	
 	public void run()
 	{
-		this.logger.info("Starting qtMimicree");
+		this.logger.info("Starting qt-sync");
 
 
 		// Load the data

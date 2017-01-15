@@ -1,4 +1,4 @@
-package mim2.qt;
+package mim2.qt_sync;
 
 
 import mim2.CommandFormater;
@@ -8,7 +8,6 @@ import mimcore.misc.MimicreeThreadPool;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -35,8 +34,9 @@ public class SimulationCommandLineParser {
 		boolean detailedLog=false;
 		int threadCount=1;
 
-	
-		
+
+		// print help if not enough arguments
+		if(args.size()<1) printHelpMessage();
         while(args.size() > 0)
         {
             String cu=args.remove(0);
@@ -44,11 +44,6 @@ public class SimulationCommandLineParser {
 			if(cu.equals("--detailed-log"))
 			{
 				detailedLog=true;
-			}
-
-			else if(cu.equals("--version"))
-			{
-				printVersion();
 			}
 			else if(cu.equals("--threads"))
 			{
@@ -109,7 +104,7 @@ public class SimulationCommandLineParser {
         SimulationMode simMode = parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
-        QtSimulationFrameworkSummary mimframe= new QtSimulationFrameworkSummary(haplotypeFile,recombinationFile,chromosomeDefinition,
+        mim2.qt_sync.QtSimulationFrameworkSummary mimframe= new QtSimulationFrameworkSummary(haplotypeFile,recombinationFile,chromosomeDefinition,
 				effectSizeFile,heritability,selectionRegimFile,outputFile,simMode,replicateRuns,logger);
         
         mimframe.run();
@@ -119,7 +114,7 @@ public class SimulationCommandLineParser {
 	public static void printHelpMessage()
 	{
 		StringBuilder sb=new StringBuilder();
-		sb.append("qt: Simulate truncating selection for a quantitative trait\n");
+		sb.append("qt-sync: Simulate truncating selection for a quantitative trait; output a summary of allele frequencies\n");
 		sb.append(CommandFormater.format("--haplotypes-g0","the haplotype file",null));
 		sb.append(CommandFormater.format("--recombination-rate","the recombination rate for windows of fixed size",null));
 		sb.append(CommandFormater.format("--effect-size","the causative SNPs and their effect sizes",null));
@@ -136,12 +131,6 @@ public class SimulationCommandLineParser {
 		System.exit(1);
 	}
 
-	public static void printVersion()
-	{
-		String version="qtMimicree version 1.03; build "+String.format("%tc",new Date(System.currentTimeMillis()));
-		System.out.println(version);
-		System.exit(1);
-	}
 
 
 	

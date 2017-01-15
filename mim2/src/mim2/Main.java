@@ -1,6 +1,6 @@
 package mim2;
 
-import mim2.qt.SimulationCommandLineParser;
+import mim2.qt_sync.SimulationCommandLineParser;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -19,9 +19,13 @@ public class Main {
 
 
 			String subtask=rawarguments.remove(0);
-			if(subtask.toLowerCase().equals("qt"))
+			if(subtask.toLowerCase().equals("qt-sync"))
 			{
-				SimulationCommandLineParser.runQTSimulations(rawarguments);
+				mim2.qt_sync.SimulationCommandLineParser.runQTSimulations(rawarguments);
+			}
+			if(subtask.toLowerCase().equals("qt-hap"))
+			{
+				mim2.qt_hap.SimulationCommandLineParser.runQTSimulations(rawarguments);
 			}
 			else
 			{
@@ -39,7 +43,9 @@ public class Main {
 			StringBuilder sb=new StringBuilder();
 			sb.append("Usage: java -Xmx4g -jar mim2.jar [subtask] [parameters of subtask]\n\n");
 			sb.append("== Main tasks ==\n");
-			sb.append(CommandFormater.format("qt","simulate truncating selection for a quantitative trait",null));
+			sb.append(CommandFormater.format("qt-sync","simulate truncating selection for a quantitative trait; output a summary of allele frequencies",null));
+			sb.append(CommandFormater.format("qt-hap","simulate truncating selection for a quantitative trait; output detailed haplotypes",null));
+
 
 			sb.append("\n== Secondary tasks ==\n");
 			sb.append(CommandFormater.format("todo","todo",null));
@@ -54,7 +60,7 @@ public class Main {
 
 		public static String getVersionNumber()
 		{
-			return "v0.2";
+			return "v0.3";
 		}
 
 

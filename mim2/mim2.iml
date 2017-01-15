@@ -7,7 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="mim2" level="project" />
     <orderEntry type="module" module-name="mimcore" />
   </component>
 </module>
-

@@ -1,4 +1,4 @@
-package mim2.qt;
+package mim2.qt_sync;
 
 import java.util.ArrayList;
 
