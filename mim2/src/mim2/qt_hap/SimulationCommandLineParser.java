@@ -123,7 +123,7 @@ public class SimulationCommandLineParser {
 		sb.append(CommandFormater.format("--chromosome-definition","which chromosomes parts constitute a chromosome",null));
 		sb.append(CommandFormater.format("--output-mode","a coma separated list of generations to output",null));
 		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));
-		sb.append(CommandFormater.format("--output-file","the output file",null));
+		sb.append(CommandFormater.format("--output-dir","the output directory",null));
 		sb.append(CommandFormater.format("--selection-regime","the selection regime",null));
 		sb.append(CommandFormater.format("--detailed-log","print detailed log messages",null));
 		sb.append(CommandFormater.format("--threads","the number of threads to use",null));
