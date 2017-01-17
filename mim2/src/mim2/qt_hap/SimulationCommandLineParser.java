@@ -31,7 +31,7 @@ public class SimulationCommandLineParser {
 		String chromosomeDefinition="";
 		Integer seed=null;
 		int replicateRuns=1;                   //
-		double heritability=1.0;
+		double ve=0.0;
 		boolean detailedLog=false;
 		int threadCount=1;
 
@@ -67,9 +67,9 @@ public class SimulationCommandLineParser {
             {
             	selectionRegimFile=args.remove(0);
             }
-			else if(cu.equals("--heritability"))
+			else if(cu.equals("--ve"))
 			{
-				heritability=Double.parseDouble(args.remove(0));
+				ve=Double.parseDouble(args.remove(0));
 			}
             else if(cu.equals("--chromosome-definition"))
             {
@@ -106,7 +106,7 @@ public class SimulationCommandLineParser {
 
 		MimicreeThreadPool.setThreads(threadCount);
         mim2.qt_hap.QtSimulationFrameworkHaplotype mimframe= new QtSimulationFrameworkHaplotype(haplotypeFile,recombinationFile,chromosomeDefinition,
-				effectSizeFile,heritability,selectionRegimFile,outputDir,simMode,replicateRuns,logger);
+				effectSizeFile,ve,selectionRegimFile,outputDir,simMode,replicateRuns,logger);
         
         mimframe.run();
 	}
@@ -119,7 +119,7 @@ public class SimulationCommandLineParser {
 		sb.append(CommandFormater.format("--haplotypes-g0","the haplotype file",null));
 		sb.append(CommandFormater.format("--recombination-rate","the recombination rate for windows of fixed size",null));
 		sb.append(CommandFormater.format("--effect-size","the causative SNPs and their effect sizes",null));
-		sb.append(CommandFormater.format("--heritability","the heritability",null));
+		sb.append(CommandFormater.format("--ve","environmental variance","0.0"));
 		sb.append(CommandFormater.format("--chromosome-definition","which chromosomes parts constitute a chromosome",null));
 		sb.append(CommandFormater.format("--output-mode","a coma separated list of generations to output",null));
 		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));

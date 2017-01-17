@@ -12,11 +12,11 @@ public class PhenotypeCalculator implements IPhenotypeCalculator {
 
 
 
-	public PhenotypeCalculator(double heritability, double genotypicVariance)
+	public PhenotypeCalculator(double environmentalVariance, double genotypicVariance)
 	{
-		    double ve=(genotypicVariance*(1-heritability))/heritability;
-			environmentalVariance=ve;
-		environmentalStdev = Math.sqrt(ve);
+
+		this.environmentalVariance=environmentalVariance;
+		environmentalStdev = Math.sqrt(environmentalVariance);
 	}
 
 	

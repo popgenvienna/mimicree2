@@ -31,7 +31,7 @@ public class QtSimulationFrameworkHaplotype {
 	private final String effectSizeFile;
 	private final String selectionRegimeFile;
 	private final String outputDir;
-	private final double heritability;
+	private final double ve;
 	private final SimulationMode simMode;
 	private final int replicateRuns;
 
@@ -39,7 +39,7 @@ public class QtSimulationFrameworkHaplotype {
 
 	private final java.util.logging.Logger logger;
 	//chromosomeDefinition,   	effectSizeFile,heritability,selectionRegimFile,outputFile,simMode,
-	public QtSimulationFrameworkHaplotype(String haplotypeFile, String recombinationFile, String chromosomeDefinition, String effectSizeFile, double heritability,
+	public QtSimulationFrameworkHaplotype(String haplotypeFile, String recombinationFile, String chromosomeDefinition, String effectSizeFile, double ve,
 										String selectionRegimeFile, String outputDir,  SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
 	{
 		// 'File' represents files and directories
@@ -60,7 +60,7 @@ public class QtSimulationFrameworkHaplotype {
 		this.recombinationFile=recombinationFile;
 		this.chromosomeDefinition=chromosomeDefinition;
 		this.selectionRegimeFile=selectionRegimeFile;
-		this.heritability=heritability;
+		this.ve=ve;
 		this.simMode=simMode;
 		this.replicateRuns=replicateRuns;
 		this.logger=logger;
@@ -79,7 +79,7 @@ public class QtSimulationFrameworkHaplotype {
 		ArrayList<DiploidGenome> dipGenomes=new DiploidGenomeReader(this.haplotypeFile,"",this.logger).readGenomes();
 
 		GenotypeCalculator genotypeCalculator=new GenotypeCalculatorReader(this.effectSizeFile,this.logger).readAdditiveFitness();
-		PhenotypeCalculator phenotypeCalculator=getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.heritability);
+		PhenotypeCalculator phenotypeCalculator=getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.ve);
 		IFitnessCalculator fitnessCalculator=new FitnessCalculatorDefault();
 
 		ISelectionRegime selectionRegime=new SelectionRegimeReader(this.selectionRegimeFile,this.logger).readSelectionRegime();
@@ -92,7 +92,7 @@ public class QtSimulationFrameworkHaplotype {
 		this.logger.info("Finished simulations");
 	}
 
-	public PhenotypeCalculator getPhenotypeCalculator(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator genotypeCalculator,double heritability)
+	public PhenotypeCalculator getPhenotypeCalculator(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator genotypeCalculator,double ve)
 	{
 		ArrayList<Double> genotypes=new ArrayList<Double>();
 		for(DiploidGenome dg: dipGenomes)
@@ -114,7 +114,7 @@ public class QtSimulationFrameworkHaplotype {
 			variance+=ss;
 		}
 		variance= variance/((double)genotypes.size());
-		return new PhenotypeCalculator(heritability,variance);
+		return new PhenotypeCalculator(ve,variance);
 	}
 
 }
