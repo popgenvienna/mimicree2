@@ -49,7 +49,7 @@ public class Main {
 
 			sb.append("\n== Secondary tasks ==\n");
 			sb.append(CommandFormater.format("todo","todo",null));
-			sb.append("\nMimicrEE2 Version "+getVersionNumber());
+			sb.append("\nMimicrEE2 Version "+getVersionNumber()+"\n");
 
 
 
@@ -60,7 +60,7 @@ public class Main {
 
 		public static String getVersionNumber()
 		{
-			return "v0.32";
+			return "v0.34";
 		}
 
 
