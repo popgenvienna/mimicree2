@@ -25,7 +25,9 @@ public class CrossoverGenerator {
 		ArrayList<GenomicPosition> recEvents=new ArrayList<GenomicPosition>();
 		for(RecombinationWindow window:windows)
 		{
-			if(window.hasRecombinationEvent(random)) recEvents.add(window.getRandomPosition(random));
+			int recs=window.getRecombinationEvents(random);
+			for(int i =0; i<recs; i++) recEvents.add(window.getRandomPosition(random));
+			// if(window.hasRecombinationEvent(random)) recEvents.add(window.getRandomPosition(random));
 		}
 		return new CrossoverEvents(recEvents);
 	}

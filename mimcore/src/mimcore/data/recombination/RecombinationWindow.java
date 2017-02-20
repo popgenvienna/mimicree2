@@ -7,23 +7,35 @@ public class RecombinationWindow {
 	private final Chromosome chromosome;
 	private final int startPosition;
 	private final int endPosition;
-	private final double recRate;
-	private final double p_recombination;
+	private final double recFraction;
+	private final double d;
+
+	public static int getPoisson(double lambda, Random random) {
+		double L = Math.exp(-lambda);
+		double p = 1.0;
+		int k = 0;
+
+		do {
+			k++;
+			p *= random.nextDouble();
+		} while (p > L);
+
+		return k - 1;
+	}
 	
-	public RecombinationWindow(Chromosome chromosome, int startPosition, int endPosition, double recRate)
+	public RecombinationWindow(Chromosome chromosome, int startPosition, int endPosition, double recFraction)
 	{
 		this.chromosome=chromosome;
 		this.startPosition=startPosition;
 		this.endPosition=endPosition;
-		if(recRate > 45.0)throw new IllegalArgumentException("Can not handle recombination rates larger than 45cM/Mb (Kosambi function fails)");
-		this.recRate=recRate;
-		int windowsize=endPosition - startPosition +  1;
-		if(windowsize > 1000000.0) throw new IllegalArgumentException("Window size for recombination events needs to be smaller than 1Mbp");
-		this.p_recombination=calculateP(recRate,windowsize);
+		if(recFraction>=0.5) throw new IllegalArgumentException("Recombination fraction must be smaller 0.5");
+		this.recFraction=recFraction;
+		double d = -0.5 * Math.log(1.0-2.0*recFraction);
+		this.d=d;
 
 	}
 	
-	
+	/**
 	private double calculateP(double recRate,int windowsize)
 	{
 		
@@ -57,6 +69,7 @@ public class RecombinationWindow {
 		return toRet;
 		
 	}
+	 **/
 	
 
 	
@@ -66,12 +79,9 @@ public class RecombinationWindow {
 	 * A random number generator decides whether a recombination event takes place within the given window
 	 * @return
 	 */
-	public boolean hasRecombinationEvent(Random random)
+	public int getRecombinationEvents(Random random)
 	{
-		
-		double rand=random.nextDouble();
-		if(rand<this.p_recombination)return true;
-		return false;
+		return getPoisson(this.d,random);
 	}
 	
 	/**
@@ -89,16 +99,6 @@ public class RecombinationWindow {
 		// a random GenomicPosition within the window
 		return new GenomicPosition(chromosome, this.startPosition+randAdd);
 		
-	}
-	
-	
-	/**
-	 * Obtain the recombination rate in cM/Mb for the given window
-	 * @return
-	 */
-	public double recombinationRate()
-	{
-		return this.recRate;
 	}
 	
 }

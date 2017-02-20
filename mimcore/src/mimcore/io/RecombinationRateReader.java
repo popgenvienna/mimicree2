@@ -45,24 +45,26 @@ public class RecombinationRateReader {
 	
 	private RecombinationWindow parseLine(String line)
 	{
-		// 2L:0..100000            0.00            0.00            0.00      
-		// 2L:100000..200000       0.00            0.00            0.00      
-		// 2L:200000..300000       0.00            0.00            1.89      
-		// 2L:300000..400000       1.89            1.92            1.95      
+		// 2L:0..100000            2.1
+		// 2L:100000..200000       2.2
+		// 2L:200000..300000       0.1
+		// 2L:300000..400000       3.1
 		
 		String[] a=line.split("\t");
+		if(a.length>2) throw new IllegalArgumentException("Input must have two columns; the genomic position (chr:start..end) followed by the recombination fraction");
 		String[] tmp1=a[0].split(":");
 		String[] tmp2=tmp1[1].split("\\.\\.");
 		
 		Chromosome chr=Chromosome.getChromosome(tmp1[0]);
 		int start=Integer.parseInt(tmp2[0].trim())+1;
 		int end=Integer.parseInt(tmp2[1].trim());
-		double recrate=Double.parseDouble(a[2]);
+		double recFraction=Double.parseDouble(a[1]);
+		if(recFraction>0.5) throw new IllegalArgumentException("Recombination fraction between two loci can not be larger than 0.5; Ideal would be a value smaller than 0.4");
 
 		// MALES are not recombining and the published recombination rate is for females
 		// deactivated male halfing - because mim2 is intented for general audience
 		//recrate=recrate * 0.5;
-		return new RecombinationWindow(chr,start,end,recrate);
+		return new RecombinationWindow(chr,start,end,recFraction);
 		
 	}
 	
