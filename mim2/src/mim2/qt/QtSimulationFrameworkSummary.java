@@ -111,8 +111,15 @@ public class QtSimulationFrameworkSummary {
 
 	public PhenotypeCalculator getPhenotypeCalculator(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator genotypeCalculator)
 	{
-		if(!this.ve.equals(null)) return new PhenotypeCalculator(this.ve);
+		// if environmental variance exists than use it directly
+		if(!this.ve.equals(null)) {
+			this.logger.info("Enviromental variance was provided; Will proceed with VE="+this.ve);
+			return new PhenotypeCalculator(this.ve);
+		}
 
+		this.logger.info("No environmental variance was provided; Will compute VE from the heritability and the genotypic variance");
+
+		// if not compute the environmental variance from the heritability
 		ArrayList<Double> genotypes=new ArrayList<Double>();
 		for(DiploidGenome dg: dipGenomes)
 		{
@@ -137,8 +144,12 @@ public class QtSimulationFrameworkSummary {
 		// h2 = vg/vg+ve
 		//ve= (1-h2)vg/h2
 
+		//double ve=(genotypicVariance*(1-heritability))/heritability;
 
-		return new PhenotypeCalculator(ve,variance);
+		double vecompute=variance*(1.0D-this.heritability)/this.heritability;
+
+		this.logger.info("Estimated genotypic variance VG="+variance+" ; Using a heritability h2="+heritability+" ; Will proceed with VE="+vecompute);
+		return new PhenotypeCalculator(vecompute);
 	}
 
 }

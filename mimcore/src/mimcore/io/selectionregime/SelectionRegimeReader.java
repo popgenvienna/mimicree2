@@ -61,7 +61,7 @@ public class SelectionRegimeReader {
 		String[] a=line.split("\t");
 		if(a.length==2)
 		{
-			this.logger.info("Selection regime file has 2 columns; Reading default selection regime (selection applies to all three replicates equally)");
+			this.logger.info("Selection regime file has 2 columns; Reading default selection regime (selection regimes applies to all replicates)");
 			return new SelectionRegimeDefaultReader(this.selectionRegimeFile,this.logger).readSelectionRegime();
 		}
 		else if(a.length==3)
