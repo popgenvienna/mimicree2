@@ -1,7 +1,5 @@
 package mim2;
 
-import mim2.qt_sync.SimulationCommandLineParser;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -19,13 +17,17 @@ public class Main {
 
 
 			String subtask=rawarguments.remove(0);
-			if(subtask.toLowerCase().equals("qt-sync"))
+			if(subtask.toLowerCase().equals("qt"))
 			{
-				mim2.qt_sync.SimulationCommandLineParser.runQTSimulations(rawarguments);
+				mim2.qt.SimulationCommandLineParser.runQTSimulations(rawarguments);
 			}
-			if(subtask.toLowerCase().equals("qt-hap"))
+			if(subtask.toLowerCase().equals("qs"))
 			{
-				mim2.qt_hap.SimulationCommandLineParser.runQTSimulations(rawarguments);
+				// TODO
+			}
+			if(subtask.toLowerCase().equals("s"))
+			{
+				// TODO
 			}
 			else
 			{
@@ -43,8 +45,9 @@ public class Main {
 			StringBuilder sb=new StringBuilder();
 			sb.append("Usage: java -Xmx4g -jar mim2.jar [subtask] [parameters of subtask]\n\n");
 			sb.append("== Main tasks ==\n");
-			sb.append(CommandFormater.format("qt-sync","simulate truncating selection for a quantitative trait; output a summary of allele frequencies",null));
-			sb.append(CommandFormater.format("qt-hap","simulate truncating selection for a quantitative trait; output detailed haplotypes",null));
+			sb.append(CommandFormater.format("s","simulate selection for loci having given selection coefficients",null));
+			sb.append(CommandFormater.format("qt","simulate truncating selection for a quantitative trait",null));
+			sb.append(CommandFormater.format("qs","simulate stabilizing selection for a quantitative trait;",null));
 
 
 			sb.append("\n== Secondary tasks ==\n");

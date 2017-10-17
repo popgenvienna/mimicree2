@@ -12,7 +12,7 @@ public class PhenotypeCalculator implements IPhenotypeCalculator {
 
 
 
-	public PhenotypeCalculator(double environmentalVariance, double genotypicVariance)
+	public PhenotypeCalculator(double environmentalVariance)
 	{
 
 		this.environmentalVariance=environmentalVariance;

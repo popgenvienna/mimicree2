@@ -1,22 +1,22 @@
-package mim2.qt_hap;
+package mim2.qt;
 
 
-import mimcore.data.DiploidGenome;
-import mimcore.data.Population;
 import mimcore.data.fitness.IFitnessCalculator;
 import mimcore.data.fitness.mating.MatingFunctionRandomMating;
-import mimcore.data.fitness.quantitative.GenotypeCalculator;
-import mimcore.data.fitness.quantitative.PhenotypeCalculator;
+import mimcore.data.fitness.quantitative.*;
 import mimcore.data.fitness.survival.ISurvivalFunction;
 import mimcore.data.recombination.RecombinationGenerator;
-import mimcore.io.HaplotypeMultiWriter;
+import mimcore.data.statistic.PACReducer;
+import mimcore.data.statistic.PopulationAlleleCount;
+import mimcore.data.DiploidGenome;
+import mimcore.data.Population;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.logging.Logger;
 
-public class MultiSimulationTimestampHaplotype {
+public class MultiSimulationTimestamp {
 	private final ArrayList<DiploidGenome> dipGenomes;
 	private final GenotypeCalculator gc;
 	private final PhenotypeCalculator pc;
@@ -26,11 +26,10 @@ public class MultiSimulationTimestampHaplotype {
 	private final HashSet<Integer> outputGenerations;
 	private final int maxGeneration;
 	private final int replicateRuns;
-	private final String outputDir;
 	private Logger logger;
 
-	public MultiSimulationTimestampHaplotype(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf, RecombinationGenerator recGenerator,
-                                             ArrayList<Integer> outputGenerations, int replicateRuns, String outputDir, Logger logger)
+	public MultiSimulationTimestamp(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf, RecombinationGenerator recGenerator,
+									ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
 	{
 
 		this.dipGenomes=dipGenomes;
@@ -51,14 +50,13 @@ public class MultiSimulationTimestampHaplotype {
 		this.logger=logger;
 		this.recGenerator=recGenerator;
 		this.replicateRuns=replicateRuns;
-		this.outputDir=outputDir;
 		
 	}
 
 	
-	public void run()
+	public ArrayList<PopulationAlleleCount> run()
 	{
-
+		ArrayList<PopulationAlleleCount> pacs=new ArrayList<PopulationAlleleCount>();
 		for(int k =0; k<this.replicateRuns; k++)
 		{
 			Population startingPopulation=Population.loadPopulation(dipGenomes,gc,pc,fc,new Random());
@@ -69,9 +67,7 @@ public class MultiSimulationTimestampHaplotype {
 			this.logger.info("Average genotype of starting population "+startingPopulation.getAverageGenotype()+"; average phenotype of starting population "+startingPopulation.getAveragePhenotype());
 
 			this.logger.info("Recording base population of replicate " + simulationNumber);
-
-			new HaplotypeMultiWriter(startingPopulation, this.outputDir,0, simulationNumber, this.logger).write();
-
+			pacs.add(new PACReducer(startingPopulation).reduce());
 			Population nextPopulation =startingPopulation;
 			// For the number of requested simulations get the next generation, and write it to file if requested
 			for(int i=1; i<=this.maxGeneration; i++)
@@ -84,11 +80,10 @@ public class MultiSimulationTimestampHaplotype {
 				if(outputGenerations.contains(i))
 				{
 					this.logger.info("Recording population at generation "+i+" of replicate "+simulationNumber);
-					new HaplotypeMultiWriter(nextPopulation, this.outputDir, i, simulationNumber, this.logger).write();
+					pacs.add(new PACReducer(nextPopulation).reduce());
 				}
 			}
 		}
-
-
+		return pacs;
 	}
 }

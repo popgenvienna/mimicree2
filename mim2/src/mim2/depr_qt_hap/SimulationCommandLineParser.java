@@ -1,13 +1,12 @@
-package mim2.qt_hap;
+package mim2.depr_qt_hap;
 
 
 import mim2.CommandFormater;
-import mim2.qt_sync.SimulationMode;
+import mim2.qt.SimulationMode;
 import mimcore.misc.MimicreeLogFactory;
 import mimcore.misc.MimicreeThreadPool;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
@@ -105,7 +104,7 @@ public class SimulationCommandLineParser {
         SimulationMode simMode = parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
-        mim2.qt_hap.QtSimulationFrameworkHaplotype mimframe= new QtSimulationFrameworkHaplotype(haplotypeFile,recombinationFile,chromosomeDefinition,
+        mim2.depr_qt_hap.QtSimulationFrameworkHaplotype mimframe= new QtSimulationFrameworkHaplotype(haplotypeFile,recombinationFile,chromosomeDefinition,
 				effectSizeFile,ve,selectionRegimFile,outputDir,simMode,replicateRuns,logger);
         
         mimframe.run();
