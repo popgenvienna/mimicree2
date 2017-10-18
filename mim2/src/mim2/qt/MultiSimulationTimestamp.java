@@ -78,20 +78,26 @@ public class MultiSimulationTimestamp {
 	public void run()
 	{
 
+
+
 		for(int k =0; k<this.replicateRuns; k++)
 		{
-			Population startingPopulation=Population.loadPopulation(dipGenomes,gc,pc,fc,new Random());
-			int startpopulationsize=startingPopulation.size();
+			// Base population generated always anew, because new env. variance for each individual
+			// for different replicates you dont use the same individuals (phenotypes) but only the same genotypes (with different phenotypes)
+			Population basePopulation=Population.loadPopulation(dipGenomes,gc,pc,fc,new Random());
+
+			int startpopulationsize=basePopulation.size();
 			int simulationNumber=k+1;
 			this.logger.info("Starting simulation replicate number " + simulationNumber);
 			this.logger.info("MimicrEE2 will proceed with forward simulations until generation " + this.maxGeneration);
-			this.logger.info("Average genotype of starting population "+startingPopulation.getAverageGenotype()+"; average phenotype of starting population "+startingPopulation.getAveragePhenotype());
+			this.logger.info("Average genotype of starting population "+basePopulation.getAverageGenotype()+"; average phenotype of starting population "+basePopulation.getAveragePhenotype());
 
-			this.logger.info("Recording base population of replicate " + simulationNumber);
+			// record stuff
+			recordPAC(basePopulation,0,simulationNumber);
+			recordGPF(basePopulation, 0, simulationNumber);
+			recordHap(basePopulation, 0, simulationNumber);
 
-
-			pacs.add(new PACReducer(startingPopulation).reduce());
-			Population nextPopulation =startingPopulation;
+			Population nextPopulation =basePopulation;
 			// For the number of requested simulations get the next generation, and write it to file if requested
 			for(int i=1; i<=this.maxGeneration; i++)
 			{
@@ -101,24 +107,57 @@ public class MultiSimulationTimestamp {
 				nextPopulation=phenTail.getNextGeneration(gc,pc,fc,new MatingFunctionRandomMating(),this.recGenerator,startpopulationsize);
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype());
 
-
+				// Use migration maybe
+				double migRate=this.migrationRegime.getMigrationRate(i,simulationNumber);
+				if(migRate>0.0) {
+					this.logger.info("Adding migrants from base population; Will use fraction of migrants "+migRate );
+					nextPopulation = Population.loadMigration(migRate, dipGenomes, nextPopulation, gc, pc, fc, new Random());
+					this.logger.info("Average genotype of new population "+nextPopulation.getAverageGenotype()+"; average phenotype of new population "+nextPopulation.getAveragePhenotype());
+				}
+				
+				// record stuff
+				// always record genotype/phenotype/fitness (given the output file is requested)
+				recordGPF(nextPopulation, i, simulationNumber);
 				if(outputGenerations.contains(i))
 				{
-					this.logger.info("Recording population at generation "+i+" of replicate "+simulationNumber);
-					pacs.add(new PACReducer(nextPopulation).reduce());
+					// only record sync and haplotypes at requested generations
+					recordPAC(nextPopulation,i,simulationNumber);
+					recordHap(nextPopulation, i, simulationNumber);
 				}
 			}
 		}
 
-		// todo
-		ISummaryWriter sw = new SyncWriter(this.outputSync,this.logger);
-		sw.write(this.pacs);
+		// Finally write as yet unwritten results
+		if(!this.outputSync.equals(null)) {
+			ISummaryWriter sw = new SyncWriter(this.outputSync, this.logger);
+			sw.write(this.pacs);
+		}
 
 	}
 
 
-	private void recordPAC(Population toRecord)
+	private void recordPAC(Population toRecord,int generation, int replicate)
 	{
-
+		// No output file no action
+		if(this.outputSync.equals(null)) return;
+		this.logger.info("Recording allele frequences at generation "+generation+" of replicate "+replicate);
+		pacs.add(new PACReducer(toRecord).reduce());
 	}
+
+	private void recordGPF(Population toRecord, int generation, int replicate)
+	{
+		// No output file no action
+		if(this.outputGPF.equals(null)) return;
+		this.logger.info("Recording genotype/phenotype/fitness at generation "+generation+" of replicate "+replicate);
+	}
+
+
+	private void recordHap(Population toRecord, int generation, int replicate)
+	{
+		// No output file no action
+		if(this.outputDir.equals(null)) return;
+		this.logger.info("Recording haplotypes at generation "+generation+" of replicate "+replicate);
+	}
+
+
 }

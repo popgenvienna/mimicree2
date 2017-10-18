@@ -55,6 +55,44 @@ public class Population {
 
 
 
+	public static Population loadMigration(double migrationRate, ArrayList<DiploidGenome> migrantPool, Population targetPopulation, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, Random random)
+	{
+		// no migration no action
+		if(!(migrationRate>0)) return targetPopulation;
+
+		//ok ok we have some migration
+		int popsize=targetPopulation.size();
+		int migrantCount=(int)(migrationRate*(double)popsize);
+
+		// First pick the migrants
+		ArrayList<Specimen> newPopulation=new ArrayList<Specimen>();
+		LinkedList<DiploidGenome> potentialMigrants=new LinkedList<DiploidGenome>(migrantPool);
+		for(int i=0; i<migrantCount; i++)
+		{
+			int targetindex=random.nextInt(potentialMigrants.size());
+			DiploidGenome genome=potentialMigrants.remove(targetindex);
+
+			// compute the GPF
+			double genotype=gc.getGenotype(genome);
+			double phenotype=pc.getPhenotype(genotype,random);
+			double fitness=fc.getFitness(genome);
+			Specimen s=new Specimen(genotype,phenotype,fitness,genome);
+			newPopulation.add(s);
+		}
+
+		// second fill in from the target population
+		LinkedList<Specimen> tps=new LinkedList<Specimen>(targetPopulation.getSpecimen());
+		while(newPopulation.size()<popsize)
+		{
+			int targetindex=random.nextInt(tps.size());
+			Specimen spec=tps.remove(targetindex);
+			newPopulation.add(spec);
+		}
+
+		// Create a new population
+		return new Population(newPopulation);
+	}
+
 
 	public static Population loadPopulation(ArrayList<DiploidGenome> genomes, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, Random random)
 	{
