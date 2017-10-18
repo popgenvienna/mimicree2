@@ -108,7 +108,7 @@ public class MultiSimulationTimestamp {
 				nextPopulation=phenTail.getNextGeneration(gc,pc,fc,new MatingFunctionRandomMating(),this.recGenerator,startpopulationsize);
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype());
 
-				// Use migration maybe
+				// Use migration, if wanted
 				double migRate=this.migrationRegime.getMigrationRate(i,simulationNumber);
 				if(migRate>0.0) {
 					this.logger.info("Adding migrants from base population; Will use fraction of migrants "+migRate );
@@ -116,12 +116,10 @@ public class MultiSimulationTimestamp {
 					this.logger.info("Average genotype of new population "+nextPopulation.getAverageGenotype()+"; average phenotype of new population "+nextPopulation.getAveragePhenotype());
 				}
 
-				// record stuff
-				// always record genotype/phenotype/fitness (given the output file is requested)
-				recordGPF(nextPopulation, i, simulationNumber);
+				// record stuff only in the requested generations
 				if(outputGenerations.contains(i))
 				{
-					// only record sync and haplotypes at requested generations
+					recordGPF(nextPopulation, i, simulationNumber);
 					recordPAC(nextPopulation,i,simulationNumber);
 					recordHap(nextPopulation, i, simulationNumber);
 				}
