@@ -46,24 +46,25 @@ public class QtSimulationFrameworkSummary {
 		if(! new File(haplotypeFile).exists()) throw new IllegalArgumentException("Haplotype file does not exist "+haplotypeFile);
 		if(! new File(recombinationFile).exists()) throw new IllegalArgumentException("Recombination file does not exist " + recombinationFile);
 		if(! new File(effectSizeFile).exists()) logger.info("No effect size file found; Commencing neutral simulations\n");
-		if(! new File(selectionRegimeFile).exists()) logger.info("No selection regime file found; Commencing neutral simulations\n");
-		if(! new File(migrationRegimeFile).exists()) logger.info("No migration regime file found; Proceeding without migration\n");
+		// selection regime
+		if(selectionRegimeFile.equals(null))logger.info("No selection regime file found; Commencing neutral simulations\n");
+		else if (! new File(selectionRegimeFile).exists()) throw new IllegalArgumentException("Selection regime file does not exist; "+selectionRegimeFile);
 
-		// Check output; either directory or sync file or both
-		boolean validOutput=false;
-		if(! new File(outputDir).exists()) logger.info("No output director found; Will not write haplotypes to file\n");
-		else  validOutput=true;
-		try
-		{
-			// Check if the output file can be created
-			new File(outputSync).createNewFile();
-			validOutput=true;
-		}
-		catch(IOException e)
-		{
-			int bla=0;
-		}
-		if(!validOutput) throw new IllegalArgumentException("No output was provided; Provide either an output directory or an output sync file or both");
+		// migration regime
+		if(migrationRegimeFile.equals(null))logger.info("No migration regime file found; Proceeding without migration\n");
+		else if (! new File(migrationRegimeFile).exists()) throw new IllegalArgumentException("Migration regime file does not exist; "+ migrationRegimeFile);
+
+		if(outputGPF.equals("null")) logger.info("No output genotype/phenotype/fitness file provided; will not record GPF\n");
+		else try {new File(outputGPF).createNewFile();} catch(IOException e) {throw new IllegalArgumentException("Can not create GPF output file "+outputGPF);}
+
+		if(outputDir.equals(null) && outputSync.equals(null)) throw new IllegalArgumentException("No output was provided; Provide either an output directory or an output sync file or both");
+
+		if(outputDir.equals(null)) logger.info("No output director found; Will not record haplotypes\n");
+		else if(! new File(outputDir).exists()) throw new IllegalArgumentException("The provided output directory does not exist "+outputDir);
+
+		if(outputSync.equals(null)) logger.info("No output sync file was provided; Will not record allele frequencies\n");
+		else try {new File(outputSync).createNewFile();} catch(IOException e) {throw new IllegalArgumentException("Can not create output sync file "+outputSync);}
+
 
 
 		if(heritability.equals(null) && ve.equals(null)) throw new IllegalArgumentException("Either ve or the heritability needs to be provided");
@@ -97,24 +98,27 @@ public class QtSimulationFrameworkSummary {
 
 		ArrayList<DiploidGenome> dipGenomes=new mimcore.io.DiploidGenomeReader(this.haplotypeFile,"",this.logger).readGenomes();
 
+		// Compute GPF
 		GenotypeCalculator genotypeCalculator=new GenotypeCalculatorReader(this.effectSizeFile,this.logger).readAdditiveFitness();
 		PhenotypeCalculator phenotypeCalculator=getPhenotypeCalculator(dipGenomes,genotypeCalculator);
 		IFitnessCalculator fitnessCalculator=new FitnessCalculatorDefault();
 
-		ISelectionRegime selectionRegime=new SelectionRegimeReader(this.selectionRegimeFile,this.logger).readSelectionRegime();
-		ISurvivalFunction survivalFunction=new SurvivalRegimeTruncatingSelection(selectionRegime);
+		// Survival function (truncating selection); If none specified all survive
+		ISurvivalFunction survivalFunction= new SurvivalRegimeAllSurvive();
+		if(!selectionRegimeFile.equals(null))
+		{
+			ISelectionRegime selectionRegime=new SelectionRegimeReader(this.selectionRegimeFile,this.logger).readSelectionRegime();
+			survivalFunction=new SurvivalRegimeTruncatingSelection(selectionRegime);
+		}
 
-		// Migration regime
+		// Migration regime; If none specified no migration
 		IMigrationRegime migrationRegime=new MigrationRegimeNoMigration();
-		if(!new File(migrationRegimeFile).exists()) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger).readMigrationRegime();
+		if(!migrationRegimeFile.equals(null)) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger).readMigrationRegime();
 
-		ArrayList<PopulationAlleleCount> pacs=new MultiSimulationTimestamp(dipGenomes,genotypeCalculator,phenotypeCalculator,fitnessCalculator,survivalFunction,
-			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger).run();
+		MultiSimulationTimestamp mst=new MultiSimulationTimestamp(dipGenomes,genotypeCalculator,phenotypeCalculator,fitnessCalculator,survivalFunction, migrationRegime, this.outputSync, this.outputGPF,this.outputDir,
+			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
+		mst.run();
 
-		ISummaryWriter sw = new SyncWriter(this.outputSync,this.logger);
-
-
-		sw.write(pacs);
 		this.logger.info("Finished simulations");
 	}
 
@@ -150,12 +154,9 @@ public class QtSimulationFrameworkSummary {
 		}
 		variance= variance/((double)genotypes.size());
 		// now we have the mean and the variance of the genotypes;
-		// h2 = vg/vg+ve
-		//ve= (1-h2)vg/h2
 
-		//double ve=(genotypicVariance*(1-heritability))/heritability;
 
-		double vecompute=variance*(1.0D-this.heritability)/this.heritability;
+		double vecompute=PhenotypeCalculator.computeVEfromVGandH2(variance,this.heritability);
 
 		this.logger.info("Estimated genotypic variance VG="+variance+" ; Using a heritability h2="+heritability+" ; Will proceed with VE="+vecompute);
 		return new PhenotypeCalculator(vecompute);

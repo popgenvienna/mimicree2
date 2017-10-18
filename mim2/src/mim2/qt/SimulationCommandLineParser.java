@@ -23,12 +23,12 @@ public class SimulationCommandLineParser {
 		String haplotypeFile="";
 		String recombinationFile="";
 		String effectSizeFile="";            //
-		String outputSync="";
-		String outputGPF="";
-		String outputDir="";
+		String outputSync=null;
+		String outputGPF=null;
+		String outputDir=null;
 		String outputGenRaw="";
-		String selectionRegimFile="";         //
-		String migrationRegimeFile="";
+		String selectionRegimFile=null;         //
+		String migrationRegimeFile=null;
 		String chromosomeDefinition="";
 		Integer seed=null;
 		int replicateRuns=1;                   //

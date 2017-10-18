@@ -10,7 +10,16 @@ public class PhenotypeCalculator implements IPhenotypeCalculator {
 	private final double environmentalVariance;
 	private final double environmentalStdev;
 
+	public static double computeVEfromVGandH2(double vg, double h2)
+	{
 
+		// h2 = vg/vg+ve
+		//ve= (1-h2)vg/h2
+
+		//double ve=(genotypicVariance*(1-heritability))/heritability;
+		double ve=vg*(1.0D-h2)/h2;
+		return ve;
+	}
 
 	public PhenotypeCalculator(double environmentalVariance)
 	{

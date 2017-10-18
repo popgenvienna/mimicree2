@@ -5,11 +5,14 @@ import mimcore.data.fitness.IFitnessCalculator;
 import mimcore.data.fitness.mating.MatingFunctionRandomMating;
 import mimcore.data.fitness.quantitative.*;
 import mimcore.data.fitness.survival.ISurvivalFunction;
+import mimcore.data.migration.IMigrationRegime;
 import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.data.statistic.PACReducer;
 import mimcore.data.statistic.PopulationAlleleCount;
 import mimcore.data.DiploidGenome;
 import mimcore.data.Population;
+import mimcore.io.misc.ISummaryWriter;
+import mimcore.io.misc.SyncWriter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,13 +25,23 @@ public class MultiSimulationTimestamp {
 	private final PhenotypeCalculator pc;
 	private final IFitnessCalculator fc;
 	private final ISurvivalFunction sf;
+	private final IMigrationRegime migrationRegime;
+	private final String outputSync;
+	private final String outputGPF;
+	private final String outputDir;
 	private final RecombinationGenerator recGenerator;
-	private final HashSet<Integer> outputGenerations;
+
 	private final int maxGeneration;
 	private final int replicateRuns;
 	private Logger logger;
 
-	public MultiSimulationTimestamp(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf, RecombinationGenerator recGenerator,
+
+	// internal variables
+	private final HashSet<Integer> outputGenerations;
+	private ArrayList<PopulationAlleleCount> pacs;
+
+	public MultiSimulationTimestamp(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
+									IMigrationRegime migrationRegime, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
 									ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
 	{
 
@@ -46,17 +59,25 @@ public class MultiSimulationTimestamp {
 			if(i > max ) max=i;
 		}
 		this.maxGeneration=max;
+		this.migrationRegime=migrationRegime;
+		this.outputSync=outputSync;
+		this.outputGPF=outputGPF;
+		this.outputDir=outputDir;
 		this.outputGenerations=toOutput;
 		this.logger=logger;
 		this.recGenerator=recGenerator;
 		this.replicateRuns=replicateRuns;
+
+
+		// internal variables
+		this.pacs=new ArrayList<PopulationAlleleCount>();
 		
 	}
 
 	
-	public ArrayList<PopulationAlleleCount> run()
+	public void run()
 	{
-		ArrayList<PopulationAlleleCount> pacs=new ArrayList<PopulationAlleleCount>();
+
 		for(int k =0; k<this.replicateRuns; k++)
 		{
 			Population startingPopulation=Population.loadPopulation(dipGenomes,gc,pc,fc,new Random());
@@ -67,6 +88,8 @@ public class MultiSimulationTimestamp {
 			this.logger.info("Average genotype of starting population "+startingPopulation.getAverageGenotype()+"; average phenotype of starting population "+startingPopulation.getAveragePhenotype());
 
 			this.logger.info("Recording base population of replicate " + simulationNumber);
+
+
 			pacs.add(new PACReducer(startingPopulation).reduce());
 			Population nextPopulation =startingPopulation;
 			// For the number of requested simulations get the next generation, and write it to file if requested
@@ -77,6 +100,8 @@ public class MultiSimulationTimestamp {
 				this.logger.info("Selection intensity " +sf.getSurvivorFraction(i, simulationNumber) +"; Selected "+phenTail.size()+ " for next generation; average genotype "+phenTail.getAverageGenotype() +"; average phenotype "+phenTail.getAveragePhenotype());
 				nextPopulation=phenTail.getNextGeneration(gc,pc,fc,new MatingFunctionRandomMating(),this.recGenerator,startpopulationsize);
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype());
+
+
 				if(outputGenerations.contains(i))
 				{
 					this.logger.info("Recording population at generation "+i+" of replicate "+simulationNumber);
@@ -84,6 +109,16 @@ public class MultiSimulationTimestamp {
 				}
 			}
 		}
-		return pacs;
+
+		// todo
+		ISummaryWriter sw = new SyncWriter(this.outputSync,this.logger);
+		sw.write(this.pacs);
+
+	}
+
+
+	private void recordPAC(Population toRecord)
+	{
+
 	}
 }
