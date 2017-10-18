@@ -11,6 +11,7 @@ import mimcore.data.statistic.PACReducer;
 import mimcore.data.statistic.PopulationAlleleCount;
 import mimcore.data.DiploidGenome;
 import mimcore.data.Population;
+import mimcore.io.HaplotypeMultiWriter;
 import mimcore.io.misc.ISummaryWriter;
 import mimcore.io.misc.SyncWriter;
 
@@ -114,7 +115,7 @@ public class MultiSimulationTimestamp {
 					nextPopulation = Population.loadMigration(migRate, dipGenomes, nextPopulation, gc, pc, fc, new Random());
 					this.logger.info("Average genotype of new population "+nextPopulation.getAverageGenotype()+"; average phenotype of new population "+nextPopulation.getAveragePhenotype());
 				}
-				
+
 				// record stuff
 				// always record genotype/phenotype/fitness (given the output file is requested)
 				recordGPF(nextPopulation, i, simulationNumber);
@@ -157,6 +158,7 @@ public class MultiSimulationTimestamp {
 		// No output file no action
 		if(this.outputDir.equals(null)) return;
 		this.logger.info("Recording haplotypes at generation "+generation+" of replicate "+replicate);
+		new HaplotypeMultiWriter(toRecord, this.outputDir,generation, replicate, this.logger).write();
 	}
 
 
