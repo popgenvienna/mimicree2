@@ -1,25 +1,23 @@
 package mimcore.data.fitness.quantitative;
 
-import java.util.Random;
+import mimcore.data.DiploidGenome;
 
 /**
  * Represents a summary of the additive fitness effects of SNPs
  * Immutable; Also allows to calculate the additive fitness effect of SNPs
  */
-public class PhenotypeCalculatorDefault implements IPhenotypeCalculator {
+public class GenotypeCalculatorAllEqual implements IGenotypeCalculator{
 
 
 
-	public PhenotypeCalculatorDefault()
+	public GenotypeCalculatorAllEqual()
 	{
-
 	}
 
 	
 
-	public double getPhenotype(double genotype,Random random)
+	public double getGenotype(DiploidGenome dipGenome)
 	{
 		return 1.0;
 	}
-
 }

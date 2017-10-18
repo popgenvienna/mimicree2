@@ -24,6 +24,7 @@ public class SimulationCommandLineParser {
 		String recombinationFile="";
 		String effectSizeFile="";            //
 		String outputSync="";
+		String outputGPF="";
 		String outputDir="";
 		String outputGenRaw="";
 		String selectionRegimFile="";         //
@@ -100,6 +101,10 @@ public class SimulationCommandLineParser {
 			{
 				outputDir=args.remove(0);
 			}
+			else if(cu.equals("--output-gpf"))
+			{
+				outputGPF=args.remove(0);
+			}
             else if(cu.equals("--help"))
             {
             	printHelpMessage();
@@ -119,7 +124,7 @@ public class SimulationCommandLineParser {
 
 		MimicreeThreadPool.setThreads(threadCount);
         mim2.qt.QtSimulationFrameworkSummary mimframe= new QtSimulationFrameworkSummary(haplotypeFile,recombinationFile,chromosomeDefinition,
-				effectSizeFile,ve,heritability,selectionRegimFile,migrationRegimeFile,outputSync,outputDir,simMode,replicateRuns,logger);
+				effectSizeFile,ve,heritability,selectionRegimFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
         
         mimframe.run();
 	}
@@ -139,6 +144,7 @@ public class SimulationCommandLineParser {
 		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));
 		sb.append(CommandFormater.format("--output-sync","the output file (sync); --output-dir or --output-sync or both may be provided",null));
 		sb.append(CommandFormater.format("--output-dir","the output directory for the haplotypes; --output-dir or --output-sync or both may be provided",null));
+		sb.append(CommandFormater.format("--output-gpf","the output file for genotype/phenotype/fitness; optional",null));
 		sb.append(CommandFormater.format("--selection-regime","the selection regime",null));
 		sb.append(CommandFormater.format("--migration-regime","the migration regime; migration from the base population to the evolved populations",null));
 		sb.append(CommandFormater.format("--detailed-log","print detailed log messages",null));

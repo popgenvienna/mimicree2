@@ -1,6 +1,6 @@
 package mimcore.io.migrationRegime;
 
-import mimcore.data.migration.MigrationRegimeDefault;
+import mimcore.data.migration.MigrationRegime;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -32,7 +32,7 @@ public class MigrationRegimeDefaultReader {
 	 * read the selection regime
 	 * @return
 	 */
-	public MigrationRegimeDefault readMigrationRegime()
+	public MigrationRegime readMigrationRegime()
 	{
 
 		this.logger.info("Start reading the migration regime file "+this.migrationRegimeFile);
@@ -68,7 +68,7 @@ public class MigrationRegimeDefaultReader {
 		}
 
 		this.logger.info("Finished reading the migration regime");
-		return new MigrationRegimeDefault(res);
+		return new MigrationRegime(res);
 	}
 
 }

@@ -9,7 +9,6 @@ import mimcore.data.fitness.IFitnessCalculator;
 import mimcore.data.fitness.mating.MatingFunctionRandomMating;
 import mimcore.data.fitness.quantitative.*;
 import mimcore.data.recombination.RecombinationGenerator;
-import mimcore.data.statistic.PACReducer;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -36,8 +35,8 @@ public class SimulationInbreedingSingleIsofemaleLine {
 		this.recGenerator=recgen;
 		this.targetCensus=targetCensus;
 		this.logger=logger;
-		this.gc=new GenotypeCalculatorDefault();
-		this.pc=new PhenotypeCalculatorDefault();
+		this.gc=new GenotypeCalculatorAllEqual();
+		this.pc=new PhenotypeCalculatorAllEqual();
 		this.runnumber=runnumber;
 		this.fc=new FitnessCalculatorDefault();
 		

@@ -9,12 +9,12 @@ import java.util.LinkedList;
 /**
  * Created by robertkofler on 6/4/14.
  */
-public class MigrationRegimeDefault implements IMigrationRegime {
+public class MigrationRegime implements IMigrationRegime {
 	private final HashMap<Integer,Double> sr;
 	private final double def;
 
 
-	public MigrationRegimeDefault(HashMap<Integer, Double> input)
+	public MigrationRegime(HashMap<Integer, Double> input)
 		{
 			LinkedList<Integer> keys = new LinkedList<Integer>(input.keySet());
 			Collections.sort(keys);

@@ -2,9 +2,6 @@ package mimcore.io.migrationRegime;
 
 import mimcore.data.fitness.survival.ISelectionRegime;
 import mimcore.data.migration.IMigrationRegime;
-import mimcore.data.migration.MigrationRegimeDefault;
-import mimcore.io.selectionregime.SelectionRegimeDefaultReader;
-import mimcore.io.selectionregime.SelectionRegimeReplicateSpecificReader;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

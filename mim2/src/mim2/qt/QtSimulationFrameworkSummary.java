@@ -6,9 +6,12 @@ import mimcore.data.fitness.FitnessCalculatorDefault;
 import mimcore.data.fitness.quantitative.PhenotypeCalculator;
 import mimcore.data.fitness.quantitative.GenotypeCalculator;
 import mimcore.data.fitness.survival.*;
+import mimcore.data.migration.IMigrationRegime;
+import mimcore.data.migration.MigrationRegimeNoMigration;
 import mimcore.data.recombination.*;
 import mimcore.data.statistic.PopulationAlleleCount;
 import mimcore.io.*;
+import mimcore.io.migrationRegime.MigrationRegimeReader;
 import mimcore.io.selectionregime.*;
 import mimcore.io.misc.*;
 
@@ -24,6 +27,7 @@ public class QtSimulationFrameworkSummary {
 	private final String selectionRegimeFile;
 	private final String migrationRegimeFile;
 	private final String outputSync;
+	private final String outputGPF;
 	private final String outputDir;
 	private final Double ve;
 	private final Double heritability;
@@ -35,7 +39,7 @@ public class QtSimulationFrameworkSummary {
 	private final java.util.logging.Logger logger;
 	//chromosomeDefinition,   	effectSizeFile,heritability,selectionRegimFile,outputFile,simMode,
 	public QtSimulationFrameworkSummary(String haplotypeFile, String recombinationFile, String chromosomeDefinition, String effectSizeFile, Double ve, Double heritability,
-										String selectionRegimeFile, String migrationRegimeFile, String outputSync, String outputDir,  SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
+										String selectionRegimeFile, String migrationRegimeFile, String outputSync,String outputGPF, String outputDir,  SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
 	{
 		// 'File' represents files and directories
 		// Test if input files exist
@@ -65,6 +69,7 @@ public class QtSimulationFrameworkSummary {
 		if(heritability.equals(null) && ve.equals(null)) throw new IllegalArgumentException("Either ve or the heritability needs to be provided");
 		if(!(replicateRuns>0)) throw new IllegalArgumentException("At least one replicate run should be provided; Provided by the user "+replicateRuns);
 
+		this.outputGPF=outputGPF;
 		this.outputSync=outputSync;
 		this.outputDir=outputDir;
 		this.effectSizeFile=effectSizeFile;
@@ -98,6 +103,10 @@ public class QtSimulationFrameworkSummary {
 
 		ISelectionRegime selectionRegime=new SelectionRegimeReader(this.selectionRegimeFile,this.logger).readSelectionRegime();
 		ISurvivalFunction survivalFunction=new SurvivalRegimeTruncatingSelection(selectionRegime);
+
+		// Migration regime
+		IMigrationRegime migrationRegime=new MigrationRegimeNoMigration();
+		if(!new File(migrationRegimeFile).exists()) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger).readMigrationRegime();
 
 		ArrayList<PopulationAlleleCount> pacs=new MultiSimulationTimestamp(dipGenomes,genotypeCalculator,phenotypeCalculator,fitnessCalculator,survivalFunction,
 			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger).run();
