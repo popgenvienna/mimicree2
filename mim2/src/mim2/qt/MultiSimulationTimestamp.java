@@ -8,12 +8,15 @@ import mimcore.data.fitness.survival.ISurvivalFunction;
 import mimcore.data.migration.IMigrationRegime;
 import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.data.statistic.PACReducer;
+import mimcore.data.statistic.GPFCollection;
 import mimcore.data.statistic.PopulationAlleleCount;
 import mimcore.data.DiploidGenome;
 import mimcore.data.Population;
 import mimcore.io.HaplotypeMultiWriter;
+import mimcore.io.misc.GPFWriter;
 import mimcore.io.misc.ISummaryWriter;
 import mimcore.io.misc.SyncWriter;
+import mimcore.data.statistic.GPFReducer;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -40,6 +43,7 @@ public class MultiSimulationTimestamp {
 	// internal variables
 	private final HashSet<Integer> outputGenerations;
 	private ArrayList<PopulationAlleleCount> pacs;
+	private ArrayList<GPFCollection> gpfs;
 
 	public MultiSimulationTimestamp(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
 									IMigrationRegime migrationRegime, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
@@ -72,6 +76,7 @@ public class MultiSimulationTimestamp {
 
 		// internal variables
 		this.pacs=new ArrayList<PopulationAlleleCount>();
+		this.gpfs=new ArrayList<GPFCollection>();
 		
 	}
 
@@ -81,7 +86,7 @@ public class MultiSimulationTimestamp {
 
 
 
-		for(int k =0; k<this.replicateRuns; k++)
+		for(int k =0; k < this.replicateRuns; k++)
 		{
 			// Base population generated always anew, because new env. variance for each individual
 			// for different replicates you dont use the same individuals (phenotypes) but only the same genotypes (with different phenotypes)
@@ -120,16 +125,20 @@ public class MultiSimulationTimestamp {
 				if(outputGenerations.contains(i))
 				{
 					recordGPF(nextPopulation, i, simulationNumber);
-					recordPAC(nextPopulation,i,simulationNumber);
+					recordPAC(nextPopulation, i, simulationNumber);
 					recordHap(nextPopulation, i, simulationNumber);
 				}
 			}
 		}
 
 		// Finally write as yet unwritten results
-		if(!this.outputSync.equals(null)) {
+		if(this.outputSync!=null) {
 			ISummaryWriter sw = new SyncWriter(this.outputSync, this.logger);
 			sw.write(this.pacs);
+		}
+		if(this.outputGPF!=null){
+			GPFWriter gw=new GPFWriter(this.outputGPF,this.logger);
+			gw.write(gpfs);
 		}
 
 	}
@@ -138,7 +147,7 @@ public class MultiSimulationTimestamp {
 	private void recordPAC(Population toRecord,int generation, int replicate)
 	{
 		// No output file no action
-		if(this.outputSync.equals(null)) return;
+		if(this.outputSync==null) return;
 		this.logger.info("Recording allele frequences at generation "+generation+" of replicate "+replicate);
 		pacs.add(new PACReducer(toRecord).reduce());
 	}
@@ -146,15 +155,16 @@ public class MultiSimulationTimestamp {
 	private void recordGPF(Population toRecord, int generation, int replicate)
 	{
 		// No output file no action
-		if(this.outputGPF.equals(null)) return;
+		if(this.outputGPF==null) return;
 		this.logger.info("Recording genotype/phenotype/fitness at generation "+generation+" of replicate "+replicate);
+		gpfs.add(new GPFReducer(toRecord,replicate,generation).reduce());
 	}
 
 
 	private void recordHap(Population toRecord, int generation, int replicate)
 	{
 		// No output file no action
-		if(this.outputDir.equals(null)) return;
+		if(this.outputDir==null) return;
 		this.logger.info("Recording haplotypes at generation "+generation+" of replicate "+replicate);
 		new HaplotypeMultiWriter(toRecord, this.outputDir,generation, replicate, this.logger).write();
 	}

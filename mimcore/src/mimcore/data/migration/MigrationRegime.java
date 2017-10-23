@@ -11,27 +11,14 @@ import java.util.LinkedList;
  */
 public class MigrationRegime implements IMigrationRegime {
 	private final HashMap<Integer,Double> sr;
-	private final double def;
+	private final double defMigration;
 
 
-	public MigrationRegime(HashMap<Integer, Double> input)
-		{
-			LinkedList<Integer> keys = new LinkedList<Integer>(input.keySet());
-			Collections.sort(keys);
-			int lastGenerations=keys.peekLast();
-			Double defMigration=null;
+	public MigrationRegime(HashMap<Integer, Double> input) {
+		sr = new HashMap<Integer,Double>(input);
+		this.defMigration=0.0;
 
-			HashMap<Integer,Double> store=new HashMap<Integer, Double>();
-			for(int i=1;i<=lastGenerations; i++)
-			{
-				if(input.containsKey(i))defMigration=input.get(i);
-				if(defMigration==null) throw new IllegalArgumentException("You did not provide a migration rate for the first generations");
-				store.put(i,defMigration);
-
-			}
-			def=defMigration;
-			sr=store;
-		}
+	}
 
 
 	/**
@@ -49,7 +36,7 @@ public class MigrationRegime implements IMigrationRegime {
 		}
 		else
 		{
-			return def;
+			return defMigration;
 		}
 
 	}

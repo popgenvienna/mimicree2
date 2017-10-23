@@ -5,13 +5,13 @@ import mimcore.data.haplotypes.SNPCollection;
 /**
  * Represents summary statistics for a single populatio
  */
-public class PGF {
+public class GPF {
 	private final double genotype;
 	private final double phenotype;
 	private final double fitness;
 
 
-	public PGF(double genotype, double phenotype, double fitness)
+	public GPF(double genotype, double phenotype, double fitness)
 	{
 		this.genotype=genotype;
 		this.phenotype=phenotype;

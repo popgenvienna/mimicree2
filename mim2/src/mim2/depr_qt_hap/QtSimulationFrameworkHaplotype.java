@@ -109,7 +109,8 @@ public class QtSimulationFrameworkHaplotype {
 			variance+=ss;
 		}
 		variance= variance/((double)genotypes.size());
-		return new PhenotypeCalculator(ve,variance);
+		//return new PhenotypeCalculator(ve,variance);
+		return null;
 	}
 
 }

@@ -21,13 +21,17 @@ public class Main {
 			{
 				mim2.qt.SimulationCommandLineParser.runQTSimulations(rawarguments);
 			}
-			if(subtask.toLowerCase().equals("qs"))
+			else if(subtask.toLowerCase().equals("qs"))
 			{
 				// TODO
 			}
-			if(subtask.toLowerCase().equals("s"))
+			else if(subtask.toLowerCase().equals("sc"))
 			{
-				// TODO
+				// TODO fitness
+			}
+			else if(subtask.toLowerCase().equals("stat-qt-pgf"))
+			{
+				// TODO not sure if I should support this
 			}
 			else
 			{
@@ -45,9 +49,9 @@ public class Main {
 			StringBuilder sb=new StringBuilder();
 			sb.append("Usage: java -Xmx4g -jar mim2.jar [subtask] [parameters of subtask]\n\n");
 			sb.append("== Main tasks ==\n");
-			sb.append(CommandFormater.format("s","simulate selection for loci having given selection coefficients",null));
+			sb.append(CommandFormater.format("sc","simulate selection for loci having given selection coefficient",null));
 			sb.append(CommandFormater.format("qt","simulate truncating selection for a quantitative trait",null));
-			sb.append(CommandFormater.format("qs","simulate stabilizing selection for a quantitative trait;",null));
+			sb.append(CommandFormater.format("qs","simulate stabilizing selection for a quantitative trait",null));
 
 
 			sb.append("\n== Secondary tasks ==\n");
@@ -63,7 +67,7 @@ public class Main {
 
 		public static String getVersionNumber()
 		{
-			return "v0.41";
+			return "v0.54";
 		}
 
 

@@ -47,27 +47,28 @@ public class QtSimulationFrameworkSummary {
 		if(! new File(recombinationFile).exists()) throw new IllegalArgumentException("Recombination file does not exist " + recombinationFile);
 		if(! new File(effectSizeFile).exists()) logger.info("No effect size file found; Commencing neutral simulations\n");
 		// selection regime
-		if(selectionRegimeFile.equals(null))logger.info("No selection regime file found; Commencing neutral simulations\n");
+		if(selectionRegimeFile == null)logger.info("No selection regime file found; Commencing neutral simulations\n");
 		else if (! new File(selectionRegimeFile).exists()) throw new IllegalArgumentException("Selection regime file does not exist; "+selectionRegimeFile);
 
 		// migration regime
-		if(migrationRegimeFile.equals(null))logger.info("No migration regime file found; Proceeding without migration\n");
+		if(migrationRegimeFile == null)logger.info("No migration regime file found; Proceeding without migration\n");
 		else if (! new File(migrationRegimeFile).exists()) throw new IllegalArgumentException("Migration regime file does not exist; "+ migrationRegimeFile);
 
-		if(outputGPF.equals("null")) logger.info("No output genotype/phenotype/fitness file provided; will not record GPF\n");
+		if(outputGPF == null) logger.info("No output genotype/phenotype/fitness file provided; will not record GPF\n");
 		else try {new File(outputGPF).createNewFile();} catch(IOException e) {throw new IllegalArgumentException("Can not create GPF output file "+outputGPF);}
 
-		if(outputDir.equals(null) && outputSync.equals(null)) throw new IllegalArgumentException("No output was provided; Provide either an output directory or an output sync file or both");
+		if((outputDir == null) && (outputSync==null)) throw new IllegalArgumentException("No output was provided; Provide either an output directory or an output sync file or both");
 
-		if(outputDir.equals(null)) logger.info("No output director found; Will not record haplotypes\n");
+		if(outputDir== null) logger.info("No output director found; Will not record haplotypes\n");
 		else if(! new File(outputDir).exists()) throw new IllegalArgumentException("The provided output directory does not exist "+outputDir);
 
-		if(outputSync.equals(null)) logger.info("No output sync file was provided; Will not record allele frequencies\n");
+		if(outputSync == null) logger.info("No output sync file was provided; Will not record allele frequencies\n");
 		else try {new File(outputSync).createNewFile();} catch(IOException e) {throw new IllegalArgumentException("Can not create output sync file "+outputSync);}
 
 
 
-		if(heritability.equals(null) && ve.equals(null)) throw new IllegalArgumentException("Either ve or the heritability needs to be provided");
+		if((heritability==null) && (ve == null)) throw new IllegalArgumentException("Either ve or the heritability needs to be provided");
+		if((heritability!=null) && (ve != null)) throw new IllegalArgumentException("Either ve or the heritability needs to be provided, NOT BOTH");
 		if(!(replicateRuns>0)) throw new IllegalArgumentException("At least one replicate run should be provided; Provided by the user "+replicateRuns);
 
 		this.outputGPF=outputGPF;
@@ -105,7 +106,7 @@ public class QtSimulationFrameworkSummary {
 
 		// Survival function (truncating selection); If none specified all survive
 		ISurvivalFunction survivalFunction= new SurvivalRegimeAllSurvive();
-		if(!selectionRegimeFile.equals(null))
+		if(selectionRegimeFile != null)
 		{
 			ISelectionRegime selectionRegime=new SelectionRegimeReader(this.selectionRegimeFile,this.logger).readSelectionRegime();
 			survivalFunction=new SurvivalRegimeTruncatingSelection(selectionRegime);
@@ -113,7 +114,7 @@ public class QtSimulationFrameworkSummary {
 
 		// Migration regime; If none specified no migration
 		IMigrationRegime migrationRegime=new MigrationRegimeNoMigration();
-		if(!migrationRegimeFile.equals(null)) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger).readMigrationRegime();
+		if(migrationRegimeFile != null) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger).readMigrationRegime();
 
 		MultiSimulationTimestamp mst=new MultiSimulationTimestamp(dipGenomes,genotypeCalculator,phenotypeCalculator,fitnessCalculator,survivalFunction, migrationRegime, this.outputSync, this.outputGPF,this.outputDir,
 			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
@@ -125,12 +126,12 @@ public class QtSimulationFrameworkSummary {
 	public PhenotypeCalculator getPhenotypeCalculator(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator genotypeCalculator)
 	{
 		// if environmental variance exists than use it directly
-		if(!this.ve.equals(null)) {
+		if(this.ve!=null) {
 			this.logger.info("Enviromental variance was provided; Will proceed with VE="+this.ve);
 			return new PhenotypeCalculator(this.ve);
 		}
 
-		this.logger.info("No environmental variance was provided; Will compute VE from the heritability and the genotypic variance");
+		this.logger.info("No environmental variance was provided; Will compute VE from the heritability and the genotypic variance in the base population");
 
 		// if not compute the environmental variance from the heritability
 		ArrayList<Double> genotypes=new ArrayList<Double>();

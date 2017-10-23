@@ -22,7 +22,7 @@ public class MimicreeThreadPool {
 	
 	public static ExecutorService getExector()
 	{
-		if(executor==null)throw new IllegalArgumentException("qMimicrEEThreadPool needs to be initated before usage");
+		if(executor==null)throw new IllegalArgumentException("MimicrEE2 ThreadPool needs to be initated before usage");
 		return executor;
 	}
 	
