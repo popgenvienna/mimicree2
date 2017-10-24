@@ -67,7 +67,7 @@ public class Main {
 
 		public static String getVersionNumber()
 		{
-			return "v0.54";
+			return "v0.61";
 		}
 
 

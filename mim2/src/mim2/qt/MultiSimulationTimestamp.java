@@ -113,12 +113,15 @@ public class MultiSimulationTimestamp {
 				nextPopulation=phenTail.getNextGeneration(gc,pc,fc,new MatingFunctionRandomMating(),this.recGenerator,startpopulationsize);
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype());
 
-				// Use migration, if wanted
-				double migRate=this.migrationRegime.getMigrationRate(i,simulationNumber);
-				if(migRate>0.0) {
-					this.logger.info("Adding migrants from base population; Will use fraction of migrants "+migRate );
-					nextPopulation = Population.loadMigration(migRate, dipGenomes, nextPopulation, gc, pc, fc, new Random());
-					this.logger.info("Average genotype of new population "+nextPopulation.getAverageGenotype()+"; average phenotype of new population "+nextPopulation.getAveragePhenotype());
+				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>
+				ArrayList<DiploidGenome> migrants=this.migrationRegime.getMigrants(i,simulationNumber);
+				if(migrants.size()>0) {
+					this.logger.info("Adding "+migrants.size()+ " migrants to the evolved population (randomly removing an equivalent number of evolved individuals)");
+					Population migrantPop=Population.loadPopulation(migrants,gc,pc,fc, new Random());
+					this.logger.info("Average genotype of migrants "+migrantPop.getAverageGenotype()+"; average phenotype of migrants "+migrantPop.getAveragePhenotype());
+					nextPopulation = Population.loadMigration(migrantPop, nextPopulation, new Random(),this.logger);
+
+					this.logger.info("Average genotype of new population "+nextPopulation.getAverageGenotype()+"; average phenotype of new population "+nextPopulation.getAveragePhenotype()+ "; N="+nextPopulation.size());
 				}
 
 				// record stuff only in the requested generations

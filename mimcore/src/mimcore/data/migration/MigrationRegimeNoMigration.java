@@ -1,5 +1,8 @@
 package mimcore.data.migration;
 
+import mimcore.data.DiploidGenome;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,9 +26,9 @@ public class MigrationRegimeNoMigration implements IMigrationRegime {
 	 * @param generation
 	 * @return
 	 */
-	public double getMigrationRate(int generation, int replicate)
+	public ArrayList<DiploidGenome> getMigrants(int generation, int replicate)
 	{
-		return 0.0D;
+		return new ArrayList<DiploidGenome>();
 	}
 }
 

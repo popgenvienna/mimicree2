@@ -9,11 +9,10 @@ import mimcore.data.fitness.survival.*;
 import mimcore.data.migration.IMigrationRegime;
 import mimcore.data.migration.MigrationRegimeNoMigration;
 import mimcore.data.recombination.*;
-import mimcore.data.statistic.PopulationAlleleCount;
 import mimcore.io.*;
 import mimcore.io.migrationRegime.MigrationRegimeReader;
+import mimcore.io.migrationRegime.MigrationRegimeReader_Deprecated;
 import mimcore.io.selectionregime.*;
-import mimcore.io.misc.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -114,7 +113,7 @@ public class QtSimulationFrameworkSummary {
 
 		// Migration regime; If none specified no migration
 		IMigrationRegime migrationRegime=new MigrationRegimeNoMigration();
-		if(migrationRegimeFile != null) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger).readMigrationRegime();
+		if(migrationRegimeFile != null) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger,dipGenomes).readMigrationRegime();
 
 		MultiSimulationTimestamp mst=new MultiSimulationTimestamp(dipGenomes,genotypeCalculator,phenotypeCalculator,fitnessCalculator,survivalFunction, migrationRegime, this.outputSync, this.outputGPF,this.outputDir,
 			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);

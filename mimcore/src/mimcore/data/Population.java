@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 
 /**
@@ -55,40 +56,29 @@ public class Population {
 
 
 
-	public static Population loadMigration(double migrationRate, ArrayList<DiploidGenome> migrantPool, Population targetPopulation, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, Random random)
+	public static Population loadMigration(Population migrants, Population targetPopulation, Random random, Logger logger)
 	{
 		// no migration no action
-		if(!(migrationRate>0)) return targetPopulation;
+		if(migrants.size()==0) return targetPopulation;
 
 		//ok ok we have some migration
+		// Convert migrants into specimens
+		ArrayList<Specimen> newPopulation=migrants.getSpecimen();
+
 		int popsize=targetPopulation.size();
-		int migrantCount=(int)(migrationRate*(double)popsize);
 
-		// First pick the migrants
-		ArrayList<Specimen> newPopulation=new ArrayList<Specimen>();
-		LinkedList<DiploidGenome> potentialMigrants=new LinkedList<DiploidGenome>(migrantPool);
-		for(int i=0; i<migrantCount; i++)
-		{
-			int targetindex=random.nextInt(potentialMigrants.size());
-			DiploidGenome genome=potentialMigrants.remove(targetindex);
 
-			// compute the GPF
-			double genotype=gc.getGenotype(genome);
-			double phenotype=pc.getPhenotype(genotype,random);
-			double fitness=fc.getFitness(genome);
-			Specimen s=new Specimen(genotype,phenotype,fitness,genome);
-			newPopulation.add(s);
-		}
-
-		// second fill in from the target population
+		// second fill in the remaining individuals randomly from the target population
 		LinkedList<Specimen> tps=new LinkedList<Specimen>(targetPopulation.getSpecimen());
+		int countAdded=0;
 		while(newPopulation.size()<popsize)
 		{
 			int targetindex=random.nextInt(tps.size());
 			Specimen spec=tps.remove(targetindex);
 			newPopulation.add(spec);
+			countAdded++;
 		}
-
+		logger.fine("Added "+countAdded+" from evolved population");
 		// Create a new population
 		return new Population(newPopulation);
 	}
