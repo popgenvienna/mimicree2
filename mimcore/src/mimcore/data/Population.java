@@ -5,7 +5,7 @@ package mimcore.data;
 import mimcore.data.gpf.mating.IMatingFunction;
 import mimcore.data.gpf.quantitative.IGenotypeCalculator;
 import mimcore.data.gpf.quantitative.IPhenotypeCalculator;
-import mimcore.data.gpf.IFitnessCalculator;
+import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.recombination.*;
 import mimcore.misc.MimicreeThreadPool;
 

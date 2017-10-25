@@ -1,4 +1,4 @@
-package mimcore.data.gpf;
+package mimcore.data.gpf.fitness;
 
 import mimcore.data.DiploidGenome;
 
