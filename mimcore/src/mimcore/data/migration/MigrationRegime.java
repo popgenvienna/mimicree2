@@ -1,7 +1,6 @@
 package mimcore.data.migration;
 
 import mimcore.data.DiploidGenome;
-import mimcore.data.fitness.survival.ISelectionRegime;
 
 import java.io.File;
 import java.util.*;

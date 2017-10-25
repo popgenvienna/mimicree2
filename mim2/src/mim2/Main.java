@@ -29,7 +29,7 @@ public class Main {
 			}
 			else if(subtask.toLowerCase().equals("sc"))
 			{
-				// TODO fitness
+				// TODO gpf
 			}
 			else if(subtask.toLowerCase().equals("stat-qt-pgf"))
 			{

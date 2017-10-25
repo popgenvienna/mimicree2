@@ -50,9 +50,9 @@ public class HaplotypeMultiWriter {
 			System.exit(0);
 		}
 
-		/* In case I ever need fitness output
+		/* In case I ever need gpf output
 		try{
-			fitnessOFile = new File(this.outputDir,"fitness.r" + this.simulationNumber + ".g"+this.generation).getCanonicalPath();
+			fitnessOFile = new File(this.outputDir,"gpf.r" + this.simulationNumber + ".g"+this.generation).getCanonicalPath();
 		}
 		catch(IOException e)
 		{

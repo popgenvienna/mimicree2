@@ -3,6 +3,8 @@ package mim2.shared;
 import java.util.ArrayList;
 
 public enum SimulationMode {
+
+
 	Timestamp;
 
 	private ArrayList<Integer> timestamps;

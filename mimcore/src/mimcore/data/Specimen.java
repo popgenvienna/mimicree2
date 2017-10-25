@@ -7,7 +7,7 @@ import java.util.Random;
 
 /**
  * Represent a single specimen which can be imagined as a phenotype.
- * A specimen has a diplod genome, a fitness and a recombination rate
+ * A specimen has a diplod genome, a gpf and a recombination rate
  * Immutable
  * @author robertkofler
  *

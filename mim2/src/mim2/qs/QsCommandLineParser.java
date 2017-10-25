@@ -2,7 +2,7 @@ package mim2.qs;
 
 
 import mim2.CommandFormater;
-import mim2.qt.QtSimulationFramework;
+import mim2.shared.CommandLineParseHelp;
 import mim2.shared.SimulationMode;
 import mimcore.misc.MimicreeLogFactory;
 import mimcore.misc.MimicreeThreadPool;
@@ -29,7 +29,8 @@ public class QsCommandLineParser {
 		String outputGPF=null;
 		String outputDir=null;
 		String outputGenRaw="";
-		String selectionRegimFile=null;         //
+		String gaussianFitnessFunctionFile=null;         // either or
+		String fitnessFunctionFile=null;
 		String migrationRegimeFile=null;
 		String chromosomeDefinition="";
 		Integer seed=null;
@@ -67,10 +68,14 @@ public class QsCommandLineParser {
             {
             	effectSizeFile=args.remove(0);
             }
-            else if(cu.equals("--selection-regime"))
+            else if(cu.equals("--gauss-gpf-function"))
             {
-            	selectionRegimFile=args.remove(0);
+				gaussianFitnessFunctionFile=args.remove(0);
             }
+			else if(cu.equals("--gpf-function"))
+			{
+				fitnessFunctionFile=args.remove(0);
+			}
 			else if(cu.equals("--migration-regime"))
 			{
 				migrationRegimeFile=args.remove(0);
@@ -122,11 +127,11 @@ public class QsCommandLineParser {
 
     
         // Parse the string with the generations
-        SimulationMode simMode = parseOutputGenerations(outputGenRaw);
+        SimulationMode simMode = CommandLineParseHelp.parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
-        QtSimulationFramework mimframe= new QtSimulationFramework(haplotypeFile,recombinationFile,chromosomeDefinition,
-				effectSizeFile,ve,heritability,selectionRegimFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
+        QsSimulationFramework mimframe= new QsSimulationFramework(haplotypeFile,recombinationFile,chromosomeDefinition,
+				effectSizeFile,ve,heritability,gaussianFitnessFunctionFile,fitnessFunctionFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
         
         mimframe.run();
 	}
@@ -140,14 +145,15 @@ public class QsCommandLineParser {
 		sb.append(CommandFormater.format("--recombination-rate","the recombination rate for windows of fixed size",null));
 		sb.append(CommandFormater.format("--effect-size","the causative SNPs and their effect sizes",null));
 		sb.append(CommandFormater.format( "--ve", "environmental variance; either --ve or --heritability needs to be provided", null));
-		sb.append(CommandFormater.format( "--heritability", "heritability; either --ve or --heritability needs to be provided", null));
+		sb.append(CommandFormater.format("--heritability", "heritability; either --ve or --heritability needs to be provided", null));
 		sb.append(CommandFormater.format("--chromosome-definition","which chromosomes parts constitute a chromosome",null));
 		sb.append(CommandFormater.format("--output-mode","a coma separated list of generations to output",null));
 		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));
 		sb.append(CommandFormater.format("--output-sync","the output file (sync); --output-dir or --output-sync or both may be provided",null));
 		sb.append(CommandFormater.format("--output-dir","the output directory for the haplotypes; --output-dir or --output-sync or both may be provided",null));
-		sb.append(CommandFormater.format("--output-gpf","the output file for genotype/phenotype/fitness; optional",null));
-		sb.append(CommandFormater.format("--selection-regime","the selection regime",null));
+		sb.append(CommandFormater.format("--output-gpf","the output file for genotype/phenotype/gpf; optional",null));
+		sb.append(CommandFormater.format("--gauss-gpf-function","a gaussian gpf function for mapping the phenotype to gpf; --gpf-function or --gauss-gpf-function may be provided",null));
+		sb.append(CommandFormater.format("--gpf-function","a gpf function for mapping the phenotype to gpf; either --gpf-function or --gauss-gpf-function may be provided",null));
 		sb.append(CommandFormater.format("--migration-regime","the migration regime; migration from the base population to the evolved populations",null));
 		sb.append(CommandFormater.format("--detailed-log","print detailed log messages",null));
 		sb.append(CommandFormater.format("--threads","the number of threads to use",null));
@@ -158,29 +164,4 @@ public class QsCommandLineParser {
 
 
 
-	
-	public static SimulationMode parseOutputGenerations(String outputGenerationsRaw)
-	{
-		// Parse a String consistent of a comma-separated list of numbers, to a array of integers
-		SimulationMode simMode;
-			String [] tmp;
-			if(outputGenerationsRaw.contains(","))
-			{
-				tmp=outputGenerationsRaw.split(",");
-			}
-			else
-			{
-				tmp=new String[1];
-				tmp[0]=outputGenerationsRaw;
-			}
-			// Convert everything to int
-			ArrayList<Integer> ti=new ArrayList<Integer>();
-			for(String s :tmp)
-			{
-				ti.add(Integer.parseInt(s));
-			}
-			simMode=SimulationMode.Timestamp;
-			simMode.setTimestamps(ti);
-		return simMode;
-	}
 }

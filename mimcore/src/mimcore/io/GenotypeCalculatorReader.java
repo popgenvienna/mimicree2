@@ -2,8 +2,8 @@ package mimcore.io;
 
 import mimcore.data.Chromosome;
 import mimcore.data.GenomicPosition;
-import mimcore.data.fitness.quantitative.AdditiveSNPeffect;
-import mimcore.data.fitness.quantitative.GenotypeCalculator;
+import mimcore.data.gpf.quantitative.AdditiveSNPeffect;
+import mimcore.data.gpf.quantitative.GenotypeCalculator;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -32,13 +32,13 @@ public class GenotypeCalculatorReader {
 	}
 	
 	/**
-	 * Retrieve the additive fitness effects of SNPs from a file
+	 * Retrieve the additive gpf effects of SNPs from a file
 	 * @return
 	 */
 	public GenotypeCalculator readAdditiveFitness()
 	{
 		ArrayList<AdditiveSNPeffect> addSNPs=new ArrayList<AdditiveSNPeffect>();
-		this.logger.info("Start reading additive fitness effects from file "+this.additiveFile);
+		this.logger.info("Start reading additive gpf effects from file "+this.additiveFile);
 		String line;
 		try
 		{
@@ -65,7 +65,7 @@ public class GenotypeCalculatorReader {
 		}
 		
 		
-		this.logger.info("Finished reading " + addSNPs.size() + " additive fitness effects of SNPs");
+		this.logger.info("Finished reading " + addSNPs.size() + " additive gpf effects of SNPs");
 		return new GenotypeCalculator(addSNPs);
 	}
 	

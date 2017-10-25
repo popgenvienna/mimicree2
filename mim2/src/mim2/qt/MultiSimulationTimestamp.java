@@ -1,10 +1,10 @@
 package mim2.qt;
 
 
-import mimcore.data.fitness.IFitnessCalculator;
-import mimcore.data.fitness.mating.MatingFunctionRandomMating;
-import mimcore.data.fitness.quantitative.*;
-import mimcore.data.fitness.survival.ISurvivalFunction;
+import mimcore.data.gpf.IFitnessCalculator;
+import mimcore.data.gpf.mating.MatingFunctionRandomMating;
+import mimcore.data.gpf.quantitative.*;
+import mimcore.data.gpf.survival.ISurvivalFunction;
 import mimcore.data.migration.IMigrationRegime;
 import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.data.statistic.PACReducer;
@@ -159,7 +159,7 @@ public class MultiSimulationTimestamp {
 	{
 		// No output file no action
 		if(this.outputGPF==null) return;
-		this.logger.info("Recording genotype/phenotype/fitness at generation "+generation+" of replicate "+replicate);
+		this.logger.info("Recording genotype/phenotype/gpf at generation "+generation+" of replicate "+replicate);
 		gpfs.add(new GPFReducer(toRecord,replicate,generation).reduce());
 	}
 

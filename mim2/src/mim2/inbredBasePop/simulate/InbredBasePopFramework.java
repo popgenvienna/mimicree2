@@ -1,11 +1,9 @@
 package mim2.inbredBasePop.simulate;
 
 import mimcore.data.*;
-import mimcore.data.fitness.*;
 import mimcore.data.recombination.*;
 import mimcore.io.*;
 import mimcore.io.haplotypes.DiploidGenomeWriter;
-import mimcore.io.misc.*;
 
 import java.io.File;
 import java.io.IOException;

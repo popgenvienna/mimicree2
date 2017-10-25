@@ -1,6 +1,6 @@
 package mimcore.io.migrationRegime;
 
-import mimcore.data.fitness.survival.ISelectionRegime;
+import mimcore.data.gpf.survival.ISelectionRegime;
 import mimcore.data.migration.IMigrationRegime;
 
 import java.io.BufferedReader;

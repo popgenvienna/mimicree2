@@ -1,6 +1,6 @@
 package mimcore.io.selectionregime;
 
-import mimcore.data.fitness.survival.SelectionRegimeReplicateSpecific;
+import mimcore.data.gpf.survival.SelectionRegimeReplicateSpecific;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;

@@ -3,11 +3,11 @@ package mim2.depr_qt_hap;
 
 import mimcore.data.DiploidGenome;
 import mimcore.data.Population;
-import mimcore.data.fitness.IFitnessCalculator;
-import mimcore.data.fitness.mating.MatingFunctionRandomMating;
-import mimcore.data.fitness.quantitative.GenotypeCalculator;
-import mimcore.data.fitness.quantitative.PhenotypeCalculator;
-import mimcore.data.fitness.survival.ISurvivalFunction;
+import mimcore.data.gpf.IFitnessCalculator;
+import mimcore.data.gpf.mating.MatingFunctionRandomMating;
+import mimcore.data.gpf.quantitative.GenotypeCalculator;
+import mimcore.data.gpf.quantitative.PhenotypeCalculator;
+import mimcore.data.gpf.survival.ISurvivalFunction;
 import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.io.HaplotypeMultiWriter;
 

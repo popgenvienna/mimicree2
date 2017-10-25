@@ -2,6 +2,7 @@ package mim2.qt;
 
 
 import mim2.CommandFormater;
+import mim2.shared.CommandLineParseHelp;
 import mim2.shared.SimulationMode;
 import mimcore.misc.MimicreeLogFactory;
 import mimcore.misc.MimicreeThreadPool;
@@ -121,7 +122,7 @@ public class QtCommandLineParser {
 
     
         // Parse the string with the generations
-        SimulationMode simMode = parseOutputGenerations(outputGenRaw);
+        SimulationMode simMode = CommandLineParseHelp.parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
         QtSimulationFramework mimframe= new QtSimulationFramework(haplotypeFile,recombinationFile,chromosomeDefinition,
@@ -145,8 +146,8 @@ public class QtCommandLineParser {
 		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));
 		sb.append(CommandFormater.format("--output-sync","the output file (sync); --output-dir or --output-sync or both may be provided",null));
 		sb.append(CommandFormater.format("--output-dir","the output directory for the haplotypes; --output-dir or --output-sync or both may be provided",null));
-		sb.append(CommandFormater.format("--output-gpf","the output file for genotype/phenotype/fitness; optional",null));
-		sb.append(CommandFormater.format("--selection-regime","the selection regime",null));
+		sb.append(CommandFormater.format("--output-gpf","the output file for genotype/phenotype/gpf; optional",null));
+		sb.append(CommandFormater.format("--selection-regime","the truncating selection regime",null));
 		sb.append(CommandFormater.format("--migration-regime","the migration regime; migration from the base population to the evolved populations",null));
 		sb.append(CommandFormater.format("--detailed-log","print detailed log messages",null));
 		sb.append(CommandFormater.format("--threads","the number of threads to use",null));
@@ -158,28 +159,5 @@ public class QtCommandLineParser {
 
 
 	
-	public static SimulationMode parseOutputGenerations(String outputGenerationsRaw)
-	{
-		// Parse a String consistent of a comma-separated list of numbers, to a array of integers
-		SimulationMode simMode;
-			String [] tmp;
-			if(outputGenerationsRaw.contains(","))
-			{
-				tmp=outputGenerationsRaw.split(",");
-			}
-			else
-			{
-				tmp=new String[1];
-				tmp[0]=outputGenerationsRaw;
-			}
-			// Convert everything to int
-			ArrayList<Integer> ti=new ArrayList<Integer>();
-			for(String s :tmp)
-			{
-				ti.add(Integer.parseInt(s));
-			}
-			simMode=SimulationMode.Timestamp;
-			simMode.setTimestamps(ti);
-		return simMode;
-	}
+
 }

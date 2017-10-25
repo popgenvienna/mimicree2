@@ -4,10 +4,10 @@ import mimcore.data.DiploidGenome;
 import mimcore.data.MatePair;
 import mimcore.data.Population;
 import mimcore.data.Specimen;
-import mimcore.data.fitness.FitnessCalculatorDefault;
-import mimcore.data.fitness.IFitnessCalculator;
-import mimcore.data.fitness.mating.MatingFunctionRandomMating;
-import mimcore.data.fitness.quantitative.*;
+import mimcore.data.gpf.FitnessCalculatorDefault;
+import mimcore.data.gpf.IFitnessCalculator;
+import mimcore.data.gpf.mating.MatingFunctionRandomMating;
+import mimcore.data.gpf.quantitative.*;
 import mimcore.data.recombination.RecombinationGenerator;
 
 import java.util.ArrayList;

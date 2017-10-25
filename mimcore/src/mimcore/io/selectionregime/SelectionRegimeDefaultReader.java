@@ -1,6 +1,6 @@
 package mimcore.io.selectionregime;
 
-import mimcore.data.fitness.survival.SelectionRegimeDefault;
+import mimcore.data.gpf.survival.SelectionRegimeDefault;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

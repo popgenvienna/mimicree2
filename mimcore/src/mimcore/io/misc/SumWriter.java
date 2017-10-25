@@ -1,6 +1,5 @@
 package mimcore.io.misc;
 
-import mimcore.data.fitness.*;
 import mimcore.data.haplotypes.SNP;
 import mimcore.data.haplotypes.SNPCollection;
 import mimcore.data.statistic.*;
