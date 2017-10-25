@@ -1,5 +1,6 @@
 package mim2.qt;
 
+import mim2.shared.SimulationMode;
 import mimcore.data.*;
 import mimcore.data.fitness.*;
 import mimcore.data.fitness.FitnessCalculatorDefault;
@@ -11,14 +12,13 @@ import mimcore.data.migration.MigrationRegimeNoMigration;
 import mimcore.data.recombination.*;
 import mimcore.io.*;
 import mimcore.io.migrationRegime.MigrationRegimeReader;
-import mimcore.io.migrationRegime.MigrationRegimeReader_Deprecated;
 import mimcore.io.selectionregime.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class QtSimulationFrameworkSummary {
+public class QtSimulationFramework {
 	private final String haplotypeFile;
 	private final String recombinationFile;
 	private final String chromosomeDefinition;
@@ -37,8 +37,8 @@ public class QtSimulationFrameworkSummary {
 
 	private final java.util.logging.Logger logger;
 	//chromosomeDefinition,   	effectSizeFile,heritability,selectionRegimFile,outputFile,simMode,
-	public QtSimulationFrameworkSummary(String haplotypeFile, String recombinationFile, String chromosomeDefinition, String effectSizeFile, Double ve, Double heritability,
-										String selectionRegimeFile, String migrationRegimeFile, String outputSync,String outputGPF, String outputDir,  SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
+	public QtSimulationFramework(String haplotypeFile, String recombinationFile, String chromosomeDefinition, String effectSizeFile, Double ve, Double heritability,
+                                 String selectionRegimeFile, String migrationRegimeFile, String outputSync, String outputGPF, String outputDir, SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
 	{
 		// 'File' represents files and directories
 		// Test if input files exist

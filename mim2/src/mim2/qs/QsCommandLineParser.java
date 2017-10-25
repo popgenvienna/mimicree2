@@ -1,7 +1,8 @@
-package mim2.depr_qt_hap;
+package mim2.qs;
 
 
 import mim2.CommandFormater;
+import mim2.qt.QtSimulationFramework;
 import mim2.shared.SimulationMode;
 import mimcore.misc.MimicreeLogFactory;
 import mimcore.misc.MimicreeThreadPool;
@@ -11,7 +12,7 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 
-public class SimulationCommandLineParser {
+public class QsCommandLineParser {
 	
 	/**
 	 * Parse the command line arguments and return the results
@@ -24,13 +25,17 @@ public class SimulationCommandLineParser {
 		String haplotypeFile="";
 		String recombinationFile="";
 		String effectSizeFile="";            //
-		String outputDir="";
+		String outputSync=null;
+		String outputGPF=null;
+		String outputDir=null;
 		String outputGenRaw="";
-		String selectionRegimFile="";         //
+		String selectionRegimFile=null;         //
+		String migrationRegimeFile=null;
 		String chromosomeDefinition="";
 		Integer seed=null;
 		int replicateRuns=1;                   //
-		double ve=0.0;
+		Double ve=null;
+		Double heritability=null;
 		boolean detailedLog=false;
 		int threadCount=1;
 
@@ -66,9 +71,17 @@ public class SimulationCommandLineParser {
             {
             	selectionRegimFile=args.remove(0);
             }
+			else if(cu.equals("--migration-regime"))
+			{
+				migrationRegimeFile=args.remove(0);
+			}
 			else if(cu.equals("--ve"))
 			{
 				ve=Double.parseDouble(args.remove(0));
+			}
+			else if(cu.equals("--heritability"))
+			{
+				heritability=Double.parseDouble(args.remove(0));
 			}
             else if(cu.equals("--chromosome-definition"))
             {
@@ -82,10 +95,18 @@ public class SimulationCommandLineParser {
             {
             	replicateRuns=Integer.parseInt(args.remove(0));
             }
-            else if(cu.equals("--output-dir"))
+            else if(cu.equals("--output-sync"))
             {
-            	outputDir=args.remove(0);
+            	outputSync=args.remove(0);
             }
+			else if(cu.equals("--output-dir"))
+			{
+				outputDir=args.remove(0);
+			}
+			else if(cu.equals("--output-gpf"))
+			{
+				outputGPF=args.remove(0);
+			}
             else if(cu.equals("--help"))
             {
             	printHelpMessage();
@@ -104,8 +125,8 @@ public class SimulationCommandLineParser {
         SimulationMode simMode = parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
-        mim2.depr_qt_hap.QtSimulationFrameworkHaplotype mimframe= new QtSimulationFrameworkHaplotype(haplotypeFile,recombinationFile,chromosomeDefinition,
-				effectSizeFile,ve,selectionRegimFile,outputDir,simMode,replicateRuns,logger);
+        QtSimulationFramework mimframe= new QtSimulationFramework(haplotypeFile,recombinationFile,chromosomeDefinition,
+				effectSizeFile,ve,heritability,selectionRegimFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
         
         mimframe.run();
 	}
@@ -114,16 +135,20 @@ public class SimulationCommandLineParser {
 	public static void printHelpMessage()
 	{
 		StringBuilder sb=new StringBuilder();
-		sb.append("qt-hap: Simulate truncating selection for a quantitative trait; output detailed haplotypes\n");
+		sb.append("qt: Simulate truncating selection for a quantitative trait\n");
 		sb.append(CommandFormater.format("--haplotypes-g0","the haplotype file",null));
 		sb.append(CommandFormater.format("--recombination-rate","the recombination rate for windows of fixed size",null));
 		sb.append(CommandFormater.format("--effect-size","the causative SNPs and their effect sizes",null));
-		sb.append(CommandFormater.format("--ve","environmental variance","0.0"));
+		sb.append(CommandFormater.format( "--ve", "environmental variance; either --ve or --heritability needs to be provided", null));
+		sb.append(CommandFormater.format( "--heritability", "heritability; either --ve or --heritability needs to be provided", null));
 		sb.append(CommandFormater.format("--chromosome-definition","which chromosomes parts constitute a chromosome",null));
 		sb.append(CommandFormater.format("--output-mode","a coma separated list of generations to output",null));
 		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));
-		sb.append(CommandFormater.format("--output-dir","the output directory",null));
+		sb.append(CommandFormater.format("--output-sync","the output file (sync); --output-dir or --output-sync or both may be provided",null));
+		sb.append(CommandFormater.format("--output-dir","the output directory for the haplotypes; --output-dir or --output-sync or both may be provided",null));
+		sb.append(CommandFormater.format("--output-gpf","the output file for genotype/phenotype/fitness; optional",null));
 		sb.append(CommandFormater.format("--selection-regime","the selection regime",null));
+		sb.append(CommandFormater.format("--migration-regime","the migration regime; migration from the base population to the evolved populations",null));
 		sb.append(CommandFormater.format("--detailed-log","print detailed log messages",null));
 		sb.append(CommandFormater.format("--threads","the number of threads to use",null));
 		sb.append(CommandFormater.format("--help","print the help",null));

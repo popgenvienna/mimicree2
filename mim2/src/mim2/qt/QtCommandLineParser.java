@@ -2,6 +2,7 @@ package mim2.qt;
 
 
 import mim2.CommandFormater;
+import mim2.shared.SimulationMode;
 import mimcore.misc.MimicreeLogFactory;
 import mimcore.misc.MimicreeThreadPool;
 
@@ -10,7 +11,7 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 
-public class SimulationCommandLineParser {
+public class QtCommandLineParser {
 	
 	/**
 	 * Parse the command line arguments and return the results
@@ -123,7 +124,7 @@ public class SimulationCommandLineParser {
         SimulationMode simMode = parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
-        mim2.qt.QtSimulationFrameworkSummary mimframe= new QtSimulationFrameworkSummary(haplotypeFile,recombinationFile,chromosomeDefinition,
+        QtSimulationFramework mimframe= new QtSimulationFramework(haplotypeFile,recombinationFile,chromosomeDefinition,
 				effectSizeFile,ve,heritability,selectionRegimFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
         
         mimframe.run();

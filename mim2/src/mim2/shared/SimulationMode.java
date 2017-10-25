@@ -1,4 +1,4 @@
-package mim2.qt;
+package mim2.shared;
 
 import java.util.ArrayList;
 

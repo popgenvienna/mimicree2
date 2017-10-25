@@ -1,5 +1,7 @@
 package mim2;
 
+import mim2.qt.QtCommandLineParser;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -19,7 +21,7 @@ public class Main {
 			String subtask=rawarguments.remove(0);
 			if(subtask.toLowerCase().equals("qt"))
 			{
-				mim2.qt.SimulationCommandLineParser.runQTSimulations(rawarguments);
+				QtCommandLineParser.runQTSimulations(rawarguments);
 			}
 			else if(subtask.toLowerCase().equals("qs"))
 			{
@@ -32,6 +34,10 @@ public class Main {
 			else if(subtask.toLowerCase().equals("stat-qt-pgf"))
 			{
 				// TODO not sure if I should support this
+			}
+			else if(subtask.toLowerCase().equals("__test__"))
+			{
+
 			}
 			else
 			{

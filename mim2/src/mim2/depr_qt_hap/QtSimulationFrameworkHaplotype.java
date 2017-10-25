@@ -1,6 +1,6 @@
 package mim2.depr_qt_hap;
 
-import mim2.qt.SimulationMode;
+import mim2.shared.SimulationMode;
 import mimcore.data.DiploidGenome;
 import mimcore.data.fitness.FitnessCalculatorDefault;
 import mimcore.data.fitness.IFitnessCalculator;
