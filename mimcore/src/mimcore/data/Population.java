@@ -92,7 +92,7 @@ public class Population {
 		{
 			double genotype=gc.getGenotype(genome);
 			double phenotype=pc.getPhenotype(genotype,random);
-			double fitness=fc.getFitness(genome);
+			double fitness=fc.getFitness(genome,phenotype);
 			Specimen s=new Specimen(genotype,phenotype,fitness,genome);
 			specimens.add(s);
 
@@ -299,7 +299,7 @@ class SingleSpecimenGenerator implements Runnable
 		DiploidGenome fertilizedEgg=mp.getChild(recGenerator,this.random);
 		double genotype=gc.getGenotype(fertilizedEgg);
 		double phenotype=pc.getPhenotype(genotype,random);
-		double fitness=fc.getFitness(fertilizedEgg);
+		double fitness=fc.getFitness(fertilizedEgg,phenotype);
 		Specimen spec=   new Specimen(genotype,phenotype,fitness,fertilizedEgg);
 		collector.addSpecimen(spec);
 	}

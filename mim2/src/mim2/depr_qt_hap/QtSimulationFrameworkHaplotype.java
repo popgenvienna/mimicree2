@@ -2,8 +2,8 @@ package mim2.depr_qt_hap;
 
 import mim2.shared.SimulationMode;
 import mimcore.data.DiploidGenome;
-import mimcore.data.gpf.FitnessCalculatorDefault;
-import mimcore.data.gpf.IFitnessCalculator;
+import mimcore.data.gpf.fitness.FitnessCalculatorAllEqual;
+import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.gpf.quantitative.GenotypeCalculator;
 import mimcore.data.gpf.quantitative.PhenotypeCalculator;
 import mimcore.data.gpf.survival.ISelectionRegime;
@@ -75,7 +75,7 @@ public class QtSimulationFrameworkHaplotype {
 
 		GenotypeCalculator genotypeCalculator=new GenotypeCalculatorReader(this.effectSizeFile,this.logger).readAdditiveFitness();
 		PhenotypeCalculator phenotypeCalculator=getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.ve);
-		IFitnessCalculator fitnessCalculator=new FitnessCalculatorDefault();
+		IFitnessCalculator fitnessCalculator=new FitnessCalculatorAllEqual();
 
 		ISelectionRegime selectionRegime=new SelectionRegimeReader(this.selectionRegimeFile,this.logger).readSelectionRegime();
 		ISurvivalFunction survivalFunction=new SurvivalRegimeTruncatingSelection(selectionRegime);

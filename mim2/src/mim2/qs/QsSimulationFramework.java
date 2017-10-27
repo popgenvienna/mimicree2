@@ -4,8 +4,8 @@ import mim2.qt.MultiSimulationTimestamp;
 import mim2.shared.GPFHelper;
 import mim2.shared.SimulationMode;
 import mimcore.data.DiploidGenome;
-import mimcore.data.gpf.FitnessCalculatorDefault;
-import mimcore.data.gpf.IFitnessCalculator;
+import mimcore.data.gpf.fitness.FitnessCalculatorAllEqual;
+import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.gpf.quantitative.GenotypeCalculator;
 import mimcore.data.gpf.quantitative.PhenotypeCalculator;
 import mimcore.data.gpf.survival.ISelectionRegime;
@@ -102,7 +102,7 @@ public class QsSimulationFramework {
 
 	public void run()
 	{
-		this.logger.info("Starting qt");
+		this.logger.info("Starting qs (quantitative trait under stabilizing selection)");
 
 
 		// Load the data
@@ -113,16 +113,12 @@ public class QsSimulationFramework {
 
 		// Compute GPF
 		GenotypeCalculator genotypeCalculator=new GenotypeCalculatorReader(this.effectSizeFile,this.logger).readAdditiveFitness();
-		PhenotypeCalculator phenotypeCalculator= GPFHelper.getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.ve,this.heritability,this.logger)(dipGenomes,genotypeCalculator);
-		IFitnessCalculator fitnessCalculator=new FitnessCalculatorDefault();
+		PhenotypeCalculator phenotypeCalculator= GPFHelper.getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.ve,this.heritability,this.logger);
+		IFitnessCalculator fitnessCalculator=new FitnessCalculatorAllEqual();
 
-		// Survival function (truncating selection); If none specified all survive
+		// Survival function; no selective deaths; all survive
 		ISurvivalFunction survivalFunction= new SurvivalRegimeAllSurvive();
-		if(selectionRegimeFile != null)
-		{
-			ISelectionRegime selectionRegime=new SelectionRegimeReader(this.selectionRegimeFile,this.logger).readSelectionRegime();
-			survivalFunction=new SurvivalRegimeTruncatingSelection(selectionRegime);
-		}
+
 
 		// Migration regime; If none specified no migration
 		IMigrationRegime migrationRegime=new MigrationRegimeNoMigration();

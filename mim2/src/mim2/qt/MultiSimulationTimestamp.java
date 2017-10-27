@@ -1,7 +1,7 @@
 package mim2.qt;
 
 
-import mimcore.data.gpf.IFitnessCalculator;
+import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.gpf.mating.MatingFunctionRandomMating;
 import mimcore.data.gpf.quantitative.*;
 import mimcore.data.gpf.survival.ISurvivalFunction;

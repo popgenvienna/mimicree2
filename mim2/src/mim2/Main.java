@@ -1,6 +1,7 @@
 package mim2;
 
 import mim2.qt.QtCommandLineParser;
+import mim2.test.TestMain;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -37,7 +38,7 @@ public class Main {
 			}
 			else if(subtask.toLowerCase().equals("__test__"))
 			{
-
+				TestMain.codeToTest();
 			}
 			else
 			{

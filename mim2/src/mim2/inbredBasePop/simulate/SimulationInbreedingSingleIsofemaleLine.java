@@ -4,8 +4,8 @@ import mimcore.data.DiploidGenome;
 import mimcore.data.MatePair;
 import mimcore.data.Population;
 import mimcore.data.Specimen;
-import mimcore.data.gpf.FitnessCalculatorDefault;
-import mimcore.data.gpf.IFitnessCalculator;
+import mimcore.data.gpf.fitness.FitnessCalculatorAllEqual;
+import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.gpf.mating.MatingFunctionRandomMating;
 import mimcore.data.gpf.quantitative.*;
 import mimcore.data.recombination.RecombinationGenerator;
@@ -38,7 +38,7 @@ public class SimulationInbreedingSingleIsofemaleLine {
 		this.gc=new GenotypeCalculatorAllEqual();
 		this.pc=new PhenotypeCalculatorAllEqual();
 		this.runnumber=runnumber;
-		this.fc=new FitnessCalculatorDefault();
+		this.fc=new FitnessCalculatorAllEqual();
 		
 	}
 
@@ -81,7 +81,7 @@ public class SimulationInbreedingSingleIsofemaleLine {
 			DiploidGenome f1child=matepair.getChild(this.recGenerator,random);
 			double genotype =this.gc.getGenotype(f1child);
 			double phenotype=this.pc.getPhenotype(genotype,random);
-			double fitness=this.fc.getFitness(f1child);
+			double fitness=this.fc.getFitness(f1child,phenotype);
 			Specimen s=new Specimen(genotype,phenotype,fitness,f1child);
 		specs.add(s);
 		}

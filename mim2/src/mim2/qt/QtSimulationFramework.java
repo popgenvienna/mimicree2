@@ -3,8 +3,8 @@ package mim2.qt;
 import mim2.shared.GPFHelper;
 import mim2.shared.SimulationMode;
 import mimcore.data.*;
-import mimcore.data.gpf.*;
-import mimcore.data.gpf.FitnessCalculatorDefault;
+import mimcore.data.gpf.fitness.FitnessCalculatorAllEqual;
+import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.gpf.quantitative.PhenotypeCalculator;
 import mimcore.data.gpf.quantitative.GenotypeCalculator;
 import mimcore.data.gpf.survival.*;
@@ -90,7 +90,7 @@ public class QtSimulationFramework {
 	
 	public void run()
 	{
-		this.logger.info("Starting qt");
+		this.logger.info("Starting qt (quantitative trait under truncating selection)");
 
 
 		// Load the data
@@ -102,7 +102,7 @@ public class QtSimulationFramework {
 		// Compute GPF
 		GenotypeCalculator genotypeCalculator=new GenotypeCalculatorReader(this.effectSizeFile,this.logger).readAdditiveFitness();
 		PhenotypeCalculator phenotypeCalculator= GPFHelper.getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.ve,this.heritability,this.logger);
-		IFitnessCalculator fitnessCalculator=new FitnessCalculatorDefault();
+		IFitnessCalculator fitnessCalculator=new FitnessCalculatorAllEqual();
 
 		// Survival function (truncating selection); If none specified all survive
 		ISurvivalFunction survivalFunction= new SurvivalRegimeAllSurvive();

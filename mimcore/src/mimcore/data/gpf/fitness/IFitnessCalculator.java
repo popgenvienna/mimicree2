@@ -7,5 +7,6 @@ import mimcore.data.DiploidGenome;
  */
 public interface IFitnessCalculator {
 
-	public abstract double getFitness(DiploidGenome dipGenome);
+	public abstract double getFitness(DiploidGenome dipGenome, double phenotype);
+
 }
