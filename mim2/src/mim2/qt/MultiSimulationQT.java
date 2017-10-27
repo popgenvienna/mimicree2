@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.logging.Logger;
 
-public class MultiSimulationTimestamp {
+public class MultiSimulationQT {
 	private final ArrayList<DiploidGenome> dipGenomes;
 	private final GenotypeCalculator gc;
 	private final PhenotypeCalculator pc;
@@ -45,9 +45,9 @@ public class MultiSimulationTimestamp {
 	private ArrayList<PopulationAlleleCount> pacs;
 	private ArrayList<GPFCollection> gpfs;
 
-	public MultiSimulationTimestamp(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
-									IMigrationRegime migrationRegime, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
-									ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
+	public MultiSimulationQT(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
+                             IMigrationRegime migrationRegime, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
+                             ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
 	{
 
 		this.dipGenomes=dipGenomes;

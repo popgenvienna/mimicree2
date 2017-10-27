@@ -1,17 +1,13 @@
 package mim2.qs;
 
-import mim2.qt.MultiSimulationTimestamp;
 import mim2.shared.GPFHelper;
 import mim2.shared.SimulationMode;
 import mimcore.data.DiploidGenome;
-import mimcore.data.gpf.fitness.FitnessCalculatorAllEqual;
-import mimcore.data.gpf.fitness.IFitnessCalculator;
+import mimcore.data.gpf.fitness.FitnessFunctionContainer;
 import mimcore.data.gpf.quantitative.GenotypeCalculator;
 import mimcore.data.gpf.quantitative.PhenotypeCalculator;
-import mimcore.data.gpf.survival.ISelectionRegime;
 import mimcore.data.gpf.survival.ISurvivalFunction;
 import mimcore.data.gpf.survival.SurvivalRegimeAllSurvive;
-import mimcore.data.gpf.survival.SurvivalRegimeTruncatingSelection;
 import mimcore.data.migration.IMigrationRegime;
 import mimcore.data.migration.MigrationRegimeNoMigration;
 import mimcore.data.recombination.RecombinationGenerator;
@@ -19,8 +15,8 @@ import mimcore.io.ChromosomeDefinitionReader;
 import mimcore.io.DiploidGenomeReader;
 import mimcore.io.GenotypeCalculatorReader;
 import mimcore.io.RecombinationRateReader;
+import mimcore.io.fitnessfunction.FitnessFunctionReaderGaussian;
 import mimcore.io.migrationRegime.MigrationRegimeReader;
-import mimcore.io.selectionregime.SelectionRegimeReader;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,18 +50,18 @@ public class QsSimulationFramework {
 		if(! new File(haplotypeFile).exists()) throw new IllegalArgumentException("Haplotype file does not exist "+haplotypeFile);
 		if(! new File(recombinationFile).exists()) throw new IllegalArgumentException("Recombination file does not exist " + recombinationFile);
 		if(! new File(effectSizeFile).exists()) logger.info("No effect size file found; Commencing neutral simulations\n");
-		// gpf function
-		if((gaussianFitnessFunctionFile==null) && (fitnessFunctionFile == null)) throw new IllegalArgumentException("Either a gaussian gpf function or a gpf function must be provided");
-		if((gaussianFitnessFunctionFile!=null) && (fitnessFunctionFile != null)) throw new IllegalArgumentException("Either a gaussian gpf function or a gpf function must be provided; NOT BOTH");
+		// fitness function
+		if((gaussianFitnessFunctionFile==null) && (fitnessFunctionFile == null)) throw new IllegalArgumentException("Either a gaussian fitness function or a fitness function must be provided");
+		if((gaussianFitnessFunctionFile!=null) && (fitnessFunctionFile != null)) throw new IllegalArgumentException("Either a gaussian fitness function or a fitness function must be provided; NOT BOTH");
 
-		if((gaussianFitnessFunctionFile != null) && (!new File(gaussianFitnessFunctionFile).exists())) throw new IllegalArgumentException("Gaussian gpf function file does not exist; "+gaussianFitnessFunctionFile);
+		if((gaussianFitnessFunctionFile != null) && (!new File(gaussianFitnessFunctionFile).exists())) throw new IllegalArgumentException("Gaussian fitness function file does not exist; "+gaussianFitnessFunctionFile);
 		if((fitnessFunctionFile != null) && (!new File(fitnessFunctionFile).exists())) throw new IllegalArgumentException("Fitness function file does not exist; "+fitnessFunctionFile);
 
 		// migration regime
 		if(migrationRegimeFile == null)logger.info("No migration regime file found; Proceeding without migration\n");
 		else if (! new File(migrationRegimeFile).exists()) throw new IllegalArgumentException("Migration regime file does not exist; "+ migrationRegimeFile);
 
-		if(outputGPF == null) logger.info("No output genotype/phenotype/gpf file provided; will not record GPF\n");
+		if(outputGPF == null) logger.info("No output genotype/phenotype/fitness file provided; will not record GPF\n");
 		else try {new File(outputGPF).createNewFile();} catch(IOException e) {throw new IllegalArgumentException("Can not create GPF output file "+outputGPF);}
 
 		if((outputDir == null) && (outputSync==null)) throw new IllegalArgumentException("No output was provided; Provide either an output directory or an output sync file or both");
@@ -102,7 +98,7 @@ public class QsSimulationFramework {
 
 	public void run()
 	{
-		this.logger.info("Starting qs (quantitative trait under stabilizing selection)");
+		this.logger.info("Starting qs simulations: a quantitative trait under stabilizing selection");
 
 
 		// Load the data
@@ -114,7 +110,10 @@ public class QsSimulationFramework {
 		// Compute GPF
 		GenotypeCalculator genotypeCalculator=new GenotypeCalculatorReader(this.effectSizeFile,this.logger).readAdditiveFitness();
 		PhenotypeCalculator phenotypeCalculator= GPFHelper.getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.ve,this.heritability,this.logger);
-		IFitnessCalculator fitnessCalculator=new FitnessCalculatorAllEqual();
+		FitnessFunctionContainer ffc=null;
+		if(gaussianFitnessFunctionFile != null) ffc= new FitnessFunctionReaderGaussian(this.gaussianFitnessFunctionFile,this.logger).readFitnessFunction();
+		else if(fitnessFunctionFile !=null){}
+		else throw new IllegalArgumentException("no fitness function could be loaded; critical error; contact the programmer");
 
 		// Survival function; no selective deaths; all survive
 		ISurvivalFunction survivalFunction= new SurvivalRegimeAllSurvive();
@@ -124,7 +123,7 @@ public class QsSimulationFramework {
 		IMigrationRegime migrationRegime=new MigrationRegimeNoMigration();
 		if(migrationRegimeFile != null) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger,dipGenomes).readMigrationRegime();
 
-		MultiSimulationTimestamp mst=new MultiSimulationTimestamp(dipGenomes,genotypeCalculator,phenotypeCalculator,fitnessCalculator,survivalFunction, migrationRegime, this.outputSync, this.outputGPF,this.outputDir,
+		MultiSimulationQS mst=new MultiSimulationQS(dipGenomes,genotypeCalculator,phenotypeCalculator,ffc,survivalFunction, migrationRegime, this.outputSync, this.outputGPF,this.outputDir,
 			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
 		mst.run();
 

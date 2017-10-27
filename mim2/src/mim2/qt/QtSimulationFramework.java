@@ -54,7 +54,7 @@ public class QtSimulationFramework {
 		if(migrationRegimeFile == null)logger.info("No migration regime file found; Proceeding without migration\n");
 		else if (! new File(migrationRegimeFile).exists()) throw new IllegalArgumentException("Migration regime file does not exist; "+ migrationRegimeFile);
 
-		if(outputGPF == null) logger.info("No output genotype/phenotype/gpf file provided; will not record GPF\n");
+		if(outputGPF == null) logger.info("No output genotype/phenotype/fitness file provided; will not record GPF\n");
 		else try {new File(outputGPF).createNewFile();} catch(IOException e) {throw new IllegalArgumentException("Can not create GPF output file "+outputGPF);}
 
 		if((outputDir == null) && (outputSync==null)) throw new IllegalArgumentException("No output was provided; Provide either an output directory or an output sync file or both");
@@ -90,7 +90,7 @@ public class QtSimulationFramework {
 	
 	public void run()
 	{
-		this.logger.info("Starting qt (quantitative trait under truncating selection)");
+		this.logger.info("Starting qt simulations: a quantitative trait with truncating selection");
 
 
 		// Load the data
@@ -116,7 +116,7 @@ public class QtSimulationFramework {
 		IMigrationRegime migrationRegime=new MigrationRegimeNoMigration();
 		if(migrationRegimeFile != null) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger,dipGenomes).readMigrationRegime();
 
-		MultiSimulationTimestamp mst=new MultiSimulationTimestamp(dipGenomes,genotypeCalculator,phenotypeCalculator,fitnessCalculator,survivalFunction, migrationRegime, this.outputSync, this.outputGPF,this.outputDir,
+		MultiSimulationQT mst=new MultiSimulationQT(dipGenomes,genotypeCalculator,phenotypeCalculator,fitnessCalculator,survivalFunction, migrationRegime, this.outputSync, this.outputGPF,this.outputDir,
 			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
 		mst.run();
 

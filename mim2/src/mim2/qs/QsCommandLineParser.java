@@ -68,11 +68,11 @@ public class QsCommandLineParser {
             {
             	effectSizeFile=args.remove(0);
             }
-            else if(cu.equals("--gauss-gpf-function"))
+            else if(cu.equals("--gauss-fitness-function"))
             {
 				gaussianFitnessFunctionFile=args.remove(0);
             }
-			else if(cu.equals("--gpf-function"))
+			else if(cu.equals("--fitness-function"))
 			{
 				fitnessFunctionFile=args.remove(0);
 			}
@@ -151,9 +151,9 @@ public class QsCommandLineParser {
 		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));
 		sb.append(CommandFormater.format("--output-sync","the output file (sync); --output-dir or --output-sync or both may be provided",null));
 		sb.append(CommandFormater.format("--output-dir","the output directory for the haplotypes; --output-dir or --output-sync or both may be provided",null));
-		sb.append(CommandFormater.format("--output-gpf","the output file for genotype/phenotype/gpf; optional",null));
-		sb.append(CommandFormater.format("--gauss-gpf-function","a gaussian gpf function for mapping the phenotype to gpf; --gpf-function or --gauss-gpf-function may be provided",null));
-		sb.append(CommandFormater.format("--gpf-function","a gpf function for mapping the phenotype to gpf; either --gpf-function or --gauss-gpf-function may be provided",null));
+		sb.append(CommandFormater.format("--output-gpf","the output file for genotype/phenotype/fitness; optional",null));
+		sb.append(CommandFormater.format("--gauss-fitness-function","a gaussian fitness function for mapping the phenotype to fitness; --fitness-function or --gauss-fitness-function may be provided",null));
+		sb.append(CommandFormater.format("--fitness-function","a fitness function for mapping the phenotype to fitness; either --fitness-function or --gauss-fitness-function may be provided",null));
 		sb.append(CommandFormater.format("--migration-regime","the migration regime; migration from the base population to the evolved populations",null));
 		sb.append(CommandFormater.format("--detailed-log","print detailed log messages",null));
 		sb.append(CommandFormater.format("--threads","the number of threads to use",null));
