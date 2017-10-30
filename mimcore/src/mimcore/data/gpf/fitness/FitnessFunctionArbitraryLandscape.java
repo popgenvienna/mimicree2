@@ -31,8 +31,8 @@ public class FitnessFunctionArbitraryLandscape implements IFitnessCalculator {
 
 		// from sorted entries get the lowest and the largest phenotypic values
 		this.entries=tostore;
-		this.lowest=entries.get(0);
-		this.highest=entries.get(this.entries.size()-1);
+		this.lowest=this.entries.get(0);
+		this.highest=this.entries.get(this.entries.size()-1);
 
 
 	}
@@ -40,8 +40,8 @@ public class FitnessFunctionArbitraryLandscape implements IFitnessCalculator {
 	public  double getFitness(DiploidGenome dipGenome, double phenotype)
 	{
 		// Exclude the boundary conditions; if lower than lowest or higher than highest; return the boundary condition
-		if(phenotype < this.lowest.getPhenotypicValue()) return this.lowest.getFitness();
-		if(phenotype> this.highest.getPhenotypicValue()) return this.highest.getFitness();
+		if(phenotype <= this.lowest.getPhenotypicValue()) return this.lowest.getFitness();
+		if(phenotype >= this.highest.getPhenotypicValue()) return this.highest.getFitness();
 
 		double fitness=binarySearchAndInterpolateFitness(phenotype);
 		return fitness;
@@ -70,15 +70,16 @@ public class FitnessFunctionArbitraryLandscape implements IFitnessCalculator {
 			else if(entries.get(middle).getPhenotypicValue() > phenotypicValue) {
 				high = middle - 1;
 			}
-			else throw new IllegalArgumentException("OK something went terribly wrong during binary search");
+			else throw new IllegalArgumentException("OK something went terribly wrong during binary search; 1");
 		}
 
-		if(low!=high) throw new IllegalArgumentException("Algorithm assumption violated; contact programmer");
+		if(low!=high) throw new IllegalArgumentException("Algorithm assumption violated; contact programmer; 2");
 
 		// interpolate between the two values
-		if(entries.get(low).getPhenotypicValue()<phenotypicValue) return interpolateFitness(low, low+1, phenotypicValue);
+		if(entries.get(low).getPhenotypicValue()==phenotypicValue) return entries.get(low).getFitness(); // first check if identical
+		else if(entries.get(low).getPhenotypicValue()<phenotypicValue) return interpolateFitness(low, low+1, phenotypicValue);
 		else if(entries.get(low).getPhenotypicValue()>phenotypicValue) return interpolateFitness(low-1, low, phenotypicValue);
-		else throw new IllegalArgumentException("Algorithm assumption violated; contact programmer");
+		else throw new IllegalArgumentException("Algorithm assumption violated; contact programmer; 3");
 
 	}
 
@@ -86,8 +87,8 @@ public class FitnessFunctionArbitraryLandscape implements IFitnessCalculator {
 	{
 		ArbitraryLandscapeEntry lowEntry=this.entries.get(lowIndex);
 		ArbitraryLandscapeEntry highEntry=this.entries.get(highIndex);
-		if(phenotype < lowEntry.getPhenotypicValue()) throw new IllegalArgumentException("Algorithm assumption was violated; contact programmer...");
-		if(phenotype > highEntry.getPhenotypicValue()) throw new IllegalArgumentException("Algorithm assumption was violated; contact programmer...");
+		if(phenotype < lowEntry.getPhenotypicValue()) throw new IllegalArgumentException("Algorithm assumption was violated; contact programmer... 4");
+		if(phenotype > highEntry.getPhenotypicValue()) throw new IllegalArgumentException("Algorithm assumption was violated; contact programmer... 5");
 
 		// k steigung slope
 		// delta y (fitness) / delta x (phenotypic value)
