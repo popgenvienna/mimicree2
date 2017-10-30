@@ -12,7 +12,8 @@ public class FitnessFunctionContainer {
 
     public FitnessFunctionContainer(HashMap<Integer,IFitnessCalculator> fitcalcs)
     {
-        this.fitcalcs=new HashMap<Integer,IFitnessCalculator>();
+        if(fitcalcs.size()<1) throw new IllegalArgumentException("At least one fitness calculator needs to be provided for fitness function containers");
+        this.fitcalcs=new HashMap<Integer,IFitnessCalculator>(fitcalcs);
     }
 
 

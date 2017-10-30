@@ -19,7 +19,7 @@ public class QsCommandLineParser {
 	 * @param args the command line arguments
 	 * @return
 	 */
-	public static void runQTSimulations(LinkedList<String> args)
+	public static void runQSSimulations(LinkedList<String> args)
 	{
 
 		String haplotypeFile="";

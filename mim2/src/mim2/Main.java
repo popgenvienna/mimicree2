@@ -1,5 +1,6 @@
 package mim2;
 
+import mim2.qs.QsCommandLineParser;
 import mim2.qt.QtCommandLineParser;
 import mim2.test.TestMain;
 
@@ -26,7 +27,7 @@ public class Main {
 			}
 			else if(subtask.toLowerCase().equals("qs"))
 			{
-				// TODO
+				QsCommandLineParser.runQSSimulations(rawarguments);
 			}
 			else if(subtask.toLowerCase().equals("sc"))
 			{
