@@ -3,34 +3,99 @@ package mimcore.data.gpf.fitness;
 import mimcore.data.DiploidGenome;
 import mimcore.data.statistic.Gaussian;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 /**
  * Created by robertkofler on 11/20/16.
  */
 public class FitnessFunctionArbitraryLandscape implements IFitnessCalculator {
 
-	private final double minFitness;
-	private final double maxFitness;
-	private final double deltaFitness;
-	private final double mean;
-	private final double stdev;
-	private final double scale;
+	private final ArrayList<ArbitraryLandscapeEntry> entries;
+	private final ArbitraryLandscapeEntry lowest;
+	private final ArbitraryLandscapeEntry highest;
 
-	public FitnessFunctionArbitraryLandscape(double minFitness, double maxFitness, double mean, double stdev)
+	public FitnessFunctionArbitraryLandscape(ArrayList<ArbitraryLandscapeEntry> entries)
 	{
-		this.minFitness=minFitness;
-		this.maxFitness=maxFitness;
-		if(maxFitness<minFitness) throw new IllegalArgumentException("Max. fitness needs to be larger than min. fitness");
-		this.mean=mean;
-		this.stdev=stdev;
-		this.scale= Gaussian.pdf(mean,mean,stdev);
-		this.deltaFitness=this.maxFitness-this.minFitness;
+		ArrayList<ArbitraryLandscapeEntry> tostore=new ArrayList<ArbitraryLandscapeEntry>(entries);
+		//sort ascending
+		Collections.sort(tostore,new Comparator<ArbitraryLandscapeEntry>() {
+			@Override
+			public int compare(ArbitraryLandscapeEntry i1, ArbitraryLandscapeEntry i2) {
+				if(i1.getPhenotypicValue() < i2.getPhenotypicValue())return -1;
+				if(i1.getPhenotypicValue() > i2.getPhenotypicValue() )return 1;
+				return 0;
+			}
+		});
+
+		// from sorted entries get the lowest and the largest phenotypic values
+		this.entries=tostore;
+		this.lowest=entries.get(0);
+		this.highest=entries.get(this.entries.size()-1);
+
+
 	}
 
 	public  double getFitness(DiploidGenome dipGenome, double phenotype)
 	{
-		double gaussvalue=Gaussian.pdf(phenotype,this.mean,this.stdev);
-		double fitness=gaussvalue*this.deltaFitness/this.scale;
-		fitness+=this.minFitness;
+		// Exclude the boundary conditions; if lower than lowest or higher than highest; return the boundary condition
+		if(phenotype < this.lowest.getPhenotypicValue()) return this.lowest.getFitness();
+		if(phenotype> this.highest.getPhenotypicValue()) return this.highest.getFitness();
+
+		double fitness=binarySearchAndInterpolateFitness(phenotype);
 		return fitness;
+
+	}
+
+	private  double binarySearchAndInterpolateFitness(double phenotypicValue)
+	{
+		// binary search to speed it up with many entries...
+		// lowest and highest index
+		int low = 0;
+		int high = entries.size() - 1;
+
+		while(high > low) {
+
+			int middle = (low + high) / 2;
+
+
+			if(entries.get(middle).getPhenotypicValue() == phenotypicValue) {
+				// Jackpot: we found the value; just return the fitness; not expected to happen often...
+				return entries.get(middle).getFitness();
+			}
+			else if(entries.get(middle).getPhenotypicValue() < phenotypicValue) {
+				low = middle + 1;
+			}
+			else if(entries.get(middle).getPhenotypicValue() > phenotypicValue) {
+				high = middle - 1;
+			}
+			else throw new IllegalArgumentException("OK something went terribly wrong during binary search");
+		}
+
+		if(low!=high) throw new IllegalArgumentException("Algorithm assumption violated; contact programmer");
+
+		// interpolate between the two values
+		if(entries.get(low).getPhenotypicValue()<phenotypicValue) return interpolateFitness(low, low+1, phenotypicValue);
+		else if(entries.get(low).getPhenotypicValue()>phenotypicValue) return interpolateFitness(low-1, low, phenotypicValue);
+		else throw new IllegalArgumentException("Algorithm assumption violated; contact programmer");
+
+	}
+
+	private double interpolateFitness(int lowIndex, int highIndex,double phenotype)
+	{
+		ArbitraryLandscapeEntry lowEntry=this.entries.get(lowIndex);
+		ArbitraryLandscapeEntry highEntry=this.entries.get(highIndex);
+		if(phenotype < lowEntry.getPhenotypicValue()) throw new IllegalArgumentException("Algorithm assumption was violated; contact programmer...");
+		if(phenotype > highEntry.getPhenotypicValue()) throw new IllegalArgumentException("Algorithm assumption was violated; contact programmer...");
+
+		// k steigung slope
+		// delta y (fitness) / delta x (phenotypic value)
+		double k=(highEntry.getFitness()-lowEntry.getFitness())/(highEntry.getPhenotypicValue()-lowEntry.getPhenotypicValue());
+
+		double deltaPheno=phenotype-lowEntry.getPhenotypicValue();
+		double deltaFitness=k*deltaPheno;
+		double interpolationResult=lowEntry.getFitness()+deltaFitness;
+		return interpolationResult;
 	}
 }

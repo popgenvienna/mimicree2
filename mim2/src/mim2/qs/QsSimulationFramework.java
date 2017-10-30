@@ -123,9 +123,9 @@ public class QsSimulationFramework {
 		IMigrationRegime migrationRegime=new MigrationRegimeNoMigration();
 		if(migrationRegimeFile != null) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger,dipGenomes).readMigrationRegime();
 
-		MultiSimulationQS mst=new MultiSimulationQS(dipGenomes,genotypeCalculator,phenotypeCalculator,ffc,survivalFunction, migrationRegime, this.outputSync, this.outputGPF,this.outputDir,
-			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
-		mst.run();
+		//MultiSimulationQS mst=new MultiSimulationQS(dipGenomes,genotypeCalculator,phenotypeCalculator,ffc,survivalFunction, migrationRegime, this.outputSync, this.outputGPF,this.outputDir,
+		//	recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
+		//mst.run();
 
 		this.logger.info("Finished simulations");
 	}

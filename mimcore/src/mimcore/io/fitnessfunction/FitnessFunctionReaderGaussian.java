@@ -49,7 +49,6 @@ public class FitnessFunctionReaderGaussian {
 			{
 				String[] a=line.split("\t");
 				if(a.length!=5) throw new IllegalArgumentException("Every entry in the gaussian fitness function file must have exactly five columns (tab separated)");
-				assert(a.length==5);
 				int generation=Integer.parseInt(a[0]);
 				double minFitness=Double.parseDouble(a[1]);
 				double maxFitness=Double.parseDouble(a[2]);
