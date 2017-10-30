@@ -14,13 +14,13 @@ import java.util.logging.Logger;
 public class FitnessFunctionReaderArbitraryFunction {
 
 	private BufferedReader bf;
-	private String gaussianFitnessFunctionFile;
+	private String fitnessFunctionFile;
 	private Logger logger;
-	public FitnessFunctionReaderArbitraryFunction(String gaussianFitnessFunctionFile, Logger logger)
+	public FitnessFunctionReaderArbitraryFunction(String fitnessFunctionFile, Logger logger)
 	{
-		this.gaussianFitnessFunctionFile=gaussianFitnessFunctionFile;
+		this.fitnessFunctionFile=fitnessFunctionFile;
 		try{
-			bf=new BufferedReader(new FileReader(gaussianFitnessFunctionFile));
+			bf=new BufferedReader(new FileReader(fitnessFunctionFile));
 		}
 		catch(FileNotFoundException e)
 		{
@@ -37,7 +37,7 @@ public class FitnessFunctionReaderArbitraryFunction {
 	public FitnessFunctionContainer readFitnessFunction()
 	{
 
-		this.logger.info("Start reading user defined approximation of fitness functions from file "+this.gaussianFitnessFunctionFile);
+		this.logger.info("Start reading user defined approximation of fitness functions from file "+this.fitnessFunctionFile);
 		HashMap<Integer,ArrayList<ArbitraryLandscapeEntry>> data=new HashMap<Integer,ArrayList<ArbitraryLandscapeEntry>>();
 		String line;
 		try
@@ -74,6 +74,7 @@ public class FitnessFunctionReaderArbitraryFunction {
 			System.exit(0);
 		}
 
+		// map the entries to the Fitness functions
 		HashMap<Integer,IFitnessCalculator> res=new HashMap<Integer, IFitnessCalculator>();
 		for(Map.Entry<Integer,ArrayList<ArbitraryLandscapeEntry>> entry: data.entrySet())
 		{

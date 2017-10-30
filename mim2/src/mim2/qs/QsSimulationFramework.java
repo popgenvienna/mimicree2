@@ -15,6 +15,7 @@ import mimcore.io.ChromosomeDefinitionReader;
 import mimcore.io.DiploidGenomeReader;
 import mimcore.io.GenotypeCalculatorReader;
 import mimcore.io.RecombinationRateReader;
+import mimcore.io.fitnessfunction.FitnessFunctionReaderArbitraryFunction;
 import mimcore.io.fitnessfunction.FitnessFunctionReaderGaussian;
 import mimcore.io.migrationRegime.MigrationRegimeReader;
 
@@ -112,7 +113,7 @@ public class QsSimulationFramework {
 		PhenotypeCalculator phenotypeCalculator= GPFHelper.getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.ve,this.heritability,this.logger);
 		FitnessFunctionContainer ffc=null;
 		if(gaussianFitnessFunctionFile != null) ffc= new FitnessFunctionReaderGaussian(this.gaussianFitnessFunctionFile,this.logger).readFitnessFunction();
-		else if(fitnessFunctionFile !=null){}
+		else if(fitnessFunctionFile !=null)ffc = new FitnessFunctionReaderArbitraryFunction(this.fitnessFunctionFile,this.logger).readFitnessFunction();
 		else throw new IllegalArgumentException("no fitness function could be loaded; critical error; contact the programmer");
 
 		// Survival function; no selective deaths; all survive
@@ -123,9 +124,9 @@ public class QsSimulationFramework {
 		IMigrationRegime migrationRegime=new MigrationRegimeNoMigration();
 		if(migrationRegimeFile != null) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger,dipGenomes).readMigrationRegime();
 
-		//MultiSimulationQS mst=new MultiSimulationQS(dipGenomes,genotypeCalculator,phenotypeCalculator,ffc,survivalFunction, migrationRegime, this.outputSync, this.outputGPF,this.outputDir,
-		//	recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
-		//mst.run();
+		MultiSimulationQS ms=new MultiSimulationQS(dipGenomes,genotypeCalculator,phenotypeCalculator,ffc,survivalFunction, migrationRegime, this.outputSync, this.outputGPF,this.outputDir,
+			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
+		ms.run();
 
 		this.logger.info("Finished simulations");
 	}

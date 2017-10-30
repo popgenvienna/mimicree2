@@ -53,6 +53,16 @@ public class Population {
 		return toret/this.size();
 	}
 
+	public double getAverageFitness()
+	{
+		double toret=0.0;
+		for(Specimen s: this.specimen)
+		{
+			toret+=s.fitness();
+		}
+		return toret/this.size();
+	}
+
 
 
 
