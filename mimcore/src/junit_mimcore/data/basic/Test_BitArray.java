@@ -3,16 +3,14 @@ package junit_mimcore.data.basic;
 import mimcore.data.BitArray.BitArray;
 import mimcore.data.BitArray.BitArrayBuilder;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 
 
 public class Test_BitArray {
 
 	@Test
-	@DisplayName("One bit set")
 	public void test_b1() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(0);
@@ -29,7 +27,6 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	@DisplayName("Multiset the same bit; no change to set bit")
 	public void test_ms1() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(0);
@@ -47,7 +44,6 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	@DisplayName("Set second bit")
 	public void test_b2() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(1);
@@ -64,7 +60,6 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	@DisplayName("Set third bit")
 	public void test_b3() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(2);
@@ -81,7 +76,6 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	@DisplayName("Set fourth bit")
 	public void test_b4() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(3);
@@ -98,7 +92,6 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	@DisplayName("Set fifth bit")
 	public void test_b5() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(4);
@@ -115,7 +108,6 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	@DisplayName("Set sith bit")
 	public void test_b6() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(5);
@@ -132,7 +124,6 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	@DisplayName("Set seventh bit")
 	public void test_b7() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(6);
@@ -149,7 +140,6 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	@DisplayName("Set eigth bit")
 	public void test_b8() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(7);
@@ -166,7 +156,6 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	@DisplayName("Set ninth bit")
 	public void test_b9() {
 		BitArrayBuilder c=new BitArrayBuilder(9);
 		c.setBit(8);
@@ -184,7 +173,6 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	@DisplayName("Set tenth bit")
 	public void test_b10() {
 		BitArrayBuilder c=new BitArrayBuilder(10);
 		c.setBit(9);
@@ -203,7 +191,6 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	@DisplayName("Set multiple bits")
 	public void test_immutable() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(1);

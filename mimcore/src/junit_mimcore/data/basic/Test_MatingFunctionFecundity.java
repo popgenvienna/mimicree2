@@ -1,25 +1,20 @@
 package junit_mimcore.data.basic;
 
+import junit_mimcore.factories.GenomicDataFactory;
 import mimcore.data.Population;
 import mimcore.data.Specimen;
-import mimcore.data.fitness.MatingFunction;
-import org.junit.Test;
-
-import java.util.ArrayList;
-
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
+import mimcore.data.gpf.mating.MatingFunctionFecundity;
 
 
+
+/*
 public class Test_MatingFunctionFecundity {
-	/**
-	 * Explanation 
-	 */
+
 	@Test
 	public void test_twoEqualFitnessSpecimen()
 	{
 		ArrayList<Specimen> specs=new ArrayList<Specimen>();
-		specs.add(SharedDataFactory.getSpecimen(2.0, 1.0));
+		specs.add(GenomicDataFactory.getSpecimen(2.0, 1.0));
 		specs.add(SharedDataFactory.getSpecimen(2.0, 2.0));
 		MatingFunction m=MatingFunction.getMatingFunction(new Population(specs));
 		assertEquals(m.getSpecimen(0.0).additiveFitness(),		1.0,	0.00000000001);
@@ -92,6 +87,8 @@ public class Test_MatingFunctionFecundity {
 	
 	
 	
-	
+
 
 }
+
+*/

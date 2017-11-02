@@ -1,22 +1,21 @@
 package junit_mimcore.data;
 
 import junit_mimcore.factories.QsDataFactory;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.*;
+import org.junit.Test;
 import mimcore.data.gpf.fitness.FitnessFunctionArbitraryLandscape;
 
-import static org.junit.jupiter.api.Assertions.*;
+
 
 
 /**
  * Created by robertkofler on 30/10/2017.
  * http://junit.org/junit5/docs/current/user-guide/
  */
-class Test_FitnessFunctionArbitraryLandscape {
+public class Test_FitnessFunctionArbitraryLandscape {
 
     @Test
-    @DisplayName("Interpolation between 0 and 1")
-    void test1() {
+    public void test1() {
 
         FitnessFunctionArbitraryLandscape ff= QsDataFactory.getLinearIncrease();
 
@@ -30,8 +29,7 @@ class Test_FitnessFunctionArbitraryLandscape {
 
 
     @Test
-    @DisplayName("Outside of boundaries 0 and 1")
-    void test2() {
+    public void test2() {
 
         FitnessFunctionArbitraryLandscape ff= QsDataFactory.getLinearIncrease();
 
@@ -43,8 +41,7 @@ class Test_FitnessFunctionArbitraryLandscape {
 
 
     @Test
-    @DisplayName("Boundaries in rugged landscape")
-    void test3() {
+    public void test3() {
 
         // 0/0 - 1/1 - 3/0 - 7/1 - 12/0 - 18/1
         FitnessFunctionArbitraryLandscape ff= QsDataFactory.getRugged();
@@ -56,8 +53,7 @@ class Test_FitnessFunctionArbitraryLandscape {
     }
 
     @Test
-    @DisplayName("Corner points in rugged landscape")
-    void test4() {
+    public void test4() {
 
         // 0/0 - 1/1 - 3/0 - 7/1 - 12/0 - 18/1
         FitnessFunctionArbitraryLandscape ff= QsDataFactory.getRugged();
@@ -73,8 +69,7 @@ class Test_FitnessFunctionArbitraryLandscape {
     }
 
     @Test
-    @DisplayName("Interpolation in rugged landscape")
-    void test5() {
+    public void test5() {
 
         // 0/0 - 1/1 - 3/0 - 7/1 - 12/0 - 18/1
         FitnessFunctionArbitraryLandscape ff= QsDataFactory.getRugged();
@@ -89,8 +84,7 @@ class Test_FitnessFunctionArbitraryLandscape {
 
 
     @Test
-    @DisplayName("Interpolation in rugged landscape 2")
-    void test6() {
+    public void test6() {
 
         // 0/0 - 1/1 - 3/0 - 7/1 - 12/0 - 18/1
         FitnessFunctionArbitraryLandscape ff= QsDataFactory.getRugged();
@@ -104,8 +98,7 @@ class Test_FitnessFunctionArbitraryLandscape {
     }
 
     @Test
-    @DisplayName("Interpolation in steeply increasing landscape")
-    void test7() {
+    public void test7() {
 
 
         FitnessFunctionArbitraryLandscape ff= QsDataFactory.getHighIncrease();

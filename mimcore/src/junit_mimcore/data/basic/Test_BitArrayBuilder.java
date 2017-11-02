@@ -1,14 +1,11 @@
 package junit_mimcore.data.basic;
 
 import mimcore.data.BitArray.BitArrayBuilder;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.Assert.*;
+import org.junit.Test;
 public class Test_BitArrayBuilder {
 
 	@Test
-	@DisplayName("One bit set")
 	public void test_b1() {
 		BitArrayBuilder b=new BitArrayBuilder(8);
 		b.setBit(0);
@@ -23,7 +20,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("One bit set multiple times")
 	public void test_ms1() {
 		BitArrayBuilder b=new BitArrayBuilder(8);
 		b.setBit(0);
@@ -39,7 +35,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("Set second bit")
 	public void test_b2() {
 		BitArrayBuilder b=new BitArrayBuilder(8);
 		b.setBit(1);
@@ -54,7 +49,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("Set third bit")
 	public void test_b3() {
 		BitArrayBuilder b=new BitArrayBuilder(8);
 		b.setBit(2);
@@ -69,7 +63,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("Set fourth bit")
 	public void test_b4() {
 		BitArrayBuilder b=new BitArrayBuilder(8);
 		b.setBit(3);
@@ -84,7 +77,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("Set fifth bit")
 	public void test_b5() {
 		BitArrayBuilder b=new BitArrayBuilder(8);
 		b.setBit(4);
@@ -99,7 +91,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("Set sixth bit")
 	public void test_b6() {
 		BitArrayBuilder b=new BitArrayBuilder(8);
 		b.setBit(5);
@@ -114,7 +105,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("Set seventh bit")
 	public void test_b7() {
 		BitArrayBuilder b=new BitArrayBuilder(8);
 		b.setBit(6);
@@ -129,7 +119,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("Set eigth bit")
 	public void test_b8() {
 		BitArrayBuilder b=new BitArrayBuilder(8);
 		b.setBit(7);
@@ -144,7 +133,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("Set ninth bit")
 	public void test_b9() {
 		BitArrayBuilder b=new BitArrayBuilder(9);
 		b.setBit(8);
@@ -160,7 +148,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("Set tenth bit")
 	public void test_b10() {
 		BitArrayBuilder b=new BitArrayBuilder(10);
 		b.setBit(9);
@@ -177,7 +164,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("No bit set")
 	public void test_zeroBit() {
 		BitArrayBuilder b=new BitArrayBuilder(8);
 		assertFalse(b.hasBit(0));
@@ -191,7 +177,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("All bits set")
 	public void test_allBit() {
 		BitArrayBuilder b=new BitArrayBuilder(12);
 		b.setBit(0); b.setBit(1); b.setBit(2);b.setBit(3); b.setBit(4); b.setBit(5); b.setBit(6); b.setBit(7); b.setBit(8); b.setBit(9); b.setBit(10); b.setBit(11);		
@@ -210,7 +195,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("some bits set, some not; combination 1")
 	public void test_bitCombo1() {
 		BitArrayBuilder b=new BitArrayBuilder(8);
 		b.setBit(0);
@@ -226,7 +210,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("some bits set some not; combination 2")
 	public void test_bitCombo2() {
 		BitArrayBuilder b=new BitArrayBuilder(8);
 		b.setBit(1);
@@ -242,7 +225,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("some bits set some not; combination 3")
 	public void test_bitCombo3() {
 		BitArrayBuilder b=new BitArrayBuilder(8);
 		b.setBit(0);
@@ -258,7 +240,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("some bits set some not; combination 4")
 	public void test_bitCombo4() {
 		BitArrayBuilder b=new BitArrayBuilder(8);
 		b.setBit(2);
@@ -276,7 +257,6 @@ public class Test_BitArrayBuilder {
 	
 	
 	@Test
-	@DisplayName("set a bit with a high position, ie.72")
 	public void test_highBit0() {
 		BitArrayBuilder b=new BitArrayBuilder(80);
 		b.setBit(72);
@@ -291,7 +271,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("set a bit with a high position, ie.73")
 	public void test_highBit1() {
 		BitArrayBuilder b=new BitArrayBuilder(80);
 		b.setBit(73);
@@ -306,7 +285,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("set a bit with a high position, ie.74")
 	public void test_highBit2() {
 		BitArrayBuilder b=new BitArrayBuilder(80);
 		b.setBit(74);
@@ -321,7 +299,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("set a bit with a high position, ie.75")
 	public void test_highBit3() {
 		BitArrayBuilder b=new BitArrayBuilder(80);
 		b.setBit(75);
@@ -336,7 +313,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("set a bit with a high position, ie.76")
 	public void test_highBit4() {
 		BitArrayBuilder b=new BitArrayBuilder(80);
 		b.setBit(76);
@@ -351,7 +327,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("set a bit with a high position, ie.77")
 	public void test_highBit5() {
 		BitArrayBuilder b=new BitArrayBuilder(80);
 		b.setBit(77);
@@ -366,7 +341,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("set a bit with a high position, ie.78")
 	public void test_highBit6() {
 		BitArrayBuilder b=new BitArrayBuilder(80);
 		b.setBit(78);
@@ -381,7 +355,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("set a bit with a high position, ie.79")
 	public void test_highBit7() {
 		BitArrayBuilder b=new BitArrayBuilder(80);
 		b.setBit(79);
@@ -396,7 +369,6 @@ public class Test_BitArrayBuilder {
 	}
 	
 	@Test
-	@DisplayName("All bits with high positions are unset")
 	public void test_highBitZero() {
 		BitArrayBuilder b=new BitArrayBuilder(80);
 		assertFalse(b.hasBit(72));
@@ -411,7 +383,6 @@ public class Test_BitArrayBuilder {
 	
 	
 	@Test
-	@DisplayName("All bits with high positions are set")
 	public void test_highBitAll() {
 		BitArrayBuilder b=new BitArrayBuilder(80);
 		b.setBit(72); b.setBit(73); b.setBit(74); b.setBit(75); b.setBit(76); b.setBit(77); b.setBit(78); b.setBit(79);
@@ -427,7 +398,6 @@ public class Test_BitArrayBuilder {
 	
 	
 	@Test
-	@DisplayName("Combination of set and unset for high position bits")
 	public void test_highBitCombi1() {
 		BitArrayBuilder b=new BitArrayBuilder(80);
 		b.setBit(0); b.setBit(10); b.setBit(20); b.setBit(30); b.setBit(40); b.setBit(50); b.setBit(60); b.setBit(70);

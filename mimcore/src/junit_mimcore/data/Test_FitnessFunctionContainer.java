@@ -3,18 +3,16 @@ package junit_mimcore.data;
 import junit_mimcore.factories.QsDataFactory;
 import mimcore.data.gpf.fitness.FitnessFunctionContainer;
 import mimcore.data.gpf.fitness.FitnessFunctionQuantitativeGauss;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by robertkofler on 30/10/2017.
  */
 public class Test_FitnessFunctionContainer {
     @Test
-    @DisplayName("First Generation; No influence of replicate")
-    void test1() {
+    public void test1() {
         // phenotype betwen 0 and 1 (use 0.5)
         // Value changes at 1, 5 and 30 generations to fitness 1,5 and 30 respectively
 
@@ -29,8 +27,7 @@ public class Test_FitnessFunctionContainer {
 
 
     @Test
-    @DisplayName("From the first generation to generation 5")
-    void test2() {
+    public void test2() {
         // phenotype betwen 0 and 1 (use 0.5)
         // Value changes at 1, 5 and 30 generations to fitness 1,5 and 30 respectively
 
@@ -44,8 +41,7 @@ public class Test_FitnessFunctionContainer {
 
     }
     @Test
-    @DisplayName("From generation 5 to 30")
-    void test3() {
+    public void test3() {
         // phenotype betwen 0 and 1 (use 0.5)
         // Value changes at 1, 5 and 30 generations to fitness 1,5 and 30 respectively
 
@@ -62,8 +58,7 @@ public class Test_FitnessFunctionContainer {
 
 
     @Test
-    @DisplayName("Beyond generation 30")
-    void test4() {
+    public void test4() {
         // phenotype betwen 0 and 1 (use 0.5)
         // Value changes at 1, 5 and 30 generations to fitness 1,5 and 30 respectively
 

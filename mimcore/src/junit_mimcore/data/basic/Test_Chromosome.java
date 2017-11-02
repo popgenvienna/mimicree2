@@ -1,12 +1,11 @@
 package junit_mimcore.data.basic;
 
 import mimcore.data.Chromosome;
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-
-import static org.junit.Assert.*;
 
 
 public class Test_Chromosome {

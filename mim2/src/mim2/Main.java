@@ -3,6 +3,7 @@ package mim2;
 import mim2.qs.QsCommandLineParser;
 import mim2.qt.QtCommandLineParser;
 import mim2.test.TestMain;
+import mim2.unittest.JunitMimcore;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -40,6 +41,10 @@ public class Main {
 			else if(subtask.toLowerCase().equals("__test__"))
 			{
 				TestMain.codeToTest();
+			}
+			else if(subtask.toLowerCase().equals("unit-tests"))
+			{
+				JunitMimcore.runTests();
 			}
 			else
 			{

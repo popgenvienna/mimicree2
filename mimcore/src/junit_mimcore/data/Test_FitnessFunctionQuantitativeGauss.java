@@ -3,10 +3,8 @@ package junit_mimcore.data;
 import junit_mimcore.factories.QsDataFactory;
 import mimcore.data.gpf.fitness.FitnessFunctionArbitraryLandscape;
 import mimcore.data.gpf.fitness.FitnessFunctionQuantitativeGauss;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * Created by robertkofler on 30/10/2017.
@@ -29,8 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Test_FitnessFunctionQuantitativeGauss {
 
     @Test
-    @DisplayName("Basic")
-    void test1() {
+    public void test1() {
 
         FitnessFunctionQuantitativeGauss ff=new FitnessFunctionQuantitativeGauss(0.7,1.2,2,2);
         assertEquals(ff.getFitness(null,2.0),1.2,0.00001);
@@ -40,8 +37,7 @@ public class Test_FitnessFunctionQuantitativeGauss {
 
 
     @Test
-    @DisplayName("Outlier")
-    void test2() {
+    public void test2() {
 
         FitnessFunctionQuantitativeGauss ff=new FitnessFunctionQuantitativeGauss(0.7,1.2,2,2);
         assertEquals(ff.getFitness(null,100.0),0.7,0.00001);
@@ -51,8 +47,7 @@ public class Test_FitnessFunctionQuantitativeGauss {
 
 
     @Test
-    @DisplayName("Basic large variance")
-    void test3() {
+    public void test3() {
 
         FitnessFunctionQuantitativeGauss ff=new FitnessFunctionQuantitativeGauss(0.0,2,20,10);
         assertEquals(ff.getFitness(null,20.0),2,0.00001);
