@@ -15,7 +15,8 @@ public class ExecutionListener extends RunListener {
      * Called when an atomic test has finished, whether the test succeeds or fails.
      */
     public void testFinished(Description description) throws java.lang.Exception {
-        System.out.println("Successfully tested : " + description.getMethodName()+ " ("+description.getTestClass()+")");
+        System.out.println("OK:  " + description.getMethodName()+ "    ("+description.getClassName()+")");
+
 
     }
 
@@ -34,7 +35,7 @@ public class ExecutionListener extends RunListener {
     }
 
     public void testRunFinished(Result result) throws java.lang.Exception {
-        System.out.println("Finished testing");
+        System.out.println("\nFinished testing");
         System.out.println(result.getFailureCount()+ " tests failed");
         System.out.println(result.getRunCount() +" tests were OK");
     }

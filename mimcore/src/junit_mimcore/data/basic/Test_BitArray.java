@@ -11,7 +11,7 @@ import org.junit.Test;
 public class Test_BitArray {
 
 	@Test
-	public void test_b1() {
+	public void first_bit_set() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(0);
 		BitArray b=c.getBitArray();
@@ -27,7 +27,7 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	public void test_ms1() {
+	public void set_first_bit_twice() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(0);
 		c.setBit(0);
@@ -44,7 +44,7 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	public void test_b2() {
+	public void set_second_bit() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(1);
 		BitArray b=c.getBitArray();
@@ -60,7 +60,7 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	public void test_b3() {
+	public void set_third_bit() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(2);
 		BitArray b=c.getBitArray();
@@ -76,7 +76,7 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	public void test_b4() {
+	public void set_fourth_bit() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(3);
 		BitArray b=c.getBitArray();
@@ -92,7 +92,7 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	public void test_b5() {
+	public void set_fifth_bit() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(4);
 		BitArray b=c.getBitArray();
@@ -108,7 +108,7 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	public void test_b6() {
+	public void set_sith_bit() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(5);
 		BitArray b=c.getBitArray();
@@ -124,7 +124,7 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	public void test_b7() {
+	public void set_seventh_bit() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(6);
 		BitArray b=c.getBitArray();
@@ -140,7 +140,7 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	public void test_b8() {
+	public void set_eigth_bit() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(7);
 		BitArray b=c.getBitArray();
@@ -156,7 +156,7 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	public void test_b9() {
+	public void set_ninth_bit() {
 		BitArrayBuilder c=new BitArrayBuilder(9);
 		c.setBit(8);
 		BitArray b=c.getBitArray();
@@ -173,7 +173,7 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	public void test_b10() {
+	public void set_tenth_bit() {
 		BitArrayBuilder c=new BitArrayBuilder(10);
 		c.setBit(9);
 		BitArray b=c.getBitArray();
@@ -191,7 +191,7 @@ public class Test_BitArray {
 	}
 	
 	@Test
-	public void test_immutable() {
+	public void immutable_finished_bitarray() {
 		BitArrayBuilder c=new BitArrayBuilder(8);
 		c.setBit(1);
 		BitArray b=c.getBitArray();
