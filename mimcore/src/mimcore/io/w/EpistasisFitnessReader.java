@@ -19,11 +19,11 @@ public class EpistasisFitnessReader {
 	private BufferedReader bf;
 	private String epistasisFile;
 	private Logger logger;
-	public EpistasisFitnessReader(String fitnessFile, Logger logger)
+	public EpistasisFitnessReader(String epistasisFile, Logger logger)
 	{
-		this.epistasisFile=fitnessFile;
+		this.epistasisFile=epistasisFile;
 		try{
-			bf=new BufferedReader(new FileReader(fitnessFile));
+			bf=new BufferedReader(new FileReader(epistasisFile));
 		}
 		catch(FileNotFoundException e)
 		{
@@ -53,7 +53,10 @@ public class EpistasisFitnessReader {
 
 				int index=linecounter%3;
 				threeLines[index]=line;
-				if(linecounter>0 && index==0) epis.add(parseThreeLines(threeLines));
+				// snp 1   mod 0 
+				// snp 2   mod 1
+				// epista  mod 2
+				if(index==2) epis.add(parseThreeLines(threeLines));
 
 				// last increment counter
 				linecounter++;
@@ -77,8 +80,8 @@ public class EpistasisFitnessReader {
 		}
 		
 		
-		this.logger.info("Finished reading " + snps.size() + " fitness effects of SNPs");
-		return new FitnessCalculator_Epistasis(snps);
+		this.logger.info("Finished reading " + epis.size() + " fitness effects for epistatic pairs of SNPs");
+		return new FitnessCalculator_Epistasis(epis);
 	}
 	
 	

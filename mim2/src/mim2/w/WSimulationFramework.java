@@ -15,6 +15,7 @@ import mimcore.io.DiploidGenomeReader;
 import mimcore.io.RecombinationRateReader;
 import mimcore.io.migrationRegime.MigrationRegimeReader;
 import mimcore.data.gpf.survival.ISurvivalFunction;
+import mimcore.io.w.EpistasisFitnessReader;
 import mimcore.io.w.SNPFitnessReader;
 
 import java.io.File;
@@ -109,7 +110,7 @@ public class WSimulationFramework {
 		if(this.fitnessFile!=null) snpFitness=new SNPFitnessReader(this.fitnessFile,logger).readSNPFitness();
 
 		IFitnessCalculator epistasisFitness =new FitnessCalculatorAllEqual();
-		if(this.epistasisFile!=null)  epistasisFitness=new FitnessCalculator_Epistasis(null, null);
+		if(this.epistasisFile!=null)  epistasisFitness=new EpistasisFitnessReader(this.epistasisFile,this.logger).readEpistaticPairs();
 
 		IFitnessCalculator snpAndEpistasisFitness=new FitnessCalculator_SNPandEpistasis(snpFitness,epistasisFitness);
 
