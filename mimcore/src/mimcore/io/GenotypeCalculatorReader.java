@@ -38,7 +38,7 @@ public class GenotypeCalculatorReader {
 	public GenotypeCalculator readAdditiveFitness()
 	{
 		ArrayList<AdditiveSNPeffect> addSNPs=new ArrayList<AdditiveSNPeffect>();
-		this.logger.info("Start reading additive gpf effects from file "+this.additiveFile);
+		this.logger.info("Start reading additive genotypic effects from file "+this.additiveFile);
 		String line;
 		try
 		{

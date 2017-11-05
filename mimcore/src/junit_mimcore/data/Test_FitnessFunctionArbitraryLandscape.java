@@ -15,7 +15,7 @@ import mimcore.data.gpf.fitness.FitnessFunctionArbitraryLandscape;
 public class Test_FitnessFunctionArbitraryLandscape {
 
     @Test
-    public void test1() {
+    public void linear_landscape() {
 
         FitnessFunctionArbitraryLandscape ff= QsDataFactory.getLinearIncrease();
 
@@ -29,7 +29,7 @@ public class Test_FitnessFunctionArbitraryLandscape {
 
 
     @Test
-    public void test2() {
+    public void boundaries_of_linear_landscape() {
 
         FitnessFunctionArbitraryLandscape ff= QsDataFactory.getLinearIncrease();
 
@@ -41,7 +41,7 @@ public class Test_FitnessFunctionArbitraryLandscape {
 
 
     @Test
-    public void test3() {
+    public void outside_of_boundaries() {
 
         // 0/0 - 1/1 - 3/0 - 7/1 - 12/0 - 18/1
         FitnessFunctionArbitraryLandscape ff= QsDataFactory.getRugged();
@@ -53,7 +53,7 @@ public class Test_FitnessFunctionArbitraryLandscape {
     }
 
     @Test
-    public void test4() {
+    public void boundaries_of_rugged_landscape() {
 
         // 0/0 - 1/1 - 3/0 - 7/1 - 12/0 - 18/1
         FitnessFunctionArbitraryLandscape ff= QsDataFactory.getRugged();
@@ -69,7 +69,7 @@ public class Test_FitnessFunctionArbitraryLandscape {
     }
 
     @Test
-    public void test5() {
+    public void rugged_landscape() {
 
         // 0/0 - 1/1 - 3/0 - 7/1 - 12/0 - 18/1
         FitnessFunctionArbitraryLandscape ff= QsDataFactory.getRugged();
@@ -84,7 +84,7 @@ public class Test_FitnessFunctionArbitraryLandscape {
 
 
     @Test
-    public void test6() {
+    public void rugged_landscape_v2() {
 
         // 0/0 - 1/1 - 3/0 - 7/1 - 12/0 - 18/1
         FitnessFunctionArbitraryLandscape ff= QsDataFactory.getRugged();
@@ -98,7 +98,7 @@ public class Test_FitnessFunctionArbitraryLandscape {
     }
 
     @Test
-    public void test7() {
+    public void steep_linear_increase() {
 
 
         FitnessFunctionArbitraryLandscape ff= QsDataFactory.getHighIncrease();

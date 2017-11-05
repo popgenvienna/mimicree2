@@ -11,14 +11,14 @@ import java.util.HashSet;
 public class Test_Chromosome {
 
 	@Test
-	public void test_chr1() {
+	public void one_chromosome_found() {
 		Chromosome.resetChromosomes();
 		Chromosome c= Chromosome.getChromosome("2L");
 		assertEquals(c.toString(),"2L");
 	}
 	
 	@Test
-	public void test_chr2() {
+	public void two_chromosomes_found() {
 		Chromosome.resetChromosomes();
 		Chromosome c1= Chromosome.getChromosome("2L");
 		Chromosome c2= Chromosome.getChromosome("2R");
@@ -26,7 +26,7 @@ public class Test_Chromosome {
 	}
 	
 	@Test
-	public void test_chrcollection() {
+	public void chromosome_collection_complete() {
 		Chromosome.resetChromosomes();
 		Chromosome.getChromosome("2L");
 		Chromosome.getChromosome("2R");
@@ -41,7 +41,7 @@ public class Test_Chromosome {
 	}
 	
 	@Test
-	public void test_influenceOfDefault() {
+	public void no_influence_of_default_chromosome() {
 		Chromosome.resetChromosomes();
 		Chromosome.getChromosome("2L");
 		Chromosome.getChromosome("2R");

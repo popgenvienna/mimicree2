@@ -31,7 +31,7 @@ public class MultiSimulationQS {
 	private final GenotypeCalculator gc;
 	private final PhenotypeCalculator pc;
 	private final FitnessFunctionContainer ffc;
-	private final ISurvivalFunction sf;
+	private final ISurvivalFunction sf; //not used; but may be used in the future
 	private final IMigrationRegime migrationRegime;
 	private final String outputSync;
 	private final String outputGPF;

@@ -27,7 +27,7 @@ import org.junit.Test;
 public class Test_FitnessFunctionQuantitativeGauss {
 
     @Test
-    public void test1() {
+    public void correct_fitness_normal_phenotypes() {
 
         FitnessFunctionQuantitativeGauss ff=new FitnessFunctionQuantitativeGauss(0.7,1.2,2,2);
         assertEquals(ff.getFitness(null,2.0),1.2,0.00001);
@@ -37,7 +37,7 @@ public class Test_FitnessFunctionQuantitativeGauss {
 
 
     @Test
-    public void test2() {
+    public void correct_fitness_extreme_phenotypes() {
 
         FitnessFunctionQuantitativeGauss ff=new FitnessFunctionQuantitativeGauss(0.7,1.2,2,2);
         assertEquals(ff.getFitness(null,100.0),0.7,0.00001);
@@ -47,7 +47,7 @@ public class Test_FitnessFunctionQuantitativeGauss {
 
 
     @Test
-    public void test3() {
+    public void correct_fitness_flat_gaussian() {
 
         FitnessFunctionQuantitativeGauss ff=new FitnessFunctionQuantitativeGauss(0.0,2,20,10);
         assertEquals(ff.getFitness(null,20.0),2,0.00001);

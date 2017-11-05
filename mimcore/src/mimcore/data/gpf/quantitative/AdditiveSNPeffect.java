@@ -48,7 +48,7 @@ public class AdditiveSNPeffect {
 		}
 		else
 		{
-			throw new IllegalArgumentException("Invalid outcome for additive gpf; not valid alleles "+allele1 +" "+ allele2);
+			throw new IllegalArgumentException("Invalid outcome for additive effect size; not valid alleles "+allele1 +" "+ allele2);
 		}
 	}
 	

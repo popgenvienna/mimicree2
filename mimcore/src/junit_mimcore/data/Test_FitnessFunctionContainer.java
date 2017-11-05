@@ -12,7 +12,7 @@ import org.junit.Test;
  */
 public class Test_FitnessFunctionContainer {
     @Test
-    public void test1() {
+    public void no_influence_of_replicate() {
         // phenotype betwen 0 and 1 (use 0.5)
         // Value changes at 1, 5 and 30 generations to fitness 1,5 and 30 respectively
 
@@ -27,7 +27,7 @@ public class Test_FitnessFunctionContainer {
 
 
     @Test
-    public void test2() {
+    public void fitness_for_correct_generation_low_gen() {
         // phenotype betwen 0 and 1 (use 0.5)
         // Value changes at 1, 5 and 30 generations to fitness 1,5 and 30 respectively
 
@@ -41,7 +41,7 @@ public class Test_FitnessFunctionContainer {
 
     }
     @Test
-    public void test3() {
+    public void fitness_for_correct_generation_middle_gen() {
         // phenotype betwen 0 and 1 (use 0.5)
         // Value changes at 1, 5 and 30 generations to fitness 1,5 and 30 respectively
 
@@ -58,7 +58,7 @@ public class Test_FitnessFunctionContainer {
 
 
     @Test
-    public void test4() {
+    public void fitness_for_correct_generation_high_gen() {
         // phenotype betwen 0 and 1 (use 0.5)
         // Value changes at 1, 5 and 30 generations to fitness 1,5 and 30 respectively
 

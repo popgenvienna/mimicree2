@@ -4,6 +4,7 @@ import mim2.qs.QsCommandLineParser;
 import mim2.qt.QtCommandLineParser;
 import mim2.test.TestMain;
 import mim2.unittest.JunitMimcore;
+import mim2.w.WCommandLineParser;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -30,9 +31,9 @@ public class Main {
 			{
 				QsCommandLineParser.runQSSimulations(rawarguments);
 			}
-			else if(subtask.toLowerCase().equals("sc"))
+			else if(subtask.toLowerCase().equals("w"))
 			{
-				// TODO gpf
+				WCommandLineParser.runWSimulations(rawarguments);
 			}
 			else if(subtask.toLowerCase().equals("stat-qt-pgf"))
 			{
@@ -62,13 +63,15 @@ public class Main {
 			StringBuilder sb=new StringBuilder();
 			sb.append("Usage: java -Xmx4g -jar mim2.jar [subtask] [parameters of subtask]\n\n");
 			sb.append("== Main tasks ==\n");
-			sb.append(CommandFormater.format("sc","simulate selection for loci having given selection coefficient",null));
+			sb.append(CommandFormater.format("w","simulate selection for loci having a given absolute fitness (w)",null));
 			sb.append(CommandFormater.format("qt","simulate truncating selection for a quantitative trait",null));
 			sb.append(CommandFormater.format("qs","simulate stabilizing selection for a quantitative trait",null));
 
 
 			sb.append("\n== Secondary tasks ==\n");
-			sb.append(CommandFormater.format("todo","todo",null));
+			sb.append(CommandFormater.format("unit-tests","run the unit-tests; unit-tests validate proper behaviour of MimicrEE2 components",null));
+
+
 			sb.append("\nMimicrEE2 Version "+getVersionNumber()+"\n");
 
 
@@ -80,7 +83,7 @@ public class Main {
 
 		public static String getVersionNumber()
 		{
-			return "v0.61";
+			return "v0.71";
 		}
 
 
