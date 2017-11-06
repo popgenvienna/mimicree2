@@ -36,7 +36,7 @@ public class Test_FitnessOfSNPReader {
 	}
 	
 	@Test
-	public void fitness_of_snp_at_2R_pos1()
+	public void fitness_of_first_SNP_in_file()
 	{
 		SNPFitnessReader r=getReader();
 		ArrayList<FitnessOfSNP> s= r.readSNPFitness().getSNPs();
@@ -48,6 +48,36 @@ public class Test_FitnessOfSNPReader {
 		assertEquals(s.get(0).waa(),0.8,0.0000001);
 		assertEquals(s.get(0).waA(),1.0,0.0000001);
 		assertEquals(s.get(0).wAA(),1.1,0.0000001);
+	}
+
+	@Test
+	public void fitness_of_middle_SNP_in_file()
+	{
+		SNPFitnessReader r=getReader();
+		ArrayList<FitnessOfSNP> s= r.readSNPFitness().getSNPs();
+
+		assertEquals(s.get(1).getPosition().chromosome().toString(),"2R");
+		assertEquals(s.get(1).getPosition().position(),2);
+		assertEquals(s.get(1).get_achar(),'T');
+		assertEquals(s.get(1).get_Achar(),'A');
+		assertEquals(s.get(1).waa(),0.9,0.0000001);
+		assertEquals(s.get(1).waA(),1.0,0.0000001);
+		assertEquals(s.get(1).wAA(),1.1,0.0000001);
+	}
+
+	@Test
+	public void fitness_of_last_SNP_in_file()
+	{
+		SNPFitnessReader r=getReader();
+		ArrayList<FitnessOfSNP> s= r.readSNPFitness().getSNPs();
+
+		assertEquals(s.get(3).getPosition().chromosome().toString(),"2L");
+		assertEquals(s.get(3).getPosition().position(),5);
+		assertEquals(s.get(3).get_achar(),'G');
+		assertEquals(s.get(3).get_Achar(),'C');
+		assertEquals(s.get(3).waa(),1.1,0.0000001);
+		assertEquals(s.get(3).waA(),1.0,0.0000001);
+		assertEquals(s.get(3).wAA(),1.1,0.0000001);
 	}
 	
 

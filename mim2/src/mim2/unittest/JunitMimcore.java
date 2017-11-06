@@ -1,6 +1,7 @@
 package mim2.unittest;
 
 
+import junit_mimcore.data.Test_FitnessOfEpistaticPair;
 import org.junit.runner.*;
 
 import static org.junit.runner.JUnitCore.runClasses;
@@ -23,7 +24,8 @@ public class JunitMimcore {
             junit_mimcore.data.Test_FitnessFunctionQuantitativeGauss.class,
             junit_mimcore.data.Test_FitnessFunctionArbitraryLandscape.class,
             junit_mimcore.data.Test_FitnessOfSNP.class,
-            junit_mimcore.io.Test_FitnessOfSNPReader.class);
+            junit_mimcore.io.Test_FitnessOfSNPReader.class,
+            Test_FitnessOfEpistaticPair.class );
 
 
 
