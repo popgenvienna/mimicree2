@@ -42,29 +42,66 @@ public class FitnessOfEpistasisPair {
 	 */
 	public double getEffectSizeOfGenotype(char[] genotype_1, char[] genotype_2)
 	{
+		int aindex=getAindex(genotype_1);
+		int bindex=getBindex(genotype_2);
+		int index=aindex+bindex;
+		return this.epistaticFitness[index];
 
+	}
+
+
+	private int getAindex(char[] gen_a)
+	{
 		// twice get_index; get index of a and b
 
-		char aa1=genotype_a[0];
-		char aa2=genotype_b[1];
-		if(aa1  == achar && aa2 == achar)
+		char a1=gen_a[0];
+		char a2=gen_a[1];
+		if(a1  == achar && a2 == achar)
 		{
 			// homozygous: waa
-			return this.waa;
+			return 0;
 		}
-		else if(aa1  == Achar && aa2 == Achar)
+		else if(a1  == Achar && a2 == Achar)
 		{
 			// homozygous: wAA
-			return this.wAA;
+			return 6;
 		}
-		else if ((aa1 ==achar && aa2 == Achar) || (aa1 ==Achar && aa2 == achar))
+		else if ((a1 ==achar && a2 == Achar) || (a1 ==Achar && a2 == achar))
 		{
-			// heterozygous  
-			return this.waA;
+			// heterozygous waA
+			return 3;
 		}
 		else
 		{
-			throw new IllegalArgumentException("Invalid outcome for fitness of SNPs; not valid alleles "+allele1 +" "+ allele2);
+			throw new IllegalArgumentException("Invalid outcome for epistatic fitness of SNPs; not valid alleles "+a1 +" "+ a2);
+		}
+	}
+
+
+	private int getBindex(char[] gen_b)
+	{
+		// twice get_index; get index of a and b
+
+		char b1=gen_b[0];
+		char b2=gen_b[1];
+		if(b1  == bchar && b2 == bchar)
+		{
+			// homozygous: waa
+			return 0;
+		}
+		else if(b1  == Bchar && b2 == Bchar)
+		{
+			// homozygous: wAA
+			return 2;
+		}
+		else if ((b1 ==bchar && b2 == Bchar) || (b1 ==Bchar && b2 == bchar))
+		{
+			// heterozygous waA
+			return 1;
+		}
+		else
+		{
+			throw new IllegalArgumentException("Invalid outcome for epistatic fitness of SNPs; not valid alleles "+b1 +" "+ b2);
 		}
 	}
 	

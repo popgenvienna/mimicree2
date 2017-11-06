@@ -1,4 +1,4 @@
-package mim2.qs;
+package mim2.w;
 
 
 import mimcore.data.DiploidGenome;
@@ -6,8 +6,9 @@ import mimcore.data.Population;
 import mimcore.data.gpf.fitness.FitnessFunctionContainer;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.gpf.mating.MatingFunctionFecundity;
-import mimcore.data.gpf.mating.MatingFunctionRandomMating;
 import mimcore.data.gpf.quantitative.GenotypeCalculator;
+import mimcore.data.gpf.quantitative.IGenotypeCalculator;
+import mimcore.data.gpf.quantitative.IPhenotypeCalculator;
 import mimcore.data.gpf.quantitative.PhenotypeCalculator;
 import mimcore.data.gpf.survival.ISurvivalFunction;
 import mimcore.data.migration.IMigrationRegime;
@@ -26,11 +27,11 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.logging.Logger;
 
-public class MultiSimulationQS {
+public class MultiSimulationW {
 	private final ArrayList<DiploidGenome> dipGenomes;
-	private final GenotypeCalculator gc;
-	private final PhenotypeCalculator pc;
-	private final FitnessFunctionContainer ffc;
+	private final IGenotypeCalculator gc;
+	private final IPhenotypeCalculator pc;
+	private final IFitnessCalculator fc;
 	private final ISurvivalFunction sf; //not used; but may be used in the future
 	private final IMigrationRegime migrationRegime;
 	private final String outputSync;
@@ -48,16 +49,16 @@ public class MultiSimulationQS {
 	private ArrayList<PopulationAlleleCount> pacs;
 	private ArrayList<GPFCollection> gpfs;
 
-	public MultiSimulationQS(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator gc, PhenotypeCalculator pc, FitnessFunctionContainer ffc, ISurvivalFunction sf,
-                             IMigrationRegime migrationRegime, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
-                             ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
+	public MultiSimulationW(ArrayList<DiploidGenome> dipGenomes, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
+                            IMigrationRegime migrationRegime, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
+                            ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
 	{
 
 		this.dipGenomes=dipGenomes;
 		this.pc=pc;
 		this.gc=gc;
 		this.sf=sf;
-		this.ffc=ffc;
+		this.fc=fc;
 		
 		int max=0;
 		HashSet<Integer> toOutput=new HashSet<Integer>();
@@ -86,7 +87,7 @@ public class MultiSimulationQS {
 	
 	public void run()
 	{
-		IFitnessCalculator fc=ffc.getFitnessCalculator(1,1);
+
 
 
 
@@ -100,7 +101,7 @@ public class MultiSimulationQS {
 			int simulationNumber=k+1;
 			this.logger.info("Starting simulation replicate number " + simulationNumber);
 			this.logger.info("MimicrEE2 will proceed with forward simulations until generation " + this.maxGeneration);
-			this.logger.info("Average genotype of starting population "+basePopulation.getAverageGenotype()+"; average phenotype of starting population "+basePopulation.getAveragePhenotype()+"; average fitness of starting population "+basePopulation.getAverageFitness());
+			this.logger.info("Average fitness of starting population "+basePopulation.getAverageFitness());
 
 			// record stuff
 			recordPAC(basePopulation,0,simulationNumber);
@@ -111,25 +112,22 @@ public class MultiSimulationQS {
 			// For the number of requested simulations get the next generation, and write it to file if requested
 			for(int i=1; i<=this.maxGeneration; i++)
 			{
-				// Load the new fitness function genertor; the new population will already be treated with this fitness function
-				fc=ffc.getFitnessCalculator(k+1,i);
 
 				this.logger.info("Processing generation "+i+ " of replicate run "+simulationNumber);
 
 				// Survival would go here if considered....(no survival needed for stabilizing selection);
 
 				nextPopulation=nextPopulation.getNextGeneration(gc,pc,fc,new MatingFunctionFecundity(),this.recGenerator,startpopulationsize);
-				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype()+"; average fitness of offspring "+nextPopulation.getAverageFitness());
+				this.logger.info("Average fitness of offspring "+nextPopulation.getAverageFitness());
 
 				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>
 				ArrayList<DiploidGenome> migrants=this.migrationRegime.getMigrants(i,simulationNumber);
 				if(migrants.size()>0) {
 					this.logger.info("Adding "+migrants.size()+ " migrants to the evolved population (randomly removing an equivalent number of evolved individuals)");
 					Population migrantPop=Population.loadPopulation(migrants,gc,pc,fc, new Random());
-					this.logger.info("Average genotype of migrants "+migrantPop.getAverageGenotype()+"; average phenotype of migrants "+migrantPop.getAveragePhenotype()+"; average fitness of migrants "+migrantPop.getAverageFitness());
+					this.logger.info("Average fitness of migrants "+migrantPop.getAverageFitness());
 					nextPopulation = Population.loadMigration(migrantPop, nextPopulation, new Random(),this.logger);
-
-					this.logger.info("Average genotype of new population "+nextPopulation.getAverageGenotype()+"; average phenotype of new population "+nextPopulation.getAveragePhenotype()+"; average fitness of new population "+nextPopulation.getAverageFitness());
+					this.logger.info("Average fitness of new population "+nextPopulation.getAverageFitness());
 				}
 
 				// record stuff only in the requested generations

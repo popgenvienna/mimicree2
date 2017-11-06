@@ -29,4 +29,13 @@ public class FitnessCalculator_SNP implements IFitnessCalculator {
 		}
 		return fitness;
 	}
+
+	/**
+	 * mostly for debugging
+	 * @return
+	 */
+	public ArrayList<FitnessOfSNP> getSNPs()
+	{
+		return new ArrayList<FitnessOfSNP>(this.snps);
+	}
 }

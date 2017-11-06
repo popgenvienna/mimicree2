@@ -32,6 +32,16 @@ public class SNPFitnessReader {
 		}
 		this.logger=logger;
 	}
+
+	/*
+	mostly for debugging
+	 */
+	public SNPFitnessReader(String fitnessFile, BufferedReader br, Logger logger)
+	{
+		this.fitnessFile=fitnessFile;
+		this.bf=br;
+		this.logger=logger;
+	}
 	
 	/**
 	 * Retrieve the additive gpf effects of SNPs from a file

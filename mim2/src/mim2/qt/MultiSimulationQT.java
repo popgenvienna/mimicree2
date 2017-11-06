@@ -159,7 +159,7 @@ public class MultiSimulationQT {
 	{
 		// No output file no action
 		if(this.outputGPF==null) return;
-		this.logger.info("Recording genotype/phenotype/gpf at generation "+generation+" of replicate "+replicate);
+		this.logger.info("Recording genotype/phenotype/fitness at generation "+generation+" of replicate "+replicate);
 		gpfs.add(new GPFReducer(toRecord,replicate,generation).reduce());
 	}
 

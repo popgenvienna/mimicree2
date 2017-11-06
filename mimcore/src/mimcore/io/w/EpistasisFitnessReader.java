@@ -53,7 +53,7 @@ public class EpistasisFitnessReader {
 
 				int index=linecounter%3;
 				threeLines[index]=line;
-				// snp 1   mod 0 
+				// snp 1   mod 0
 				// snp 2   mod 1
 				// epista  mod 2
 				if(index==2) epis.add(parseThreeLines(threeLines));
@@ -100,16 +100,23 @@ public class EpistasisFitnessReader {
 		if(a3.length!=9) throw new IllegalArgumentException("Invalid entry for fitness effects of epistatic pair; must have 9 columns "+ lines[2]);
 
 
-		GenomicPosition gp=new GenomicPosition(Chromosome.getChromosome(a[0]),Integer.parseInt(a[1]));
-		String alleles=a[2];
-		double waa=Double.parseDouble(a[3]);
-		double waA=Double.parseDouble(a[4]);
-		double wAA=Double.parseDouble(a[5]);
-		String[] tmp=alleles.split("/");
-		char achar=tmp[0].charAt(0);
-		char Achar=tmp[1].charAt(0);
+		GenomicPosition pos1=new GenomicPosition(Chromosome.getChromosome(a1[0]),Integer.parseInt(a1[1]));
+		GenomicPosition pos2=new GenomicPosition(Chromosome.getChromosome(a2[0]),Integer.parseInt(a2[1]));
+		String[] tmp1=a1[2].split("/");
+		String[] tmp2=a2[2].split("/");
+		char achar=tmp1[0].charAt(0);
+		char Achar=tmp1[1].charAt(0);
+		char bchar=tmp2[0].charAt(0);
+		char Bchar=tmp2[1].charAt(0);
 
-		return new FitnessOfSNP(gp,achar,Achar,waa,waA,wAA);
+		double[] epiFit=new double[9];
+		for(int i=0; i<9;i++)
+		{
+			double ep=Double.parseDouble(a3[1]);
+			epiFit[i]=ep;
+		}
+
+		return new FitnessOfEpistasisPair(pos1,pos2,achar,Achar,bchar,Bchar,epiFit);
 		
 	}
 	

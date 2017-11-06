@@ -68,10 +68,11 @@ public class FitnessOfSNP {
 	}
 	
 	
-	public char achar()
+	public char get_achar()
 	{
 		return this.achar;
 	}
+	public char get_Achar() { return this.Achar; }
 	
 	public double waa()
 	{
