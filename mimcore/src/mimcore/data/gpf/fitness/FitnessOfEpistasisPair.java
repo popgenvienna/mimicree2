@@ -118,6 +118,11 @@ public class FitnessOfEpistasisPair {
 	{
 		return this.position_2;
 	}
+
+	public char getAchar(){return this.Achar;}
+	public char getachar(){return this.achar;}
+	public char getBchar(){return this.Bchar;}
+	public char getbchar(){return this.bchar;}
 	
 	
 

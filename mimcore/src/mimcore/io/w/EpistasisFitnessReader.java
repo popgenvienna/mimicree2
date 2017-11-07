@@ -32,6 +32,15 @@ public class EpistasisFitnessReader {
 		}
 		this.logger=logger;
 	}
+
+	public EpistasisFitnessReader(String epistasisFile, BufferedReader br, Logger logger)
+	{
+		this.epistasisFile=epistasisFile;
+		this.bf=br;
+		this.logger=logger;
+	}
+
+
 	
 	/**
 	 * Retrieve the additive gpf effects of SNPs from a file
@@ -112,7 +121,7 @@ public class EpistasisFitnessReader {
 		double[] epiFit=new double[9];
 		for(int i=0; i<9;i++)
 		{
-			double ep=Double.parseDouble(a3[1]);
+			double ep=Double.parseDouble(a3[i]);
 			epiFit[i]=ep;
 		}
 

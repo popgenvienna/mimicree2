@@ -27,4 +27,14 @@ public class FitnessCalculator_Epistasis implements IFitnessCalculator {
 		}
 		return epiFitness;
 	}
+
+
+	/**
+	 * mostly for debugging
+	 * @return
+	 */
+	public ArrayList<FitnessOfEpistasisPair> getEpistaticPairs()
+	{
+		return new ArrayList<FitnessOfEpistasisPair>(this.epistasis);
+	}
 }
