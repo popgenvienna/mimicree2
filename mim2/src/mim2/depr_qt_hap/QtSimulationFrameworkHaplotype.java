@@ -12,7 +12,7 @@ import mimcore.data.gpf.survival.SurvivalRegimeTruncatingSelection;
 import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.io.ChromosomeDefinitionReader;
 import mimcore.io.DiploidGenomeReader;
-import mimcore.io.GenotypeCalculatorReader;
+import mimcore.io.SNPQuantitativeEffectSizeReader;
 import mimcore.io.RecombinationRateReader;
 import mimcore.io.selectionregime.SelectionRegimeReader;
 
@@ -73,7 +73,7 @@ public class QtSimulationFrameworkHaplotype {
 
 		ArrayList<DiploidGenome> dipGenomes=new DiploidGenomeReader(this.haplotypeFile,"",this.logger).readGenomes();
 
-		GenotypeCalculator genotypeCalculator=new GenotypeCalculatorReader(this.effectSizeFile,this.logger).readAdditiveFitness();
+		GenotypeCalculator genotypeCalculator=new SNPQuantitativeEffectSizeReader(this.effectSizeFile,this.logger).readAdditiveFitness();
 		PhenotypeCalculator phenotypeCalculator=getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.ve);
 		IFitnessCalculator fitnessCalculator=new FitnessCalculatorAllEqual();
 

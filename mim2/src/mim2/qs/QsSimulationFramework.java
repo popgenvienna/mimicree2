@@ -13,7 +13,7 @@ import mimcore.data.migration.MigrationRegimeNoMigration;
 import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.io.ChromosomeDefinitionReader;
 import mimcore.io.DiploidGenomeReader;
-import mimcore.io.GenotypeCalculatorReader;
+import mimcore.io.SNPQuantitativeEffectSizeReader;
 import mimcore.io.RecombinationRateReader;
 import mimcore.io.fitnessfunction.FitnessFunctionReaderArbitraryFunction;
 import mimcore.io.fitnessfunction.FitnessFunctionReaderGaussian;
@@ -109,7 +109,7 @@ public class QsSimulationFramework {
 		ArrayList<DiploidGenome> dipGenomes=new DiploidGenomeReader(this.haplotypeFile,"",this.logger).readGenomes();
 
 		// Compute GPF
-		GenotypeCalculator genotypeCalculator=new GenotypeCalculatorReader(this.effectSizeFile,this.logger).readAdditiveFitness();
+		GenotypeCalculator genotypeCalculator=new SNPQuantitativeEffectSizeReader(this.effectSizeFile,this.logger).readAdditiveFitness();
 		PhenotypeCalculator phenotypeCalculator= GPFHelper.getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.ve,this.heritability,this.logger);
 		FitnessFunctionContainer ffc=null;
 		if(gaussianFitnessFunctionFile != null) ffc= new FitnessFunctionReaderGaussian(this.gaussianFitnessFunctionFile,this.logger).readFitnessFunction();

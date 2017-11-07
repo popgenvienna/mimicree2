@@ -12,12 +12,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-public class GenotypeCalculatorReader {
+public class SNPQuantitativeEffectSizeReader {
 
 	private BufferedReader bf;
 	private String additiveFile;
 	private Logger logger;
-	public GenotypeCalculatorReader(String additiveFile, Logger logger)
+	public SNPQuantitativeEffectSizeReader(String additiveFile, Logger logger)
 	{
 		this.additiveFile=additiveFile;
 		try{
