@@ -69,7 +69,7 @@ public class InbredBasePopFramework {
 		RecombinationGenerator recGenerator = new RecombinationGenerator(new RecombinationRateReader(this.recombinationFile,this.logger).getRecombinationRate(),
 				new ChromosomeDefinitionReader("").getRandomAssortmentGenerator());
 
-		ArrayList<DiploidGenome> dipGenomes=new mimcore.io.DiploidGenomeReader(this.haplotypeFile,"",this.logger).readGenomes();
+		ArrayList<DiploidGenome> dipGenomes=new mimcore.io.DiploidGenomeReader(this.haplotypeFile,this.logger).readGenomes();
 		if(dipGenomes.size()!=2) throw new IllegalArgumentException("Only two diploid genomes are allowed");
 
 

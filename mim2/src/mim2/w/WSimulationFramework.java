@@ -99,7 +99,7 @@ public class WSimulationFramework {
 		RecombinationGenerator recGenerator = new RecombinationGenerator(new RecombinationRateReader(this.recombinationFile,this.logger).getRecombinationRate(),
 				new ChromosomeDefinitionReader(this.chromosomeDefinition).getRandomAssortmentGenerator());
 
-		ArrayList<DiploidGenome> dipGenomes=new DiploidGenomeReader(this.haplotypeFile,"",this.logger).readGenomes();
+		ArrayList<DiploidGenome> dipGenomes=new DiploidGenomeReader(this.haplotypeFile,this.logger).readGenomes();
 
 		// genotype and phenotype are set to 1.0 (this is ignored)
 		IGenotypeCalculator genotypeCalculator=new GenotypeCalculatorAllEqual();

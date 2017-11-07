@@ -2,18 +2,17 @@ package mimcore.io;
 
 import mimcore.data.*;
 import mimcore.data.haplotypes.*;
+import mimcore.io.haplotypes.HaplotypeReader;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class DiploidGenomeReader implements IDiploidGenomeReader {
 	private final String haplotypeFile;
-	private final String inversionFile;
 	private Logger logger;
-	public DiploidGenomeReader(String haplotypeFile, String inversionFile, Logger logger)
+	public DiploidGenomeReader(String haplotypeFile, Logger logger)
 	{
 		this.haplotypeFile=haplotypeFile;
-		this.inversionFile=inversionFile;
 		this.logger=logger;
 	}
 	
@@ -23,7 +22,7 @@ public class DiploidGenomeReader implements IDiploidGenomeReader {
 	 */
 	public ArrayList<DiploidGenome> readGenomes()
 	{
-		ArrayList<HaploidGenome> hapGenomes=new HaploidGenomeReader(this.haplotypeFile,this.inversionFile,this.logger).readGenomes();
+		ArrayList<HaploidGenome> hapGenomes=new HaplotypeReader(this.haplotypeFile,this.logger).getHaplotypes();
 		ArrayList<DiploidGenome> dipGenomes=new ArrayList<DiploidGenome>();
 		for(int i=0; i<hapGenomes.size(); i+=2)
 		{

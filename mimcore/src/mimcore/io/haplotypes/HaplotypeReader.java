@@ -17,21 +17,21 @@ public class HaplotypeReader {
 	private String input;
 	private java.util.logging.Logger logger;
 	private boolean inputIsStringStream;
-	
+
 	public HaplotypeReader(String haplotypeFile, java.util.logging.Logger logger)
 	{
 		this.logger=logger;
 		this.input=haplotypeFile;
 		this.inputIsStringStream=false;
 	}
-	
+
 	public HaplotypeReader(String inputStringStream, java.util.logging.Logger logger, boolean inputIsStringStream)
 	{
 		this.input=inputStringStream;
 		this.logger=logger;
 		this.inputIsStringStream=true;
 	}
-	
+
 	public ArrayList<HaploidGenome> getHaplotypes()
 	{
 		this.logger.info("Starting reading haplotypes from file "+this.input);
@@ -41,17 +41,17 @@ public class HaplotypeReader {
 		this.logger.fine("Start reading haplotype information");
 		ArrayList<BitArray> haps=new HaplotypeHaplotypeReader(getBufferedReader(),snpcol).getHaplotypes();
 		this.logger.fine("Finished reading haplotype information; Haplotypes read " + haps.size());
-		
+
 		ArrayList<HaploidGenome> haplotypes=new ArrayList<HaploidGenome>();
 		for (BitArray ba : haps)
 		{
 			haplotypes.add(new HaploidGenome(ba,snpcol));
 		}
 		this.logger.info("Finished reading haplotypes; Read "+snpcol.size() + " SNPs and " + haplotypes.size() + " haplotypes");
-		
+
 		return haplotypes;
 	}
-	
+
 	/**
 	 * Factory method for obtaining a new BufferedReader to the input
 	 * BufferedReader either to a File or to a String (for debugging)
@@ -69,7 +69,7 @@ public class HaplotypeReader {
 			bf=getBufferedFileReader(this.input);
 		}
 		return bf;
-		
+
 	}
 
 

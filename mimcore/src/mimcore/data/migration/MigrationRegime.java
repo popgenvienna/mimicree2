@@ -83,7 +83,7 @@ public class MigrationRegime implements IMigrationRegime {
 		this.logger.info("Loading potential migrants from file "+path);
 		if(! new File(path).exists()) throw new IllegalArgumentException("Haplotype file does not exist "+path);
 
-		ArrayList<DiploidGenome> dipGenomes=new mimcore.io.DiploidGenomeReader(path,"",this.logger).readGenomes();
+		ArrayList<DiploidGenome> dipGenomes=new mimcore.io.DiploidGenomeReader(path,this.logger).readGenomes();
 		this.logger.info("Successfully loaded "+dipGenomes.size()+ " potential migrants");
 		return dipGenomes;
 	}
