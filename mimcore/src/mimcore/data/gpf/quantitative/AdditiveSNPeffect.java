@@ -11,12 +11,14 @@ import mimcore.data.*;
 public class AdditiveSNPeffect {
 	private final GenomicPosition position;
 	private final char achar;
+	private final char alternativeChar;
 	private final double a;
 	private final double d;
-	public AdditiveSNPeffect(GenomicPosition position, char achar, double a, double d)
+	public AdditiveSNPeffect(GenomicPosition position, char achar, char alternativeChar, double a, double d)
 	{
 		this.position=position;
 		this.achar=achar;
+		this.alternativeChar=alternativeChar;
 		this.a=a;
 		if(a<0)throw new IllegalArgumentException("Effect size of SNP must not be smaller than zero");
 		this.d=d;
@@ -36,15 +38,15 @@ public class AdditiveSNPeffect {
 			// homozygous for w11 (gpf = 1.0)
 			return this.a;
 		}
-		else if (allele1 ==achar || allele2 == achar)
-		{
-			// heterozygous  
-			return this.d;
-		}
-		else if((allele1==allele2) && (allele1 != achar|| allele2 != achar))
+		else if(allele1== alternativeChar && allele2==alternativeChar)
 		{
 			// homozygous for the other allele w22
 			return -this.a;
+		}
+		else if((allele1==achar && allele2 ==alternativeChar) || (allele1==alternativeChar && allele2 ==achar))
+		{
+
+			return this.d;
 		}
 		else
 		{
@@ -66,7 +68,11 @@ public class AdditiveSNPeffect {
 	{
 		return this.achar;
 	}
-	
+	public char altchar()
+	{
+		return this.alternativeChar;
+	}
+
 	public double a()
 	{
 		return this.a;

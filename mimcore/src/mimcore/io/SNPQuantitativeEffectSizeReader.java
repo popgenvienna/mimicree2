@@ -30,6 +30,12 @@ public class SNPQuantitativeEffectSizeReader {
 		}
 		this.logger=logger;
 	}
+	public SNPQuantitativeEffectSizeReader(String additiveFile, BufferedReader br, Logger logger)
+	{
+		this.additiveFile=additiveFile;
+		this.bf=br;
+		this.logger=logger;
+	}
 	
 	/**
 	 * Retrieve the additive gpf effects of SNPs from a file
@@ -82,7 +88,13 @@ public class SNPQuantitativeEffectSizeReader {
 		GenomicPosition gp=new GenomicPosition(Chromosome.getChromosome(a[0]),Integer.parseInt(a[1]));
 		double aeffect=Double.parseDouble(a[3]);
 		if(aeffect<0) throw new IllegalArgumentException("Fitness effect must not be smaller than zero");
-		return new AdditiveSNPeffect(gp,a[2].charAt(0),aeffect,Double.parseDouble(a[4]));
+
+		String[] tmp=a[2].split("/");
+		char achar=tmp[0].charAt(0);
+		char altchar=tmp[1].charAt(0);
+
+
+		return new AdditiveSNPeffect(gp,achar,altchar,aeffect,Double.parseDouble(a[4]));
 		
 	}
 	
