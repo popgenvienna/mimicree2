@@ -29,7 +29,8 @@ public class JunitMimcore {
             junit_mimcore.io.Test_EpistasisFitnessReader.class,
             junit_mimcore.data.Test_AdditiveSNPEffect.class,
             junit_mimcore.io.Test_SNPQuantitativeEffectSizeReader.class,
-            junit_mimcore.io.Test_HaplotypeReader.class);
+            junit_mimcore.io.Test_HaplotypeReader.class,
+            junit_mimcore.io.Test_RecombinationRateReader.class);
 
 
 

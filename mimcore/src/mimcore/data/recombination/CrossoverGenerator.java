@@ -32,6 +32,16 @@ public class CrossoverGenerator {
 		return new CrossoverEvents(recEvents);
 	}
 
+
+	/**
+	 * mostly for debugging
+	 * @return
+	 */
+	public ArrayList<RecombinationWindow> getWindows()
+	{
+		return new ArrayList<RecombinationWindow>(this.windows);
+	}
+
 }
 
 

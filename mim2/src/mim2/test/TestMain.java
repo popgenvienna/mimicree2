@@ -1,5 +1,6 @@
 package mim2.test;
 
+import mim2.test.recombinationTest.RecombinationTester;
 import mimcore.data.DiploidGenome;
 import mimcore.data.gpf.fitness.ArbitraryLandscapeEntry;
 import mimcore.data.gpf.fitness.FitnessFunctionQuantitativeGauss;
@@ -14,6 +15,10 @@ import java.util.Comparator;
  */
 public class TestMain {
 
+    public static void testMain()
+    {
+        RecombinationTester.generatePoisson();
+    }
     public static void codeToTest()
     {
         ArrayList<ArbitraryLandscapeEntry> entries=new ArrayList<ArbitraryLandscapeEntry>();

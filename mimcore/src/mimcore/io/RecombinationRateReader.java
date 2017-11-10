@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.DoubleSummaryStatistics;
 import java.util.logging.Logger;
 
 /**
@@ -41,9 +42,16 @@ public class RecombinationRateReader {
 		}
 		this.logger=logger;
 	}
+
+	public RecombinationRateReader(String recombinationFile,BufferedReader br, Logger logger)
+	{
+		this.recombinationFile=recombinationFile;
+		this.bf=br;
+		this.logger=logger;
+	}
 	
 	
-	private RecombinationWindow parseLine(String line)
+	private RecombinationWindow parseLine(String line,RecombinationMode recombinationMode)
 	{
 		// 2L:0..100000            2.1
 		// 2L:100000..200000       2.2
@@ -58,13 +66,21 @@ public class RecombinationRateReader {
 		Chromosome chr=Chromosome.getChromosome(tmp1[0]);
 		int start=Integer.parseInt(tmp2[0].trim())+1;
 		int end=Integer.parseInt(tmp2[1].trim());
-		double recFraction=Double.parseDouble(a[1]);
-		if(recFraction>0.5) throw new IllegalArgumentException("Recombination fraction between two loci can not be larger than 0.5; Ideal would be a value smaller than 0.4");
+
+		double rec= Double.parseDouble(a[1]);
+		if(recombinationMode==RecombinationMode.RF)
+		{
+			if(rec>0.5) throw new IllegalArgumentException("Recombination fraction between two loci can not be larger than 0.5; Ideal would be a value smaller than 0.4");
+			rec=this.recFraction2lambda(rec);
+		}
+		else if(recombinationMode==RecombinationMode.LAMBDA){int nix=0;}
+		else throw new IllegalArgumentException("Do not support recombination mode "+recombinationMode);
+
 
 		// MALES are not recombining and the published recombination rate is for females
 		// deactivated male halfing - because mim2 is intented for general audience
 		//recrate=recrate * 0.5;
-		return new RecombinationWindow(chr,start,end,recFraction);
+		return new RecombinationWindow(chr,start,end,rec);
 		
 	}
 	
@@ -79,11 +95,17 @@ public class RecombinationRateReader {
 		this.logger.info("Start reading recombinaton rate from file "+this.recombinationFile);
 		// deactivated male halfing as mim2 is intended for general audience
 		//this.logger.info("Males in Drosophila do not recombine; Will thus multiply recombination rate by 1/2");
+		RecombinationMode recmode=null;
+
 		try
 		{
 			while((line=bf.readLine())!=null)
 			{
-				entries.add(parseLine(line));
+				if(recmode==null)
+				{
+					recmode=getRecMode(line);
+				}
+				else entries.add(parseLine(line,recmode));
 			}
 		}
 		catch(IOException e)
@@ -110,7 +132,28 @@ public class RecombinationRateReader {
 		
 		
 	}
-	
+
+	private double recFraction2lambda(double rf)
+	{
+		double lambda = -0.5 * Math.log(1.0-2.0*rf);
+		return lambda;
+	}
+
+	private RecombinationMode getRecMode(String firstLine)
+	{
+		if(firstLine.toLowerCase().equals("[lambda]")) {
+			this.logger.info("Recombination mode: [lambda]; recombination rates are provided as lambda values of a Poisson distribution");
+			return RecombinationMode.LAMBDA;
+		}
+		else if(firstLine.toLowerCase().equals("[rf]")) {
+			this.logger.info("Recombination mode: [rf]; recombination rates are provided as recombination fractions; Will compute lambda values of a Poisson distribution using Haldanes map function (1919)");
+			return RecombinationMode.RF;
+		}
+
+		else throw new IllegalArgumentException("Do not recognize recombination encoding; allowed values [lambda], [rf]; got: "+firstLine);
+	}
+
+	private enum RecombinationMode {RF,LAMBDA};
 	
 
 }

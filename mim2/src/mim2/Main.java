@@ -41,7 +41,7 @@ public class Main {
 			}
 			else if(subtask.toLowerCase().equals("__test__"))
 			{
-				TestMain.codeToTest();
+				TestMain.testMain();
 			}
 			else if(subtask.toLowerCase().equals("unit-tests"))
 			{
@@ -83,7 +83,7 @@ public class Main {
 
 		public static String getVersionNumber()
 		{
-			return "v0.83";
+			return "v0.86";
 		}
 
 

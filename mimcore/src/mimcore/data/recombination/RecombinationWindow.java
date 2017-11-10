@@ -7,8 +7,7 @@ public class RecombinationWindow {
 	private final Chromosome chromosome;
 	private final int startPosition;
 	private final int endPosition;
-	private final double recFraction;
-	private final double d;
+	private final double lambda;
 
 	public static int getPoisson(double lambda, Random random) {
 		double L = Math.exp(-lambda);
@@ -23,15 +22,13 @@ public class RecombinationWindow {
 		return k - 1;
 	}
 	
-	public RecombinationWindow(Chromosome chromosome, int startPosition, int endPosition, double recFraction)
+	public RecombinationWindow(Chromosome chromosome, int startPosition, int endPosition, double lambda)
 	{
 		this.chromosome=chromosome;
 		this.startPosition=startPosition;
 		this.endPosition=endPosition;
-		if(recFraction>=0.5) throw new IllegalArgumentException("Recombination fraction must be smaller 0.5");
-		this.recFraction=recFraction;
-		double d = -0.5 * Math.log(1.0-2.0*recFraction);
-		this.d=d;
+		if(lambda<0.0) throw new IllegalArgumentException("Lambda of a Poisson distribution must be larger than zero");
+		this.lambda=lambda;
 
 	}
 	
@@ -81,7 +78,7 @@ public class RecombinationWindow {
 	 */
 	public int getRecombinationEvents(Random random)
 	{
-		return getPoisson(this.d,random);
+		return getPoisson(this.lambda,random);
 	}
 	
 	/**
@@ -100,5 +97,12 @@ public class RecombinationWindow {
 		return new GenomicPosition(chromosome, this.startPosition+randAdd);
 		
 	}
+
+
+	public Chromosome getChromosome(){return this.chromosome;}
+	public int getStartPosition(){return this.startPosition;}
+	public int getEndPosition(){return this.endPosition;}
+	public double getLambda(){return this.lambda;}
+
 	
 }
