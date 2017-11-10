@@ -1,6 +1,8 @@
 package mimcore.data.migration;
 
 import mimcore.data.DiploidGenome;
+import mimcore.data.haplotypes.SNP;
+import mimcore.data.haplotypes.SNPCollection;
 
 import java.io.File;
 import java.util.*;
@@ -14,6 +16,7 @@ import java.util.logging.Logger;
 public class MigrationRegime implements IMigrationRegime {
 	private final HashMap<Integer,MigrationEntry> sr;
 	private final ArrayList<DiploidGenome> defaultSourcePopulation;
+	private final SNPCollection controlCollection; // all SNPs of the migration file must match this collection!
 	private final Logger logger;
 
 
@@ -22,6 +25,7 @@ public class MigrationRegime implements IMigrationRegime {
 		sr = new HashMap<Integer,MigrationEntry>(input);
 		this.logger=logger;
 		this.defaultSourcePopulation=new ArrayList<DiploidGenome>(defaultSourcePopulation);
+		this.controlCollection=defaultSourcePopulation.get(0).getHaplotypeA().getSNPCollection();
 
 	}
 
@@ -84,8 +88,34 @@ public class MigrationRegime implements IMigrationRegime {
 		if(! new File(path).exists()) throw new IllegalArgumentException("Haplotype file does not exist "+path);
 
 		ArrayList<DiploidGenome> dipGenomes=new mimcore.io.DiploidGenomeReader(path,this.logger).readGenomes();
+		if(dipGenomes.size()<1) throw new IllegalArgumentException("Invalid input of migrant population; Number of diploid genomes must be larger than zero; file="+path);
 		this.logger.info("Successfully loaded "+dipGenomes.size()+ " potential migrants");
+		validateDiploidGenomes(dipGenomes);
 		return dipGenomes;
+	}
+
+	/**
+	 * Check if migrant populatin is valid
+	 * ie. has the same SNPs as the base population
+	 * @param genomes
+	 * @return
+	 */
+	private boolean validateDiploidGenomes(ArrayList<DiploidGenome> genomes)
+	{
+		this.logger.info("Testing validity of migrant population (ie. if migrant population has the same SNPs as the base popualtion)");
+
+		SNPCollection tocompare=genomes.get(0).getHaplotypeA().getSNPCollection();
+
+		if(tocompare.size()!=this.controlCollection.size())throw new IllegalArgumentException("Invalid migrant population; Migrant population has different SNPs than the base population; size "+tocompare.size()+" vs "+controlCollection.size());
+		for(int i=0; i<tocompare.size(); i++)
+		{
+			SNP valid=this.controlCollection.getSNPforIndex(i);
+			SNP check=tocompare.getSNPforIndex(i);
+			if(!valid.equals(check)) throw new IllegalArgumentException("Invalid migrant population; Migrant population has different SNPs than the base population "+valid.toString()+ " vs "+check.toString());
+
+		}
+		this.logger.info("Finished; Migrant population is valid");
+		return true;
 	}
 
 

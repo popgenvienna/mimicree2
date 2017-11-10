@@ -17,7 +17,7 @@ public class TestMain {
 
     public static void testMain()
     {
-        RecombinationTester.generatePoisson();
+        RecombinationTester.haldanesMapFunction();
     }
     public static void codeToTest()
     {

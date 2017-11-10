@@ -72,6 +72,19 @@ public class SNP implements Comparable<SNP>{
 	{
 		return this.genpos.toString()+" "+this.ancestralAllele+"/"+this.derivedAllele;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof SNP)) {
+			return false;
+		}
+		SNP tc = (SNP) o;
+		if (!this.genomicPosition().equals(tc.genomicPosition())) return false;
+		if (tc.ancestralAllele() == this.ancestralAllele && tc.derivedAllele == this.derivedAllele && tc.referenceCharacter == this.referenceCharacter)
+			return true;
+		else return false;
+	}
+
 	
 	
    

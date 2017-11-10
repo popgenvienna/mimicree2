@@ -71,7 +71,7 @@ public class RecombinationRateReader {
 		if(recombinationMode==RecombinationMode.RF)
 		{
 			if(rec>0.5) throw new IllegalArgumentException("Recombination fraction between two loci can not be larger than 0.5; Ideal would be a value smaller than 0.4");
-			rec=this.recFraction2lambda(rec);
+			rec=haldane1919mapFunction(rec);
 		}
 		else if(recombinationMode==RecombinationMode.LAMBDA){int nix=0;}
 		else throw new IllegalArgumentException("Do not support recombination mode "+recombinationMode);
@@ -133,7 +133,7 @@ public class RecombinationRateReader {
 		
 	}
 
-	private double recFraction2lambda(double rf)
+	public static double haldane1919mapFunction(double rf)
 	{
 		double lambda = -0.5 * Math.log(1.0-2.0*rf);
 		return lambda;
