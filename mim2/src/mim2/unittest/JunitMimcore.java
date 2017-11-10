@@ -20,6 +20,8 @@ public class JunitMimcore {
             junit_mimcore.data.basic.Test_BitArray.class,
             junit_mimcore.data.basic.Test_BitArrayBuilder.class,
             junit_mimcore.data.basic.Test_Chromosome.class,
+            junit_mimcore.data.basic.Test_SNP.class,
+            junit_mimcore.data.basic.Test_SNPCollection.class,
             junit_mimcore.data.Test_FitnessFunctionContainer.class,
             junit_mimcore.data.Test_FitnessFunctionQuantitativeGauss.class,
             junit_mimcore.data.Test_FitnessFunctionArbitraryLandscape.class,
