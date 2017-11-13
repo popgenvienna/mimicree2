@@ -25,8 +25,15 @@ public class MigrationRegime implements IMigrationRegime {
 		sr = new HashMap<Integer,MigrationEntry>(input);
 		this.logger=logger;
 		this.defaultSourcePopulation=new ArrayList<DiploidGenome>(defaultSourcePopulation);
+		if(defaultSourcePopulation.size()<1) throw new IllegalArgumentException("Size of default source population must be larger than zero");
 		this.controlCollection=defaultSourcePopulation.get(0).getHaplotypeA().getSNPCollection();
+	}
 
+	public MigrationRegime(HashMap<Integer, MigrationEntry> input, SNPCollection controlCollection, Logger logger) {
+		sr = new HashMap<Integer,MigrationEntry>(input);
+		this.logger=logger;
+		this.defaultSourcePopulation=new ArrayList<DiploidGenome>();
+		this.controlCollection=controlCollection;
 	}
 
 
@@ -116,6 +123,11 @@ public class MigrationRegime implements IMigrationRegime {
 		}
 		this.logger.info("Finished; Migrant population is valid");
 		return true;
+	}
+
+	public HashMap<Integer,MigrationEntry> getMigrationEntries()
+	{
+		return new HashMap<Integer,MigrationEntry>(this.sr);
 	}
 
 

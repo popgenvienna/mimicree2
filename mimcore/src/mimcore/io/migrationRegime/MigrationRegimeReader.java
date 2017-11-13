@@ -19,9 +19,20 @@ public class MigrationRegimeReader {
 	private BufferedReader bf;
 	private String migrationRegimeFile;
 	private Logger logger;
-	private ArrayList<DiploidGenome> defaultSourcePopulation=new ArrayList<DiploidGenome>();
+	private ArrayList<DiploidGenome> defaultSourcePopulation;
 
-	public MigrationRegimeReader(String migrationRegimeFile, Logger logger)
+
+
+	public MigrationRegimeReader(String migrationRegimeFile, BufferedReader br, Logger logger, ArrayList<DiploidGenome> defaultSourcePopulation)
+	{
+		this.migrationRegimeFile=migrationRegimeFile;
+		this.bf=br;
+		this.logger=logger;
+		this.defaultSourcePopulation=new ArrayList<DiploidGenome>(defaultSourcePopulation);
+	}
+
+
+	public MigrationRegimeReader(String migrationRegimeFile, Logger logger, ArrayList<DiploidGenome> defaultSourcePopulation)
 	{
 		this.migrationRegimeFile=migrationRegimeFile;
 		try{
@@ -33,12 +44,6 @@ public class MigrationRegimeReader {
 			System.exit(0);
 		}
 		this.logger=logger;
-	}
-
-
-	public MigrationRegimeReader(String migrationRegimeFile, Logger logger, ArrayList<DiploidGenome> defaultSourcePopulation)
-	{
-		this(migrationRegimeFile,logger);
 		this.defaultSourcePopulation=new ArrayList<DiploidGenome>(defaultSourcePopulation);
 	}
 	
@@ -46,7 +51,7 @@ public class MigrationRegimeReader {
 	 * read the selection regime
 	 * @return
 	 */
-	public IMigrationRegime readMigrationRegime()
+	public MigrationRegime readMigrationRegime()
 	{
 
 		this.logger.info("Start reading the migration regime file "+this.migrationRegimeFile);

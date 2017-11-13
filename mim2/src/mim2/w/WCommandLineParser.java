@@ -127,7 +127,6 @@ public class WCommandLineParser {
 		sb.append("qt: Simulate truncating selection for a quantitative trait\n");
 		sb.append(CommandFormater.format("--haplotypes-g0","the haplotype file",null));
 		sb.append(CommandFormater.format("--recombination-rate","the recombination rate for windows of fixed size",null));
-		sb.append(CommandFormater.format("--heritability", "heritability; either --ve or --heritability needs to be provided", null));
 		sb.append(CommandFormater.format("--chromosome-definition","which chromosomes parts constitute a chromosome",null));
 		sb.append(CommandFormater.format("--output-mode","a coma separated list of generations to output",null));
 		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));

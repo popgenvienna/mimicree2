@@ -158,6 +158,14 @@ public class GenomicDataFactory {
 		BitArray ba=b.getBitArray();
 		return new HaploidGenome(ba,getCrossoverSNPCollection());
 	}
+
+	public static ArrayList<DiploidGenome> getMinimalGenomes()
+	{
+		ArrayList<DiploidGenome> genomes=new ArrayList<DiploidGenome>();
+
+		genomes.add(new DiploidGenome(getCrossoverHaplotypeMajor(),getCrossoverHaplotypeMajor()));
+		return genomes;
+	}
 	
 	public static RandomAssortment getRandomAssortment00()
 	{
