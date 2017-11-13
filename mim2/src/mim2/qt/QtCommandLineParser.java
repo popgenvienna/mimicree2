@@ -87,7 +87,7 @@ public class QtCommandLineParser {
             {
             	chromosomeDefinition=args.remove(0);
             }
-            else if(cu.equals("--output-mode"))
+            else if(cu.equals("--snapshots"))
             {
             	outputGenRaw=args.remove(0);
             }
@@ -142,7 +142,7 @@ public class QtCommandLineParser {
 		sb.append(CommandFormater.format( "--ve", "environmental variance; either --ve or --heritability needs to be provided", null));
 		sb.append(CommandFormater.format( "--heritability", "heritability; either --ve or --heritability needs to be provided", null));
 		sb.append(CommandFormater.format("--chromosome-definition","which chromosomes parts constitute a chromosome",null));
-		sb.append(CommandFormater.format("--output-mode","a coma separated list of generations to output",null));
+		sb.append(CommandFormater.format("--snapshots","a coma separated list of generations to output",null));
 		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));
 		sb.append(CommandFormater.format("--output-sync","the output file (sync); --output-dir or --output-sync or both may be provided",null));
 		sb.append(CommandFormater.format("--output-dir","the output directory for the haplotypes; --output-dir or --output-sync or both may be provided",null));

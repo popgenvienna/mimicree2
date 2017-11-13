@@ -264,27 +264,29 @@ public class GenomicDataFactory {
 	{
 		return new AdditiveSNP(new GenomicPosition(Chromosome.getChromosome("2L"),7),'A',0.1,1.0);
 	}
+	 */
 	
 	public static DiploidGenome getDiploidGenome_11()
 	{
-		HaploidGenome g1=new HaploidGenome(getCrossoverHaplotypeMajor(),new InversionHaplotype(new ArrayList<Inversion>()));
-		HaploidGenome g2=new HaploidGenome(getCrossoverHaplotypeMajor(),new InversionHaplotype(new ArrayList<Inversion>()));
+		HaploidGenome g1=getCrossoverHaplotypeMajor();
+		HaploidGenome g2=getCrossoverHaplotypeMajor();
 		return new DiploidGenome(g1,g2);
 	}
 	
 	public static DiploidGenome getDiploidGenome_00()
 	{
-		HaploidGenome g1=new HaploidGenome(getCrossoverHaplotypeMinor(),new InversionHaplotype(new ArrayList<Inversion>()));
-		HaploidGenome g2=new HaploidGenome(getCrossoverHaplotypeMinor(),new InversionHaplotype(new ArrayList<Inversion>()));
+		HaploidGenome g1=getCrossoverHaplotypeMinor();
+		HaploidGenome g2=getCrossoverHaplotypeMinor();
 		return new DiploidGenome(g1,g2);
 	}
 	
 	public static DiploidGenome getDiploidGenome_10()
 	{
-		HaploidGenome g1=new HaploidGenome(getCrossoverHaplotypeMajor(),new InversionHaplotype(new ArrayList<Inversion>()));
-		HaploidGenome g2=new HaploidGenome(getCrossoverHaplotypeMinor(),new InversionHaplotype(new ArrayList<Inversion>()));
+		HaploidGenome g1=getCrossoverHaplotypeMajor();
+		HaploidGenome g2=getCrossoverHaplotypeMinor();
 		return new DiploidGenome(g1,g2);
 	}
+
 
 	public static ArrayList<DiploidGenome> getDiploidGenomesMf08()
 	{
@@ -309,6 +311,7 @@ public class GenomicDataFactory {
 	}
 
 
+	/**
 	public static Specimen getSpecimen(double fitness, double additiveFitness)
 	{
 		DiploidGenome genome=getDiploidGenome_11();
