@@ -14,7 +14,7 @@ import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.io.ChromosomeDefinitionReader;
 import mimcore.io.DiploidGenomeReader;
 import mimcore.io.SNPQuantitativeEffectSizeReader;
-import mimcore.io.RecombinationRateReader;
+import mimcore.io.recombination.RecombinationRateReader;
 import mimcore.io.fitnessfunction.FitnessFunctionReaderArbitraryFunction;
 import mimcore.io.fitnessfunction.FitnessFunctionReaderGaussian;
 import mimcore.io.migrationRegime.MigrationRegimeReader;

@@ -1,10 +1,8 @@
 package junit_mimcore.io;
 
 import junit_mimcore.factories.SharedFactory;
-import mimcore.data.gpf.quantitative.AdditiveSNPeffect;
 import mimcore.data.recombination.RecombinationWindow;
-import mimcore.io.RecombinationRateReader;
-import mimcore.io.SNPQuantitativeEffectSizeReader;
+import mimcore.io.recombination.RecombinationRateReader;
 import org.junit.Test;
 
 import java.io.BufferedReader;

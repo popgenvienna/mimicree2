@@ -4,6 +4,7 @@ import mimcore.data.*;
 import mimcore.data.recombination.*;
 import mimcore.io.*;
 import mimcore.io.haplotypes.DiploidGenomeWriter;
+import mimcore.io.recombination.RecombinationRateReader;
 
 import java.io.File;
 import java.io.IOException;

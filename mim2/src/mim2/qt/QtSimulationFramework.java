@@ -13,6 +13,7 @@ import mimcore.data.migration.MigrationRegimeNoMigration;
 import mimcore.data.recombination.*;
 import mimcore.io.*;
 import mimcore.io.migrationRegime.MigrationRegimeReader;
+import mimcore.io.recombination.RecombinationRateReader;
 import mimcore.io.selectionregime.*;
 
 import java.io.File;

@@ -32,7 +32,10 @@ public class CrossoverGenerator {
 		return new CrossoverEvents(recEvents);
 	}
 
-
+	public int size()
+	{
+		return this.windows.size();
+	}
 	/**
 	 * mostly for debugging
 	 * @return

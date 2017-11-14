@@ -2,7 +2,7 @@ package mim2.test.recombinationTest;
 
 import mimcore.data.misc.Tuple;
 import mimcore.data.recombination.RecombinationWindow;
-import mimcore.io.RecombinationRateReader;
+import mimcore.io.recombination.RecombinationRateReader;
 
 import java.util.ArrayList;
 import java.util.Random;

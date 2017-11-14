@@ -1,7 +1,5 @@
 package mim2.w;
 
-import mim2.qs.MultiSimulationQS;
-import mim2.shared.GPFHelper;
 import mim2.shared.SimulationMode;
 import mimcore.data.DiploidGenome;
 import mimcore.data.gpf.fitness.*;
@@ -12,7 +10,7 @@ import mimcore.data.migration.MigrationRegimeNoMigration;
 import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.io.ChromosomeDefinitionReader;
 import mimcore.io.DiploidGenomeReader;
-import mimcore.io.RecombinationRateReader;
+import mimcore.io.recombination.RecombinationRateReader;
 import mimcore.io.migrationRegime.MigrationRegimeReader;
 import mimcore.data.gpf.survival.ISurvivalFunction;
 import mimcore.io.w.EpistasisFitnessReader;

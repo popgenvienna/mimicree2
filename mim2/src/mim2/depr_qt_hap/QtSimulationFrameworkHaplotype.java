@@ -13,7 +13,7 @@ import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.io.ChromosomeDefinitionReader;
 import mimcore.io.DiploidGenomeReader;
 import mimcore.io.SNPQuantitativeEffectSizeReader;
-import mimcore.io.RecombinationRateReader;
+import mimcore.io.recombination.RecombinationRateReader;
 import mimcore.io.selectionregime.SelectionRegimeReader;
 
 import java.io.File;
