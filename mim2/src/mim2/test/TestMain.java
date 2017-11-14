@@ -17,7 +17,7 @@ public class TestMain {
 
     public static void testMain()
     {
-        RecombinationTester.haldanesMapFunction();
+        RecombinationTester.centiMorgan();
     }
     public static void codeToTest()
     {
