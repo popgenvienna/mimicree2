@@ -25,6 +25,7 @@ public class JunitMimcore {
             junit_mimcore.data.Test_FitnessFunctionContainer.class,
             junit_mimcore.data.Test_FitnessFunctionQuantitativeGauss.class,
             junit_mimcore.data.Test_FitnessFunctionArbitraryLandscape.class,
+            junit_mimcore.data.Test_FitnessFunctionDiminishingReturns.class,
             junit_mimcore.data.Test_FitnessOfSNP.class,
             junit_mimcore.data.basic.Test_PACReducer.class,
             junit_mimcore.io.Test_FitnessOfSNPReader.class,
