@@ -23,12 +23,25 @@ public class RecombinationTester {
 
         for(double rf: rfs)
         {
-            double lambda = RRRcMpMb.haldanetransform(rf,100000);
-            RecombinationWindow rw=new RecombinationWindow(null,0,1,lambda);
+
+            RecombinationWindow rw1=new RecombinationWindow(null,0,4000000,RRRcMpMb.haldanetransform(rf,400000));
+            RecombinationWindow rw2=new RecombinationWindow(null,0,2500000,RRRcMpMb.haldanetransform(rf,250000));
+            RecombinationWindow rw3=new RecombinationWindow(null,0,1500000,RRRcMpMb.haldanetransform(rf,150000));
+            RecombinationWindow rw4=new RecombinationWindow(null,0,1000000,RRRcMpMb.haldanetransform(rf,100000));
+            RecombinationWindow rw5=new RecombinationWindow(null,0,500000,RRRcMpMb.haldanetransform(rf,50000));
+            RecombinationWindow rw6=new RecombinationWindow(null,0,250000,RRRcMpMb.haldanetransform(rf,25000));
+            RecombinationWindow rw7=new RecombinationWindow(null,0,150000,RRRcMpMb.haldanetransform(rf,15000));
+            RecombinationWindow rw8=new RecombinationWindow(null,0,100000,RRRcMpMb.haldanetransform(rf,10000));
             for(int i=0; i<n; i++){
 
-                int recs=0;
-                for(int k=0; k<10; k++) recs+=rw.getRecombinationEvents(r); // ten windows with size 100kb
+                int recs=rw1.getRecombinationEvents(r)+
+                        rw2.getRecombinationEvents(r)+
+                        rw3.getRecombinationEvents(r)+
+                        rw4.getRecombinationEvents(r)+
+                        rw5.getRecombinationEvents(r)+
+                        rw6.getRecombinationEvents(r)+
+                        rw7.getRecombinationEvents(r)+
+                        rw8.getRecombinationEvents(r);
                 tups.add(new Tuple<Double,Integer>(rf,recs));
 
 
