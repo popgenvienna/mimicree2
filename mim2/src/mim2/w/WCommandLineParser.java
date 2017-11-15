@@ -124,7 +124,7 @@ public class WCommandLineParser {
 	public static void printHelpMessage()
 	{
 		StringBuilder sb=new StringBuilder();
-		sb.append("qt: Simulate truncating selection for a quantitative trait\n");
+		sb.append("w: simulate selection for loci having a given absolute fitness\n");
 		sb.append(CommandFormater.format("--haplotypes-g0","the haplotype file",null));
 		sb.append(CommandFormater.format("--recombination-rate","the recombination rate for windows of fixed size",null));
 		sb.append(CommandFormater.format("--chromosome-definition","which chromosomes parts constitute a chromosome",null));

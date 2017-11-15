@@ -135,7 +135,7 @@ public class QsCommandLineParser {
 	public static void printHelpMessage()
 	{
 		StringBuilder sb=new StringBuilder();
-		sb.append("qt: Simulate truncating selection for a quantitative trait\n");
+		sb.append("qff: Simulate selection for a quantitative trait mapping to fitness using a fitness function\n");
 		sb.append(CommandFormater.format("--haplotypes-g0","the haplotype file",null));
 		sb.append(CommandFormater.format("--recombination-rate","the recombination rate for windows of fixed size",null));
 		sb.append(CommandFormater.format("--effect-size","the causative SNPs and their effect sizes",null));

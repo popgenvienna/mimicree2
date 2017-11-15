@@ -94,7 +94,7 @@ public class QsSimulationFramework {
 
 	public void run()
 	{
-		this.logger.info("Starting qs simulations: a quantitative trait under stabilizing selection");
+		this.logger.info("Starting qff simulations: selection for a quantitative trait mapping to fitness using a fitness function");
 
 
 		// Load the data
