@@ -11,23 +11,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class FitnessFunctionReaderArbitraryFunction {
+public class FFRArbitraryFunction {
 
 	private BufferedReader bf;
-	private String fitnessFunctionFile;
-	private Logger logger;
-	public FitnessFunctionReaderArbitraryFunction(String fitnessFunctionFile, Logger logger)
+	public FFRArbitraryFunction(BufferedReader br)
 	{
-		this.fitnessFunctionFile=fitnessFunctionFile;
-		try{
-			bf=new BufferedReader(new FileReader(fitnessFunctionFile));
-		}
-		catch(FileNotFoundException e)
-		{
-			e.printStackTrace();
-			System.exit(0);
-		}
-		this.logger=logger;
+		this.bf=br;
 	}
 	
 	/**
@@ -37,7 +26,6 @@ public class FitnessFunctionReaderArbitraryFunction {
 	public FitnessFunctionContainer readFitnessFunction()
 	{
 
-		this.logger.info("Start reading user defined approximation of fitness functions from file "+this.fitnessFunctionFile);
 		HashMap<Integer,ArrayList<ArbitraryLandscapeEntry>> data=new HashMap<Integer,ArrayList<ArbitraryLandscapeEntry>>();
 		String line;
 		try
@@ -83,7 +71,6 @@ public class FitnessFunctionReaderArbitraryFunction {
 			res.put(key, new FitnessFunctionArbitraryLandscape(value));
 		}
 
-		this.logger.info("Finished reading the arbitrary fitness functions");
 		return new FitnessFunctionContainer(res);
 	}
 

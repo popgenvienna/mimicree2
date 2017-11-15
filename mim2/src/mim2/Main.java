@@ -27,7 +27,7 @@ public class Main {
 			{
 				QtCommandLineParser.runQTSimulations(rawarguments);
 			}
-			else if(subtask.toLowerCase().equals("qs"))
+			else if(subtask.toLowerCase().equals("qff"))
 			{
 				QsCommandLineParser.runQSSimulations(rawarguments);
 			}
@@ -65,7 +65,7 @@ public class Main {
 			sb.append("== Main tasks ==\n");
 			sb.append(CommandFormater.format("w","simulate selection for loci having a given absolute fitness (w)",null));
 			sb.append(CommandFormater.format("qt","simulate truncating selection for a quantitative trait",null));
-			sb.append(CommandFormater.format("qs","simulate stabilizing selection for a quantitative trait",null));
+			sb.append(CommandFormater.format("qff","simulate selection for a quantitative trait mapping to fitness according to a fitness function",null));
 
 
 			sb.append("\n== Secondary tasks ==\n");

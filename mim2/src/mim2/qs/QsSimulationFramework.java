@@ -14,9 +14,10 @@ import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.io.ChromosomeDefinitionReader;
 import mimcore.io.DiploidGenomeReader;
 import mimcore.io.SNPQuantitativeEffectSizeReader;
+import mimcore.io.fitnessfunction.FitnessFunctionReader;
 import mimcore.io.recombination.RecombinationRateReader;
-import mimcore.io.fitnessfunction.FitnessFunctionReaderArbitraryFunction;
-import mimcore.io.fitnessfunction.FitnessFunctionReaderGaussian;
+import mimcore.io.fitnessfunction.FFRArbitraryFunction;
+import mimcore.io.fitnessfunction.FFRGaussian;
 import mimcore.io.migrationRegime.MigrationRegimeReader;
 
 import java.io.File;
@@ -28,7 +29,6 @@ public class QsSimulationFramework {
 	private final String recombinationFile;
 	private final String chromosomeDefinition;
 	private final String effectSizeFile;
-	private final String gaussianFitnessFunctionFile;
 	private final String fitnessFunctionFile;
 	private final String migrationRegimeFile;
 	private final String outputSync;
@@ -44,7 +44,7 @@ public class QsSimulationFramework {
 	private final java.util.logging.Logger logger;
 	//chromosomeDefinition,   	effectSizeFile,heritability,selectionRegimFile,outputFile,simMode,
 	public QsSimulationFramework(String haplotypeFile, String recombinationFile, String chromosomeDefinition, String effectSizeFile, Double ve, Double heritability,
-                                 String gaussianFitnessFunctionFile, String fitnessFunctionFile, String migrationRegimeFile, String outputSync, String outputGPF, String outputDir, SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
+                                 String fitnessFunctionFile, String migrationRegimeFile, String outputSync, String outputGPF, String outputDir, SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
 	{
 		// 'File' represents files and directories
 		// Test if input files exist
@@ -52,11 +52,7 @@ public class QsSimulationFramework {
 		if(! new File(recombinationFile).exists()) throw new IllegalArgumentException("Recombination file does not exist " + recombinationFile);
 		if(! new File(effectSizeFile).exists()) logger.info("No effect size file found; Commencing neutral simulations\n");
 		// fitness function
-		if((gaussianFitnessFunctionFile==null) && (fitnessFunctionFile == null)) throw new IllegalArgumentException("Either a gaussian fitness function or a fitness function must be provided");
-		if((gaussianFitnessFunctionFile!=null) && (fitnessFunctionFile != null)) throw new IllegalArgumentException("Either a gaussian fitness function or a fitness function must be provided; NOT BOTH");
-
-		if((gaussianFitnessFunctionFile != null) && (!new File(gaussianFitnessFunctionFile).exists())) throw new IllegalArgumentException("Gaussian fitness function file does not exist; "+gaussianFitnessFunctionFile);
-		if((fitnessFunctionFile != null) && (!new File(fitnessFunctionFile).exists())) throw new IllegalArgumentException("Fitness function file does not exist; "+fitnessFunctionFile);
+		if(!new File(fitnessFunctionFile).exists()) throw new IllegalArgumentException("Fitness function file does not exist; "+fitnessFunctionFile);
 
 		// migration regime
 		if(migrationRegimeFile == null)logger.info("No migration regime file found; Proceeding without migration\n");
@@ -86,7 +82,6 @@ public class QsSimulationFramework {
 		this.haplotypeFile=haplotypeFile;
 		this.recombinationFile=recombinationFile;
 		this.chromosomeDefinition=chromosomeDefinition;
-		this.gaussianFitnessFunctionFile=gaussianFitnessFunctionFile;
 		this.fitnessFunctionFile=fitnessFunctionFile;
 		this.migrationRegimeFile=migrationRegimeFile;
 		this.ve=ve;
@@ -111,10 +106,7 @@ public class QsSimulationFramework {
 		// Compute GPF
 		GenotypeCalculator genotypeCalculator=new SNPQuantitativeEffectSizeReader(this.effectSizeFile,this.logger).readAdditiveFitness();
 		PhenotypeCalculator phenotypeCalculator= GPFHelper.getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.ve,this.heritability,this.logger);
-		FitnessFunctionContainer ffc=null;
-		if(gaussianFitnessFunctionFile != null) ffc= new FitnessFunctionReaderGaussian(this.gaussianFitnessFunctionFile,this.logger).readFitnessFunction();
-		else if(fitnessFunctionFile !=null)ffc = new FitnessFunctionReaderArbitraryFunction(this.fitnessFunctionFile,this.logger).readFitnessFunction();
-		else throw new IllegalArgumentException("no fitness function could be loaded; critical error; contact the programmer");
+		FitnessFunctionContainer ffc=new FitnessFunctionReader(this.fitnessFunctionFile,this.logger).readFitnessFunction();
 
 		// Survival function; no selective deaths; all survive
 		ISurvivalFunction survivalFunction= new SurvivalRegimeAllSurvive();

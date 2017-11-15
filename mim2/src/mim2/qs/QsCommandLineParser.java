@@ -29,7 +29,6 @@ public class QsCommandLineParser {
 		String outputGPF=null;
 		String outputDir=null;
 		String outputGenRaw="";
-		String gaussianFitnessFunctionFile=null;         // either or
 		String fitnessFunctionFile=null;
 		String migrationRegimeFile=null;
 		String chromosomeDefinition="";
@@ -67,10 +66,6 @@ public class QsCommandLineParser {
             else if(cu.equals("--effect-size"))
             {
             	effectSizeFile=args.remove(0);
-            }
-            else if(cu.equals("--gauss-fitness-function"))
-            {
-				gaussianFitnessFunctionFile=args.remove(0);
             }
 			else if(cu.equals("--fitness-function"))
 			{
@@ -131,7 +126,7 @@ public class QsCommandLineParser {
 
 		MimicreeThreadPool.setThreads(threadCount);
         QsSimulationFramework mimframe= new QsSimulationFramework(haplotypeFile,recombinationFile,chromosomeDefinition,
-				effectSizeFile,ve,heritability,gaussianFitnessFunctionFile,fitnessFunctionFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
+				effectSizeFile,ve,heritability,fitnessFunctionFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
         
         mimframe.run();
 	}
@@ -152,7 +147,6 @@ public class QsCommandLineParser {
 		sb.append(CommandFormater.format("--output-sync","the output file (sync); --output-dir or --output-sync or both may be provided",null));
 		sb.append(CommandFormater.format("--output-dir","the output directory for the haplotypes; --output-dir or --output-sync or both may be provided",null));
 		sb.append(CommandFormater.format("--output-gpf","the output file for genotype/phenotype/fitness; optional",null));
-		sb.append(CommandFormater.format("--gauss-fitness-function","a gaussian fitness function for mapping the phenotype to fitness; --fitness-function or --gauss-fitness-function may be provided",null));
 		sb.append(CommandFormater.format("--fitness-function","a fitness function for mapping the phenotype to fitness; either --fitness-function or --gauss-fitness-function may be provided",null));
 		sb.append(CommandFormater.format("--migration-regime","the migration regime; migration from the base population to the evolved populations",null));
 		sb.append(CommandFormater.format("--detailed-log","print detailed log messages",null));

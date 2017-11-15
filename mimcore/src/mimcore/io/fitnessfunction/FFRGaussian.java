@@ -14,23 +14,12 @@ import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-public class FitnessFunctionReaderGaussian {
+public class FFRGaussian {
 
 	private BufferedReader bf;
-	private String gaussianFitnessFunctionFile;
-	private Logger logger;
-	public FitnessFunctionReaderGaussian(String gaussianFitnessFunctionFile, Logger logger)
+	public FFRGaussian(BufferedReader br)
 	{
-		this.gaussianFitnessFunctionFile=gaussianFitnessFunctionFile;
-		try{
-			bf=new BufferedReader(new FileReader(gaussianFitnessFunctionFile));
-		}
-		catch(FileNotFoundException e)
-		{
-			e.printStackTrace();
-			System.exit(0);
-		}
-		this.logger=logger;
+		this.bf=br;
 	}
 	
 	/**
@@ -40,7 +29,6 @@ public class FitnessFunctionReaderGaussian {
 	public FitnessFunctionContainer readFitnessFunction()
 	{
 
-		this.logger.info("Start reading gaussian fitness functions from  file "+this.gaussianFitnessFunctionFile);
 		HashMap<Integer,IFitnessCalculator> res=new HashMap<Integer, IFitnessCalculator>();
 		String line;
 		try
@@ -78,8 +66,6 @@ public class FitnessFunctionReaderGaussian {
 			e.printStackTrace();
 			System.exit(0);
 		}
-
-		this.logger.info("Finished reading the gaussian fitness functions");
 		return new FitnessFunctionContainer(res);
 	}
 
