@@ -2,6 +2,11 @@ package junit_mimcore.io;
 
 import junit_mimcore.factories.GenomicDataFactory;
 import junit_mimcore.factories.SharedFactory;
+import mimcore.data.gpf.fitness.FitnessFunctionArbitraryLandscape;
+import mimcore.data.gpf.fitness.FitnessFunctionContainer;
+import mimcore.data.gpf.fitness.FitnessFunctionQuantitativeDimRet;
+import mimcore.data.gpf.fitness.FitnessFunctionQuantitativeGauss;
+import mimcore.data.haplotypes.SNP;
 import mimcore.data.migration.MigrationEntry;
 import mimcore.data.migration.MigrationRegime;
 import mimcore.io.fitnessfunction.FitnessFunctionReader;
@@ -14,6 +19,7 @@ import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class Test_FitnessFunctionReader {
 
@@ -24,9 +30,46 @@ public class Test_FitnessFunctionReader {
 	{
 		String input=
 								"[gauss]\n"+
-								"1\t0.5\t1.2\10\t3\n"+
-								"10\t0.5\t1.2\20\t3\n"+
-								"20\t0.5\t1.2\30\t3\n";
+								"1\t0.5\t1.2\t10\t3\n"+
+								"10\t0.5\t1.2\t20\t3\n"+
+								"20\t0.5\t1.2\t30\t3\n";
+
+
+
+		BufferedReader br=new BufferedReader(new StringReader(input));
+		return new FitnessFunctionReader("fakefile",br, SharedFactory.getNullLogger());
+
+	}
+
+	public static FitnessFunctionReader getDimret()
+	{
+		String input=
+						"[dimret]\n"+
+						"1\t0.5\t1.2\t10\t3\n"+
+						"10\t0.5\t1.2\t20\t3\n"+
+						"20\t0.5\t1.2\t30\t3\n";
+
+
+
+		BufferedReader br=new BufferedReader(new StringReader(input));
+		return new FitnessFunctionReader("fakefile",br, SharedFactory.getNullLogger());
+
+	}
+
+	public static FitnessFunctionReader getInterpolate()
+	{
+		String input=
+								"[interpolate]\n"+
+								"1\t0.0\t0.0\n" +
+								"1\t0.5\t1.0\n" +
+								"1\t1.0\t2.0\n" +
+								"1\t1.5\t3.0\n" +
+								"1\t2.0\t4.0\n" +
+								"5\t0.0\t1.2\n" +
+								"5\t0.5\t1.1\n" +
+								"5\t1.0\t0.8\n" +
+								"5\t1.5\t1.2\n" +
+								"5\t2.0\t1.3\n";
 
 
 
@@ -36,72 +79,90 @@ public class Test_FitnessFunctionReader {
 	}
 	
 	@Test
-	public void simple_entry()
+	public void gauss_correctly_identified()
 	{
-		MigrationRegimeReader r=getReader();
-		MigrationRegime mr=r.readMigrationRegime();
-		HashMap<Integer,MigrationEntry> s= mr.getMigrationEntries();
+		FitnessFunctionContainer ffc=getGauss().readFitnessFunction();
 
-		assertEquals(s.get(1).getGeneration(),1);
-		assertEquals(s.get(1).getMigrantCount(),100);
-		assertEquals(s.get(1).useDefault(),true);
+
+		assertTrue(ffc.getFitnessCalculator(1,1) instanceof FitnessFunctionQuantitativeGauss);
+		assertTrue(ffc.getFitnessCalculator(10,1) instanceof FitnessFunctionQuantitativeGauss);
+		assertTrue(ffc.getFitnessCalculator(1,10) instanceof FitnessFunctionQuantitativeGauss);
+		assertTrue(ffc.getFitnessCalculator(1,20) instanceof FitnessFunctionQuantitativeGauss);
+
+	}
+
+	@Test
+	public void gauss_correctly_read()
+	{
+		FitnessFunctionContainer ffc=getGauss().readFitnessFunction();
+		//if (!(o instanceof SNP)) {
+		//SNP tc = (SNP) o;
+		FitnessFunctionQuantitativeGauss g=(FitnessFunctionQuantitativeGauss)ffc.getFitnessCalculator(1,1);
+
+		assertEquals(g.getMinFitness(),0.5,0.000001);
+		assertEquals(g.getMaxFitness(),1.2,0.000001);
+		assertEquals(g.getMean(),10,0.000001);
+		assertEquals(g.getStdev(),3,0.000001);
+	}
+
+	@Test
+	public void diminishing_returns_correctly_identified()
+	{
+		FitnessFunctionContainer ffc=getDimret().readFitnessFunction();
+
+
+		assertTrue(ffc.getFitnessCalculator(1,1) instanceof FitnessFunctionQuantitativeDimRet);
+		assertTrue(ffc.getFitnessCalculator(10,1) instanceof FitnessFunctionQuantitativeDimRet);
+		assertTrue(ffc.getFitnessCalculator(1,10) instanceof FitnessFunctionQuantitativeDimRet);
+		assertTrue(ffc.getFitnessCalculator(1,20) instanceof FitnessFunctionQuantitativeDimRet);
+
+	}
+
+	@Test
+	public void diminishing_returns_correctly_read()
+	{
+		FitnessFunctionContainer ffc=getDimret().readFitnessFunction();
+		//if (!(o instanceof SNP)) {
+		//SNP tc = (SNP) o;
+		FitnessFunctionQuantitativeDimRet g=(FitnessFunctionQuantitativeDimRet)ffc.getFitnessCalculator(1,1);
+
+		assertEquals(g.getMinFitness(),0.5,0.000001);
+		assertEquals(g.getMaxFitness(),1.2,0.000001);
+		assertEquals(g.getAlpha(),10,0.000001);
+		assertEquals(g.getBeta(),3,0.000001);
+	}
+
+
+	@Test
+	public void interpolate_correctly_identified()
+	{
+		FitnessFunctionContainer ffc=getInterpolate().readFitnessFunction();
+
+
+		assertTrue(ffc.getFitnessCalculator(1,1) instanceof FitnessFunctionArbitraryLandscape);
+		assertTrue(ffc.getFitnessCalculator(10,1) instanceof FitnessFunctionArbitraryLandscape);
+		assertTrue(ffc.getFitnessCalculator(1,10) instanceof FitnessFunctionArbitraryLandscape);
+		assertTrue(ffc.getFitnessCalculator(1,20) instanceof FitnessFunctionArbitraryLandscape);
 
 	}
 
 
 	@Test
-	public void simple_entry_two()
+	public void interpolate_correctly_read()
 	{
-		MigrationRegimeReader r=getReader();
-		HashMap<Integer,MigrationEntry> s= r.readMigrationRegime().getMigrationEntries();
+		FitnessFunctionContainer ffc=getInterpolate().readFitnessFunction();
 
-		assertEquals(s.get(10).getGeneration(),10);
-		assertEquals(s.get(10).getMigrantCount(),200);
-		assertEquals(s.get(10).useDefault(),true);
+		FitnessFunctionArbitraryLandscape g=(FitnessFunctionArbitraryLandscape)ffc.getFitnessCalculator(1,1);
+		assertEquals(g.getFitness(null,0),0.0,0.00001);
+		assertEquals(g.getFitness(null,0.5),1.0,0.00001);
+		assertEquals(g.getFitness(null,1.7),3.4,0.00001);
 
-	}
-
-	@Test
-	public void entry_with_source_file()
-	{
-		MigrationRegimeReader r=getReader();
-		HashMap<Integer,MigrationEntry> s= r.readMigrationRegime().getMigrationEntries();
-
-		assertEquals(s.get(20).getGeneration(),20);
-		assertEquals(s.get(20).getMigrantCount(),300);
-		assertEquals(s.get(20).useDefault(),false);
-		assertEquals(s.get(20).getPathToSourcePopulation(),"/path/to/random/file.txt");
 	}
 
 
 
-	@Test
-	public void final_entry()
-	{
-		MigrationRegimeReader r=getReader();
-		HashMap<Integer,MigrationEntry> s= r.readMigrationRegime().getMigrationEntries();
-
-		assertEquals(s.get(40).getGeneration(),40);
-		assertEquals(s.get(40).getMigrantCount(),50);
-		assertEquals(s.get(40).useDefault(),true);
-	}
 
 
-	@Test
-	public void does_not_contain_unprovided_entries()
-	{
-		MigrationRegimeReader r=getReader();
-		HashMap<Integer,MigrationEntry> s= r.readMigrationRegime().getMigrationEntries();
-
-		assertFalse(s.containsKey(0));
-		assertFalse(s.containsKey(2));
-		assertFalse(s.containsKey(9));
-		assertFalse(s.containsKey(11));
-
-		assertFalse(s.containsKey(39));
-		assertFalse(s.containsKey(45));
-
-	}
 
 
 	

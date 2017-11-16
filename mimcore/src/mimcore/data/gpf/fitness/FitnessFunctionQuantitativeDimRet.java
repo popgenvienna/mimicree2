@@ -33,4 +33,9 @@ public class FitnessFunctionQuantitativeDimRet implements IFitnessCalculator {
 		if(fitness<minFitness)fitness=minFitness;
 		return fitness;
 	}
+
+	public double getMinFitness(){return this.minFitness;}
+	public double getMaxFitness(){return this.maxFitness;}
+	public double getAlpha(){return this.alpha;}
+	public double getBeta(){return this.beta;}
 }

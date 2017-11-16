@@ -33,4 +33,9 @@ public class FitnessFunctionQuantitativeGauss implements IFitnessCalculator {
 		fitness+=this.minFitness;
 		return fitness;
 	}
+
+	public double getMinFitness(){return this.minFitness;}
+	public double getMaxFitness(){return this.maxFitness;}
+	public double getMean(){return this.mean;}
+	public double getStdev(){return this.stdev;}
 }
