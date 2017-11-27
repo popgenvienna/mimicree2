@@ -25,5 +25,8 @@ public class MatePair {
 		return fertilizedEgg;
 	}
 
+	public Specimen getMale(){return this.male;}
+	public Specimen getFemale(){return this.female;}
+
 
 }

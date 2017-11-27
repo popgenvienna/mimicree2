@@ -67,6 +67,12 @@ public class FitnessFunctionReader {
 				container=new FFRDiminishingReturns(this.bf).readFitnessFunction();
 
 			}
+			else if(firstline.toLowerCase().equals("[dirsel]"))
+			{
+				this.logger.info("Directional selection was provided");
+				container=new FFRDirectionalSelection(this.bf).readFitnessFunction();
+
+			}
 			else throw new IllegalArgumentException("Do not recognize fitness function "+firstline);
 
 		}

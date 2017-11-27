@@ -2,10 +2,7 @@ package junit_mimcore.io;
 
 import junit_mimcore.factories.GenomicDataFactory;
 import junit_mimcore.factories.SharedFactory;
-import mimcore.data.gpf.fitness.FitnessFunctionArbitraryLandscape;
-import mimcore.data.gpf.fitness.FitnessFunctionContainer;
-import mimcore.data.gpf.fitness.FitnessFunctionQuantitativeDimRet;
-import mimcore.data.gpf.fitness.FitnessFunctionQuantitativeGauss;
+import mimcore.data.gpf.fitness.*;
 import mimcore.data.haplotypes.SNP;
 import mimcore.data.migration.MigrationEntry;
 import mimcore.data.migration.MigrationRegime;
@@ -48,6 +45,21 @@ public class Test_FitnessFunctionReader {
 						"1\t0.5\t1.2\t10\t3\n"+
 						"10\t0.5\t1.2\t20\t3\n"+
 						"20\t0.5\t1.2\t30\t3\n";
+
+
+
+		BufferedReader br=new BufferedReader(new StringReader(input));
+		return new FitnessFunctionReader("fakefile",br, SharedFactory.getNullLogger());
+
+	}
+
+	public static FitnessFunctionReader getDirsel()
+	{
+		String input=
+				"[dirsel]\n"+
+						"1\t0.5\t1.2\t10\t-0.4\t5\n"+
+						"10\t0.5\t1.2\t20\t3\t2\n"+
+						"20\t0.5\t1.2\t30\t3\t10\n";
 
 
 
@@ -157,6 +169,36 @@ public class Test_FitnessFunctionReader {
 		assertEquals(g.getFitness(null,0.5),1.0,0.00001);
 		assertEquals(g.getFitness(null,1.7),3.4,0.00001);
 
+	}
+
+
+
+	@Test
+	public void directional_selection_correctly_identified()
+	{
+		FitnessFunctionContainer ffc=getDirsel().readFitnessFunction();
+
+
+		assertTrue(ffc.getFitnessCalculator(1,1) instanceof FitnessFunctionQuantitativeDirectionalSelection);
+		assertTrue(ffc.getFitnessCalculator(10,1) instanceof FitnessFunctionQuantitativeDirectionalSelection);
+		assertTrue(ffc.getFitnessCalculator(1,10) instanceof FitnessFunctionQuantitativeDirectionalSelection);
+		assertTrue(ffc.getFitnessCalculator(1,20) instanceof FitnessFunctionQuantitativeDirectionalSelection);
+
+	}
+
+	@Test
+	public void directional_selection_correctly_read()
+	{
+		FitnessFunctionContainer ffc=getDimret().readFitnessFunction();
+		//if (!(o instanceof SNP)) {
+		//"1\t0.5\t1.2\t10\t3\t5\n"+
+		FitnessFunctionQuantitativeDirectionalSelection g=(FitnessFunctionQuantitativeDirectionalSelection)ffc.getFitnessCalculator(1,1);
+
+		assertEquals(g.getMinFitness(),0.5,0.000001);
+		assertEquals(g.getMaxFitness(),1.2,0.000001);
+		assertEquals(g.getS(),10,0.000001);
+		assertEquals(g.getR(),-0.4,0.000001);
+		assertEquals(g.getBeta(),5,0.000001);
 	}
 
 

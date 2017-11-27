@@ -1,5 +1,6 @@
 package mim2.test;
 
+import mim2.test.matingFunctionTester.MatingTester;
 import mim2.test.recombinationTest.RecombinationTester;
 import mimcore.data.DiploidGenome;
 import mimcore.data.gpf.fitness.ArbitraryLandscapeEntry;
@@ -17,7 +18,7 @@ public class TestMain {
 
     public static void testMain()
     {
-        RecombinationTester.centiMorgan();
+        MatingTester.testRandom();
     }
     public static void codeToTest()
     {
