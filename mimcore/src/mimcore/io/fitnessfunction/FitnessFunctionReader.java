@@ -55,7 +55,7 @@ public class FitnessFunctionReader {
 				this.logger.info("Fitness function provided as dense points for an arbitrary function");
 				container=new FFRArbitraryFunction(this.bf).readFitnessFunction();
 			}
-			else if(firstline.toLowerCase().equals("[gauss]"))
+			else if(firstline.toLowerCase().equals("[stabilizing]"))
 			{
 				this.logger.info("A gaussian fitness function was provided");
 				container =new FFRGaussian(this.bf).readFitnessFunction();

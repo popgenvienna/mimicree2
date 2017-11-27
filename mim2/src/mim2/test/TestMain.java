@@ -1,6 +1,5 @@
 package mim2.test;
 
-import mim2.test.matingFunctionTester.MatingTester;
 import mim2.test.recombinationTest.RecombinationTester;
 import mimcore.data.DiploidGenome;
 import mimcore.data.gpf.fitness.ArbitraryLandscapeEntry;

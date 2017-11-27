@@ -26,7 +26,7 @@ public class Test_FitnessFunctionReader {
 	public static FitnessFunctionReader getGauss()
 	{
 		String input=
-								"[gauss]\n"+
+								"[stabilizing]\n"+
 								"1\t0.5\t1.2\t10\t3\n"+
 								"10\t0.5\t1.2\t20\t3\n"+
 								"20\t0.5\t1.2\t30\t3\n";
@@ -189,7 +189,7 @@ public class Test_FitnessFunctionReader {
 	@Test
 	public void directional_selection_correctly_read()
 	{
-		FitnessFunctionContainer ffc=getDimret().readFitnessFunction();
+		FitnessFunctionContainer ffc=getDirsel().readFitnessFunction();
 		//if (!(o instanceof SNP)) {
 		//"1\t0.5\t1.2\t10\t3\t5\n"+
 		FitnessFunctionQuantitativeDirectionalSelection g=(FitnessFunctionQuantitativeDirectionalSelection)ffc.getFitnessCalculator(1,1);
