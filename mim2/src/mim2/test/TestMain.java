@@ -18,7 +18,7 @@ public class TestMain {
 
     public static void testMain()
     {
-        MatingTester.testRandom();
+        int bla=0;
     }
     public static void codeToTest()
     {
