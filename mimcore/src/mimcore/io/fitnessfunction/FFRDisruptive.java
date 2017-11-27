@@ -1,23 +1,18 @@
 package mimcore.io.fitnessfunction;
 
 import mimcore.data.gpf.fitness.FitnessFunctionContainer;
+import mimcore.data.gpf.fitness.FitnessFunctionQuantitativeDisruptive;
 import mimcore.data.gpf.fitness.FitnessFunctionQuantitativeGauss;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
-import mimcore.data.gpf.survival.ISelectionRegime;
-import mimcore.data.gpf.survival.SelectionRegimeDefault;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.security.InvalidParameterException;
 import java.util.HashMap;
-import java.util.logging.Logger;
 
-public class FFRGaussian {
+public class FFRDisruptive {
 
 	private BufferedReader bf;
-	public FFRGaussian(BufferedReader br)
+	public FFRDisruptive(BufferedReader br)
 	{
 		this.bf=br;
 	}
@@ -36,7 +31,7 @@ public class FFRGaussian {
 			while((line=bf.readLine())!=null)
 			{
 				String[] a=line.split("\t");
-				if(a.length!=5) throw new IllegalArgumentException("Every entry in the stabilizing selection fitness function file must have exactly five columns (tab separated)");
+				if(a.length!=5) throw new IllegalArgumentException("Every entry in the disruptive fitness function file must have exactly five columns (tab separated)");
 				int generation=Integer.parseInt(a[0]);
 				double minFitness=Double.parseDouble(a[1]);
 				double maxFitness=Double.parseDouble(a[2]);
@@ -47,7 +42,7 @@ public class FFRGaussian {
 				if(maxFitness<minFitness) throw new IllegalArgumentException("The maximum fitness must equal or larger than the minimum fitness");
 				if(stdDevOfPeak<=0) throw new IllegalArgumentException("The standard deviation of the fitness function must be larger than zero");
 
-				IFitnessCalculator selReg=new FitnessFunctionQuantitativeGauss(minFitness,maxFitness,meanOfPeak,stdDevOfPeak);
+				IFitnessCalculator selReg=new FitnessFunctionQuantitativeDisruptive(minFitness,maxFitness,meanOfPeak,stdDevOfPeak);
 				res.put(generation,selReg);
 			}
 		}

@@ -57,8 +57,14 @@ public class FitnessFunctionReader {
 			}
 			else if(firstline.toLowerCase().equals("[stabilizing]"))
 			{
-				this.logger.info("A gaussian fitness function was provided");
+				this.logger.info("A gaussian fitness function (stabilizing selection) was provided");
 				container =new FFRGaussian(this.bf).readFitnessFunction();
+
+			}
+			else if(firstline.toLowerCase().equals("[disruptive]"))
+			{
+				this.logger.info("A gaussian fitness function (disruptive selection) was provided");
+				container =new FFRDisruptive(this.bf).readFitnessFunction();
 
 			}
 			else if(firstline.toLowerCase().equals("[dimret]"))

@@ -38,6 +38,21 @@ public class Test_FitnessFunctionReader {
 
 	}
 
+	public static FitnessFunctionReader getDisruptive()
+	{
+		String input=
+				"[disruptive]\n"+
+						"1\t0.5\t1.2\t10\t3\n"+
+						"10\t0.5\t1.2\t20\t3\n"+
+						"20\t0.5\t1.2\t30\t3\n";
+
+
+
+		BufferedReader br=new BufferedReader(new StringReader(input));
+		return new FitnessFunctionReader("fakefile",br, SharedFactory.getNullLogger());
+
+	}
+
 	public static FitnessFunctionReader getDimret()
 	{
 		String input=
@@ -204,7 +219,32 @@ public class Test_FitnessFunctionReader {
 
 
 
+	@Test
+	public void disruptive_correctly_identified()
+	{
+		FitnessFunctionContainer ffc=getDisruptive().readFitnessFunction();
 
+
+		assertTrue(ffc.getFitnessCalculator(1,1) instanceof FitnessFunctionQuantitativeDisruptive);
+		assertTrue(ffc.getFitnessCalculator(10,1) instanceof FitnessFunctionQuantitativeDisruptive);
+		assertTrue(ffc.getFitnessCalculator(1,10) instanceof FitnessFunctionQuantitativeDisruptive);
+		assertTrue(ffc.getFitnessCalculator(1,20) instanceof FitnessFunctionQuantitativeDisruptive);
+
+	}
+
+	@Test
+	public void disruptive_correctly_read()
+	{
+		FitnessFunctionContainer ffc=getDisruptive().readFitnessFunction();
+		//if (!(o instanceof SNP)) {
+		//SNP tc = (SNP) o;
+		FitnessFunctionQuantitativeDisruptive g=(FitnessFunctionQuantitativeDisruptive)ffc.getFitnessCalculator(1,1);
+
+		assertEquals(g.getMinFitness(),0.5,0.000001);
+		assertEquals(g.getMaxFitness(),1.2,0.000001);
+		assertEquals(g.getMean(),10,0.000001);
+		assertEquals(g.getStdev(),3,0.000001);
+	}
 
 
 	
