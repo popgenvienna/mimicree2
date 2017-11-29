@@ -30,6 +30,7 @@ public class QtCommandLineParser {
 		String outputDir=null;
 		String outputGenRaw="";
 		String selectionRegimFile=null;         //
+		String populationSizeFile=null;
 		String migrationRegimeFile=null;
 		String chromosomeDefinition="";
 		Integer seed=null;
@@ -91,6 +92,10 @@ public class QtCommandLineParser {
             {
             	outputGenRaw=args.remove(0);
             }
+			else if(cu.equals("--population-size"))
+			{
+				populationSizeFile=args.remove(0);
+			}
             else if(cu.equals("--replicate-runs"))
             {
             	replicateRuns=Integer.parseInt(args.remove(0));
@@ -125,7 +130,7 @@ public class QtCommandLineParser {
         SimulationMode simMode = CommandLineParseHelp.parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
-        QtSimulationFramework mimframe= new QtSimulationFramework(haplotypeFile,recombinationFile,chromosomeDefinition,
+        QtSimulationFramework mimframe= new QtSimulationFramework(haplotypeFile,populationSizeFile,recombinationFile,chromosomeDefinition,
 				effectSizeFile,ve,heritability,selectionRegimFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
         
         mimframe.run();
@@ -138,6 +143,7 @@ public class QtCommandLineParser {
 		sb.append("qt: Simulate truncating selection for a quantitative trait\n");
 		sb.append(CommandFormater.format("--haplotypes-g0","the haplotype file",null));
 		sb.append(CommandFormater.format("--recombination-rate","the recombination rate for windows of fixed size",null));
+		sb.append(CommandFormater.format("--population-size","the population size during the simulations",null));
 		sb.append(CommandFormater.format("--effect-size","the causative SNPs and their effect sizes",null));
 		sb.append(CommandFormater.format( "--ve", "environmental variance; either --ve or --heritability needs to be provided", null));
 		sb.append(CommandFormater.format( "--heritability", "heritability; either --ve or --heritability needs to be provided", null));

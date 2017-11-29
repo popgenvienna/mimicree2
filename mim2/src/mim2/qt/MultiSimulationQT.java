@@ -1,6 +1,7 @@
 package mim2.qt;
 
 
+import mimcore.data.PopulationSizeContainer;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.gpf.mating.MatingFunctionRandomMating;
 import mimcore.data.gpf.quantitative.*;
@@ -29,6 +30,7 @@ public class MultiSimulationQT {
 	private final PhenotypeCalculator pc;
 	private final IFitnessCalculator fc;
 	private final ISurvivalFunction sf;
+	private final PopulationSizeContainer popcont;
 	private final IMigrationRegime migrationRegime;
 	private final String outputSync;
 	private final String outputGPF;
@@ -45,7 +47,7 @@ public class MultiSimulationQT {
 	private ArrayList<PopulationAlleleCount> pacs;
 	private ArrayList<GPFCollection> gpfs;
 
-	public MultiSimulationQT(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
+	public MultiSimulationQT(ArrayList<DiploidGenome> dipGenomes, PopulationSizeContainer popcont, GenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
                              IMigrationRegime migrationRegime, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
                              ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
 	{
@@ -72,6 +74,7 @@ public class MultiSimulationQT {
 		this.logger=logger;
 		this.recGenerator=recGenerator;
 		this.replicateRuns=replicateRuns;
+		this.popcont=popcont;
 
 
 		// internal variables
@@ -92,7 +95,7 @@ public class MultiSimulationQT {
 			// for different replicates you dont use the same individuals (phenotypes) but only the same genotypes (with different phenotypes)
 			Population basePopulation=Population.loadPopulation(dipGenomes,gc,pc,fc,new Random());
 
-			int startpopulationsize=basePopulation.size();
+
 			int simulationNumber=k+1;
 			this.logger.info("Starting simulation replicate number " + simulationNumber);
 			this.logger.info("MimicrEE2 will proceed with forward simulations until generation " + this.maxGeneration);
@@ -107,10 +110,11 @@ public class MultiSimulationQT {
 			// For the number of requested simulations get the next generation, and write it to file if requested
 			for(int i=1; i<=this.maxGeneration; i++)
 			{
-				this.logger.info("Processing generation "+i+ " of replicate run "+simulationNumber);
+				int popsize=popcont.getPopulationSize(i,simulationNumber);
+				this.logger.info("Processing generation "+i+ " of replicate run "+simulationNumber+ "with N="+popsize);
 				Population phenTail=sf.getSurvivors(nextPopulation, i, simulationNumber);
 				this.logger.info("Selection intensity " +sf.getSurvivorFraction(i, simulationNumber) +"; Selected "+phenTail.size()+ " for next generation; average genotype "+phenTail.getAverageGenotype() +"; average phenotype "+phenTail.getAveragePhenotype());
-				nextPopulation=phenTail.getNextGeneration(gc,pc,fc,new MatingFunctionRandomMating(),this.recGenerator,startpopulationsize);
+				nextPopulation=phenTail.getNextGeneration(gc,pc,fc,new MatingFunctionRandomMating(),this.recGenerator,popsize);
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype());
 
 				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>

@@ -27,6 +27,7 @@ public class QtSimulationFramework {
 	private final String effectSizeFile;
 	private final String selectionRegimeFile;
 	private final String migrationRegimeFile;
+	private final String populationSizeFile;
 	private final String outputSync;
 	private final String outputGPF;
 	private final String outputDir;
@@ -39,32 +40,34 @@ public class QtSimulationFramework {
 
 	private final java.util.logging.Logger logger;
 	//chromosomeDefinition,   	effectSizeFile,heritability,selectionRegimFile,outputFile,simMode,
-	public QtSimulationFramework(String haplotypeFile, String recombinationFile, String chromosomeDefinition, String effectSizeFile, Double ve, Double heritability,
+	public QtSimulationFramework(String haplotypeFile, String populationSizeFile, String recombinationFile, String chromosomeDefinition, String effectSizeFile, Double ve, Double heritability,
                                  String selectionRegimeFile, String migrationRegimeFile, String outputSync, String outputGPF, String outputDir, SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
 	{
 		// 'File' represents files and directories
 		// Test if input files exist
 		if(! new File(haplotypeFile).exists()) throw new IllegalArgumentException("Haplotype file does not exist "+haplotypeFile);
 		if(! new File(recombinationFile).exists()) throw new IllegalArgumentException("Recombination file does not exist " + recombinationFile);
-		if(! new File(effectSizeFile).exists()) logger.info("No effect size file found; Commencing neutral simulations\n");
+		if(! new File(effectSizeFile).exists()) logger.info("No effect size file found; Commencing neutral simulations");
 		// selection regime
-		if(selectionRegimeFile == null)logger.info("No selection regime file found; Commencing neutral simulations\n");
+		if(selectionRegimeFile == null)logger.info("No selection regime file found; Commencing neutral simulations");
 		else if (! new File(selectionRegimeFile).exists()) throw new IllegalArgumentException("Selection regime file does not exist; "+selectionRegimeFile);
 
 		// migration regime
-		if(migrationRegimeFile == null)logger.info("No migration regime file found; Proceeding without migration\n");
+		if(migrationRegimeFile == null)logger.info("No migration regime file found; Proceeding without migration");
 		else if (! new File(migrationRegimeFile).exists()) throw new IllegalArgumentException("Migration regime file does not exist; "+ migrationRegimeFile);
 
-		if(outputGPF == null) logger.info("No output genotype/phenotype/fitness file provided; will not record GPF\n");
+		if(outputGPF == null) logger.info("No output genotype/phenotype/fitness file provided; will not record GPF");
 		else try {new File(outputGPF).createNewFile();} catch(IOException e) {throw new IllegalArgumentException("Can not create GPF output file "+outputGPF);}
 
 		if((outputDir == null) && (outputSync==null)) throw new IllegalArgumentException("No output was provided; Provide either an output directory or an output sync file or both");
 
-		if(outputDir== null) logger.info("No output director found; Will not record haplotypes\n");
+		if(outputDir== null) logger.info("No output director found; Will not record haplotypes");
 		else if(! new File(outputDir).exists()) throw new IllegalArgumentException("The provided output directory does not exist "+outputDir);
 
-		if(outputSync == null) logger.info("No output sync file was provided; Will not record allele frequencies\n");
+		if(outputSync == null) logger.info("No output sync file was provided; Will not record allele frequencies");
 		else try {new File(outputSync).createNewFile();} catch(IOException e) {throw new IllegalArgumentException("Can not create output sync file "+outputSync);}
+
+		if((populationSizeFile != null) && (!new File(populationSizeFile).exists())) throw new IllegalArgumentException("Population size file does not exist; "+populationSizeFile);
 
 
 
@@ -75,6 +78,7 @@ public class QtSimulationFramework {
 		this.outputGPF=outputGPF;
 		this.outputSync=outputSync;
 		this.outputDir=outputDir;
+		this.populationSizeFile=populationSizeFile;
 		this.effectSizeFile=effectSizeFile;
 		this.haplotypeFile=haplotypeFile;
 		this.recombinationFile=recombinationFile;
@@ -105,6 +109,10 @@ public class QtSimulationFramework {
 		PhenotypeCalculator phenotypeCalculator= GPFHelper.getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.ve,this.heritability,this.logger);
 		IFitnessCalculator fitnessCalculator=new FitnessCalculatorAllEqual();
 
+		// Load population size computer
+		PopulationSizeContainer popcont=new PopulationSizeContainer(dipGenomes.size());
+		if(this.populationSizeFile!=null) popcont=new PopulationSizeReader(this.populationSizeFile,this.logger).readPopulationSizes();
+
 		// Survival function (truncating selection); If none specified all survive
 		ISurvivalFunction survivalFunction= new SurvivalRegimeAllSurvive();
 		if(selectionRegimeFile != null)
@@ -117,7 +125,7 @@ public class QtSimulationFramework {
 		IMigrationRegime migrationRegime=new MigrationRegimeNoMigration();
 		if(migrationRegimeFile != null) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger,dipGenomes).readMigrationRegime();
 
-		MultiSimulationQT mst=new MultiSimulationQT(dipGenomes,genotypeCalculator,phenotypeCalculator,fitnessCalculator,survivalFunction, migrationRegime, this.outputSync, this.outputGPF,this.outputDir,
+		MultiSimulationQT mst=new MultiSimulationQT(dipGenomes,popcont,genotypeCalculator,phenotypeCalculator,fitnessCalculator,survivalFunction, migrationRegime, this.outputSync, this.outputGPF,this.outputDir,
 			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
 		mst.run();
 

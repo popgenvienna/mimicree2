@@ -3,6 +3,7 @@ package mim2.w;
 
 import mimcore.data.DiploidGenome;
 import mimcore.data.Population;
+import mimcore.data.PopulationSizeContainer;
 import mimcore.data.gpf.fitness.FitnessFunctionContainer;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.gpf.mating.MatingFunctionFecundity;
@@ -29,6 +30,7 @@ import java.util.logging.Logger;
 
 public class MultiSimulationW {
 	private final ArrayList<DiploidGenome> dipGenomes;
+	private final PopulationSizeContainer popcont;
 	private final IGenotypeCalculator gc;
 	private final IPhenotypeCalculator pc;
 	private final IFitnessCalculator fc;
@@ -49,7 +51,7 @@ public class MultiSimulationW {
 	private ArrayList<PopulationAlleleCount> pacs;
 	private ArrayList<GPFCollection> gpfs;
 
-	public MultiSimulationW(ArrayList<DiploidGenome> dipGenomes, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
+	public MultiSimulationW(ArrayList<DiploidGenome> dipGenomes, PopulationSizeContainer popcont, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
                             IMigrationRegime migrationRegime, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
                             ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
 	{
@@ -76,6 +78,7 @@ public class MultiSimulationW {
 		this.logger=logger;
 		this.recGenerator=recGenerator;
 		this.replicateRuns=replicateRuns;
+		this.popcont=popcont;
 
 
 		// internal variables
@@ -97,7 +100,6 @@ public class MultiSimulationW {
 			// for different replicates you dont use the same individuals (phenotypes) but only the same genotypes (with different phenotypes)
 			Population basePopulation=Population.loadPopulation(dipGenomes,gc,pc,fc,new Random());
 
-			int startpopulationsize=basePopulation.size();
 			int simulationNumber=k+1;
 			this.logger.info("Starting simulation replicate number " + simulationNumber);
 			this.logger.info("MimicrEE2 will proceed with forward simulations until generation " + this.maxGeneration);
@@ -112,12 +114,13 @@ public class MultiSimulationW {
 			// For the number of requested simulations get the next generation, and write it to file if requested
 			for(int i=1; i<=this.maxGeneration; i++)
 			{
-
-				this.logger.info("Processing generation "+i+ " of replicate run "+simulationNumber);
+				int popsize=popcont.getPopulationSize(i,simulationNumber);
+				this.logger.info("Processing generation "+i+ " of replicate run "+simulationNumber+ " with N="+popsize);
 
 				// Survival would go here if considered....(no survival needed for stabilizing selection);
 
-				nextPopulation=nextPopulation.getNextGeneration(gc,pc,fc,new MatingFunctionFecundity(),this.recGenerator,startpopulationsize);
+
+				nextPopulation=nextPopulation.getNextGeneration(gc,pc,fc,new MatingFunctionFecundity(),this.recGenerator,popsize);
 				this.logger.info("Average fitness of offspring "+nextPopulation.getAverageFitness());
 
 				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>

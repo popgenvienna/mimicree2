@@ -3,6 +3,7 @@ package mim2.qs;
 
 import mimcore.data.DiploidGenome;
 import mimcore.data.Population;
+import mimcore.data.PopulationSizeContainer;
 import mimcore.data.gpf.fitness.FitnessFunctionContainer;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.gpf.mating.MatingFunctionFecundity;
@@ -33,6 +34,7 @@ public class MultiSimulationQS {
 	private final FitnessFunctionContainer ffc;
 	private final ISurvivalFunction sf; //not used; but may be used in the future
 	private final IMigrationRegime migrationRegime;
+	private final PopulationSizeContainer popcont;
 	private final String outputSync;
 	private final String outputGPF;
 	private final String outputDir;
@@ -48,7 +50,7 @@ public class MultiSimulationQS {
 	private ArrayList<PopulationAlleleCount> pacs;
 	private ArrayList<GPFCollection> gpfs;
 
-	public MultiSimulationQS(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator gc, PhenotypeCalculator pc, FitnessFunctionContainer ffc, ISurvivalFunction sf,
+	public MultiSimulationQS(ArrayList<DiploidGenome> dipGenomes, PopulationSizeContainer popcont, GenotypeCalculator gc, PhenotypeCalculator pc, FitnessFunctionContainer ffc, ISurvivalFunction sf,
                              IMigrationRegime migrationRegime, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
                              ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
 	{
@@ -58,7 +60,8 @@ public class MultiSimulationQS {
 		this.gc=gc;
 		this.sf=sf;
 		this.ffc=ffc;
-		
+		this.popcont=popcont;
+
 		int max=0;
 		HashSet<Integer> toOutput=new HashSet<Integer>();
 		for(Integer i : outputGenerations)
@@ -96,7 +99,6 @@ public class MultiSimulationQS {
 			// for different replicates you dont use the same individuals (phenotypes) but only the same genotypes (with different phenotypes)
 			Population basePopulation=Population.loadPopulation(dipGenomes,gc,pc,fc,new Random());
 
-			int startpopulationsize=basePopulation.size();
 			int simulationNumber=k+1;
 			this.logger.info("Starting simulation replicate number " + simulationNumber);
 			this.logger.info("MimicrEE2 will proceed with forward simulations until generation " + this.maxGeneration);
@@ -112,13 +114,13 @@ public class MultiSimulationQS {
 			for(int i=1; i<=this.maxGeneration; i++)
 			{
 				// Load the new fitness function genertor; the new population will already be treated with this fitness function
-				fc=ffc.getFitnessCalculator(k+1,i);
-
-				this.logger.info("Processing generation "+i+ " of replicate run "+simulationNumber);
+				fc=ffc.getFitnessCalculator(simulationNumber,i);
+				int popsize=popcont.getPopulationSize(i,simulationNumber);
+				this.logger.info("Processing generation "+i+ " of replicate run "+simulationNumber+ " with N="+popsize);
 
 				// Survival would go here if considered....(no survival needed for stabilizing selection);
 
-				nextPopulation=nextPopulation.getNextGeneration(gc,pc,fc,new MatingFunctionFecundity(),this.recGenerator,startpopulationsize);
+				nextPopulation=nextPopulation.getNextGeneration(gc,pc,fc,new MatingFunctionFecundity(),this.recGenerator,popsize);
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype()+"; average fitness of offspring "+nextPopulation.getAverageFitness());
 
 				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>

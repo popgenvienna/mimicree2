@@ -63,9 +63,9 @@ public class Main {
 			StringBuilder sb=new StringBuilder();
 			sb.append("Usage: java -Xmx4g -jar mim2.jar [subtask] [parameters of subtask]\n\n");
 			sb.append("== Main tasks ==\n");
-			sb.append(CommandFormater.format("w","simulate selection for loci having a given absolute fitness (w)",null));
-			sb.append(CommandFormater.format("qt","simulate truncating selection for a quantitative trait",null));
-			sb.append(CommandFormater.format("qff","simulate selection for a quantitative trait mapping to fitness according to a fitness function",null));
+			sb.append(CommandFormater.format("w","simulate selection for loci having a given absolute fitness (w..fitness)",null));
+			sb.append(CommandFormater.format("qt","simulate truncating selection for a quantitative trait (qt..quantitative truncating)",null));
+			sb.append(CommandFormater.format("qff","simulate a quantitative trait mapping to fitness (qff..quantitative fitness function)",null));
 
 
 			sb.append("\n== Secondary tasks ==\n");
@@ -83,7 +83,7 @@ public class Main {
 
 		public static String getVersionNumber()
 		{
-			return "v0.10.1";
+			return "v0.12.1";
 		}
 
 

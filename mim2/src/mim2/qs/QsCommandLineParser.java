@@ -31,6 +31,7 @@ public class QsCommandLineParser {
 		String outputGenRaw="";
 		String fitnessFunctionFile=null;
 		String migrationRegimeFile=null;
+		String populationSizeFile=null;
 		String chromosomeDefinition="";
 		Integer seed=null;
 		int replicateRuns=1;                   //
@@ -63,6 +64,10 @@ public class QsCommandLineParser {
             {
             	recombinationFile=args.remove(0);
             }
+			else if(cu.equals("--population-size"))
+			{
+				populationSizeFile=args.remove(0);
+			}
             else if(cu.equals("--effect-size"))
             {
             	effectSizeFile=args.remove(0);
@@ -125,7 +130,7 @@ public class QsCommandLineParser {
         SimulationMode simMode = CommandLineParseHelp.parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
-        QsSimulationFramework mimframe= new QsSimulationFramework(haplotypeFile,recombinationFile,chromosomeDefinition,
+        QsSimulationFramework mimframe= new QsSimulationFramework(haplotypeFile,populationSizeFile,recombinationFile,chromosomeDefinition,
 				effectSizeFile,ve,heritability,fitnessFunctionFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
         
         mimframe.run();
@@ -138,6 +143,7 @@ public class QsCommandLineParser {
 		sb.append("qff: Simulate selection for a quantitative trait mapping to fitness using a fitness function\n");
 		sb.append(CommandFormater.format("--haplotypes-g0","the haplotype file",null));
 		sb.append(CommandFormater.format("--recombination-rate","the recombination rate for windows of fixed size",null));
+		sb.append(CommandFormater.format("--population-size","the population size during the simulations",null));
 		sb.append(CommandFormater.format("--effect-size","the causative SNPs and their effect sizes",null));
 		sb.append(CommandFormater.format( "--ve", "environmental variance; either --ve or --heritability needs to be provided", null));
 		sb.append(CommandFormater.format("--heritability", "heritability; either --ve or --heritability needs to be provided", null));

@@ -88,7 +88,7 @@ public class Population {
 			newPopulation.add(spec);
 			countAdded++;
 		}
-		logger.fine("Added "+countAdded+" from evolved population");
+		logger.fine("Added "+countAdded+" individuals from evolved population");
 		// Create a new population
 		return new Population(newPopulation);
 	}

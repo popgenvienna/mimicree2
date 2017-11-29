@@ -31,6 +31,7 @@ public class WCommandLineParser {
 		String fitnessFile=null;            //
 		String epistasisFile=null;            //
 		String migrationRegimeFile=null;
+		String populationSizeFile=null;
 		String chromosomeDefinition="";
 		Integer seed=null;
 		int replicateRuns=1;                   //
@@ -81,6 +82,10 @@ public class WCommandLineParser {
             {
             	outputGenRaw=args.remove(0);
             }
+			else if(cu.equals("--population-size"))
+			{
+				populationSizeFile=args.remove(0);
+			}
             else if(cu.equals("--replicate-runs"))
             {
             	replicateRuns=Integer.parseInt(args.remove(0));
@@ -115,7 +120,7 @@ public class WCommandLineParser {
         SimulationMode simMode = CommandLineParseHelp.parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
-        WSimulationFramework mimframe= new WSimulationFramework(haplotypeFile,recombinationFile,chromosomeDefinition,fitnessFile,epistasisFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
+        WSimulationFramework mimframe= new WSimulationFramework(haplotypeFile,populationSizeFile,recombinationFile,chromosomeDefinition,fitnessFile,epistasisFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
         
         mimframe.run();
 	}
@@ -127,6 +132,7 @@ public class WCommandLineParser {
 		sb.append("w: simulate selection for loci having a given absolute fitness\n");
 		sb.append(CommandFormater.format("--haplotypes-g0","the haplotype file",null));
 		sb.append(CommandFormater.format("--recombination-rate","the recombination rate for windows of fixed size",null));
+		sb.append(CommandFormater.format("--population-size","the population size during the simulations",null));
 		sb.append(CommandFormater.format("--chromosome-definition","which chromosomes parts constitute a chromosome",null));
 		sb.append(CommandFormater.format("--snapshots","a coma separated list of generations to output",null));
 		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));
