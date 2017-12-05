@@ -142,8 +142,8 @@ public class QtCommandLineParser {
 		StringBuilder sb=new StringBuilder();
 		sb.append("qt: Simulate truncating selection for a quantitative trait\n");
 		sb.append(CommandFormater.format("--haplotypes-g0","the haplotype file",null));
-		sb.append(CommandFormater.format("--recombination-rate","the recombination rate for windows of fixed size",null));
-		sb.append(CommandFormater.format("--population-size","the population size during the simulations",null));
+		sb.append(CommandFormater.format("--recombination-rate","a file with the recombination rate for windows of fixed size",null));
+		sb.append(CommandFormater.format("--population-size","a file with the population size during the simulations",null));
 		sb.append(CommandFormater.format("--effect-size","the causative SNPs and their effect sizes",null));
 		sb.append(CommandFormater.format( "--ve", "environmental variance; either --ve or --heritability needs to be provided", null));
 		sb.append(CommandFormater.format( "--heritability", "heritability; either --ve or --heritability needs to be provided", null));
