@@ -2,16 +2,13 @@ package junit_mimcore.io;
 
 import junit_mimcore.factories.GenomicDataFactory;
 import junit_mimcore.factories.SharedFactory;
-import mimcore.data.gpf.fitness.FitnessOfSNP;
 import mimcore.data.migration.MigrationEntry;
 import mimcore.data.migration.MigrationRegime;
 import mimcore.io.migrationRegime.MigrationRegimeReader;
-import mimcore.io.w.SNPFitnessReader;
 import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;

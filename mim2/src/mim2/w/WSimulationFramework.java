@@ -115,7 +115,7 @@ public class WSimulationFramework {
 
 		// Load fitness computers (snps and
 		IFitnessCalculator snpFitness=new FitnessCalculatorAllEqual();
-		if(this.fitnessFile!=null) snpFitness=new SNPFitnessReader(this.fitnessFile,logger).readSNPFitness();
+		if(this.fitnessFile!=null) snpFitness=new SNPFitnessReader(this.fitnessFile,logger).getSNPFitness();
 
 		IFitnessCalculator epistasisFitness =new FitnessCalculatorAllEqual();
 		if(this.epistasisFile!=null)  epistasisFitness=new EpistasisFitnessReader(this.epistasisFile,this.logger).readEpistaticPairs();

@@ -1,29 +1,40 @@
 package mimcore.io.w;
 
-import mimcore.data.Chromosome;
-import mimcore.data.GenomicPosition;
 import mimcore.data.gpf.fitness.FitnessCalculator_SNP;
-import mimcore.data.gpf.fitness.FitnessOfSNP;
-import mimcore.data.gpf.quantitative.AdditiveSNPeffect;
-import mimcore.data.gpf.quantitative.GenotypeCalculator;
+import mimcore.data.recombination.CrossoverGenerator;
+import mimcore.io.recombination.RRRLambda;
+import mimcore.io.recombination.RRRRecFraction;
+import mimcore.io.recombination.RRRcMpMb;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
+/**
+ * Loads the recombination rate from a file
+ * @author robertkofler
+ * hello this is a new comment
+ */
 public class SNPFitnessReader {
-
 	private BufferedReader bf;
-	private String fitnessFile;
+	private String snpfitnessfile;
 	private Logger logger;
-	public SNPFitnessReader(String fitnessFile, Logger logger)
+
+	/**
+	 * Contains a single entry of a file
+	 * @author robertkofler
+	 *
+	 */
+
+
+	public SNPFitnessReader(String snpfitnessfile, Logger logger)
 	{
-		this.fitnessFile=fitnessFile;
-		try{
-			bf=new BufferedReader(new FileReader(fitnessFile));
+		this.snpfitnessfile=snpfitnessfile;
+		try
+		{
+			bf=new BufferedReader(new FileReader(snpfitnessfile));
 		}
 		catch(FileNotFoundException e)
 		{
@@ -33,31 +44,43 @@ public class SNPFitnessReader {
 		this.logger=logger;
 	}
 
-	/*
-	mostly for debugging
-	 */
-	public SNPFitnessReader(String fitnessFile, BufferedReader br, Logger logger)
+	public SNPFitnessReader(String snpfitnessfile, BufferedReader br, Logger logger)
 	{
-		this.fitnessFile=fitnessFile;
+		this.snpfitnessfile=snpfitnessfile;
 		this.bf=br;
 		this.logger=logger;
 	}
 	
-	/**
-	 * Retrieve the additive gpf effects of SNPs from a file
-	 * @return
-	 */
-	public FitnessCalculator_SNP readSNPFitness()
+
+	
+
+	
+	
+	public FitnessCalculator_SNP getSNPFitness()
 	{
-		ArrayList<FitnessOfSNP> snps=new ArrayList<FitnessOfSNP>();
-		this.logger.info("Start reading fitness of SNPs from file "+this.fitnessFile);
-		String line;
+
+
+		this.logger.info("Start reading fitness effects of SNPs from file "+this.snpfitnessfile);
+		// deactivated male halfing as mim2 is intended for general audience
+		//this.logger.info("Males in Drosophila do not recombine; Will thus multiply recombination rate by 1/2");
+		FitnessCalculator_SNP snpfitness=null;
+
 		try
 		{
-			while((line=bf.readLine())!=null)
-			{
-				snps.add(parseLine(line));
+			String firstline=bf.readLine();
+			if(firstline.toLowerCase().equals("[w]")) {
+				this.logger.info("SNP fitness mode: [w]; effect sizes of SNPs provided as absolute fitness values");
+
+				snpfitness= new SNPFitnessReaderW(this.bf).readSNPFitness();
 			}
+			else if(firstline.toLowerCase().equals("[s]")) {
+				this.logger.info("SNP fitness mode: [s]; selection coefficients of SNPs were provided");
+
+				snpfitness= new SNPFitnessReaderS(bf).readSNPFitness();
+			}
+			else throw new IllegalArgumentException("Do not recognize SNP format: "+firstline);
+
+
 		}
 		catch(IOException e)
 		{
@@ -76,32 +99,16 @@ public class SNPFitnessReader {
 			System.exit(0);
 		}
 		
+		this.logger.info("Finished reading effect sizes of SNPs; Read "+snpfitness.size()+ " entries");
+		return snpfitness;
 		
-		this.logger.info("Finished reading " + snps.size() + " fitness effects of SNPs");
-		return new FitnessCalculator_SNP(snps);
-	}
-	
-	
-	
-	private FitnessOfSNP parseLine(String line)
-	{ 
-		// X        3929069    C/A       0.8    1.0    1.2
-		// 3R      23302904      G/C      1.0    0.8     0.9
-
-		//(GenomicPosition position, char achar, double a, double d)
-		String[] a=line.split("\t");
-		GenomicPosition gp=new GenomicPosition(Chromosome.getChromosome(a[0]),Integer.parseInt(a[1]));
-		String alleles=a[2];
-		double waa=Double.parseDouble(a[3]);
-		double waA=Double.parseDouble(a[4]);
-		double wAA=Double.parseDouble(a[5]);
-		String[] tmp=alleles.split("/");
-		char achar=tmp[0].charAt(0);
-		char Achar=tmp[1].charAt(0);
-
-		return new FitnessOfSNP(gp,achar,Achar,waa,waA,wAA);
+		
+		
 		
 	}
+
+
+
 	
 
 }

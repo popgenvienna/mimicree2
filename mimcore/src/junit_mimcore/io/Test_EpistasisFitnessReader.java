@@ -2,9 +2,7 @@ package junit_mimcore.io;
 
 import junit_mimcore.factories.SharedFactory;
 import mimcore.data.gpf.fitness.FitnessOfEpistasisPair;
-import mimcore.data.gpf.fitness.FitnessOfSNP;
 import mimcore.io.w.EpistasisFitnessReader;
-import mimcore.io.w.SNPFitnessReader;
 import org.junit.Test;
 
 import java.io.BufferedReader;

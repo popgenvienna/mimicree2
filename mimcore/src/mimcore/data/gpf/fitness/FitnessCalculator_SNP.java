@@ -38,4 +38,10 @@ public class FitnessCalculator_SNP implements IFitnessCalculator {
 	{
 		return new ArrayList<FitnessOfSNP>(this.snps);
 	}
+
+
+	public int size()
+	{
+		return this.snps.size();
+	}
 }

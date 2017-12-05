@@ -1,10 +1,8 @@
 package junit_mimcore.io;
 
 import junit_mimcore.factories.SharedFactory;
-import mimcore.data.gpf.fitness.FitnessOfSNP;
 import mimcore.data.gpf.quantitative.AdditiveSNPeffect;
 import mimcore.io.SNPQuantitativeEffectSizeReader;
-import mimcore.io.w.SNPFitnessReader;
 import org.junit.Test;
 
 import java.io.BufferedReader;
