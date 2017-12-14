@@ -77,7 +77,7 @@ public class SNPFitnessReaderS {
 		double waa=1.0;
 		double waA=1.0+s*h;
 		double wAA=1.0+s;
-		if(waa<0 || waA <=0 || wAA<0) throw new IllegalArgumentException("Invalid parameters for SNP; fitness of genotypes must be larger than zero; "+line);
+		if(waa<0 || waA <0 || wAA<0) throw new IllegalArgumentException("Invalid parameters for SNP; fitness of genotypes must be larger than zero; "+line);
 
 		String[] tmp=alleles.split("/");
 		char achar=tmp[0].charAt(0);

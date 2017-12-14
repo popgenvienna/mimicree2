@@ -2,6 +2,7 @@ package mim2.shared;
 
 import mimcore.data.DiploidGenome;
 import mimcore.data.gpf.quantitative.GenotypeCalculator;
+import mimcore.data.gpf.quantitative.IGenotypeCalculator;
 import mimcore.data.gpf.quantitative.PhenotypeCalculator;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.logging.Logger;
  */
 public class GPFHelper {
 
-    public static PhenotypeCalculator getPhenotypeCalculator(ArrayList<DiploidGenome> dipGenomes, GenotypeCalculator genotypeCalculator, Double ve, Double heritability, Logger logger)
+    public static PhenotypeCalculator getPhenotypeCalculator(ArrayList<DiploidGenome> dipGenomes, IGenotypeCalculator genotypeCalculator, Double ve, Double heritability, Logger logger)
     {
         // if environmental variance exists than use it directly
         if(ve!=null) {

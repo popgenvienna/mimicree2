@@ -83,7 +83,7 @@ public class Main {
 
 		public static String getVersionNumber()
 		{
-			return "v0.13.2";
+			return "v0.13.3";
 		}
 
 

@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -18,6 +19,7 @@ public class SNPFitnessReaderW {
 
 	private BufferedReader bf;
 	private Logger logger;
+	private final double minEffect=0.00000001;
 
 	/*
 	mostly for debugging
@@ -66,7 +68,8 @@ public class SNPFitnessReaderW {
 	
 	
 	private FitnessOfSNP parseLine(String line)
-	{ 
+	{
+
 		// X        3929069    C/A       0.8    1.0    1.2
 		// 3R      23302904      G/C      1.0    0.8     0.9
 
@@ -77,6 +80,10 @@ public class SNPFitnessReaderW {
 		double waa=Double.parseDouble(a[3]);
 		double waA=Double.parseDouble(a[4]);
 		double wAA=Double.parseDouble(a[5]);
+		if(waa<0) throw new InvalidParameterException("Fitness of waa must be larger than zero");
+		if(waA<0) throw new InvalidParameterException("Fitness of waA must be larger than zero");
+		if(wAA<0) throw new InvalidParameterException("Fitness of wAA must be larger than zero");
+		if(waa<minEffect && waA <minEffect && wAA< minEffect) throw new InvalidParameterException("Fitness of at least one genotype must be larger than zero");
 		String[] tmp=alleles.split("/");
 		char achar=tmp[0].charAt(0);
 		char Achar=tmp[1].charAt(0);

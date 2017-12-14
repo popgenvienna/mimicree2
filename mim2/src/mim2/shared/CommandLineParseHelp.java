@@ -9,6 +9,7 @@ public class CommandLineParseHelp {
 
     public static SimulationMode parseOutputGenerations(String outputGenerationsRaw)
     {
+        if(outputGenerationsRaw.equals("")) throw new IllegalArgumentException("Please provide a valid --snapshots parameter");
         // Parse a String consistent of a comma-separated list of numbers, to a array of integers
         SimulationMode simMode;
         String [] tmp;

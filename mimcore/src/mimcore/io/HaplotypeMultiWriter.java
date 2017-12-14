@@ -41,7 +41,7 @@ public class HaplotypeMultiWriter {
 		
 		try
 		{
-			 haplotypeOFile = new File(this.outputDir,"haplotypes.r" + this.simulationNumber + ".g"+this.generation+".mimhap").getCanonicalPath();
+			 haplotypeOFile = new File(this.outputDir,"haplotypes.r" + this.simulationNumber + ".g"+this.generation+".mimhap.gz").getCanonicalPath();
 			 
 		}
 		catch(IOException e)

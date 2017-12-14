@@ -5,6 +5,8 @@ import mim2.shared.SimulationMode;
 import mimcore.data.*;
 import mimcore.data.gpf.fitness.FitnessCalculatorAllEqual;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
+import mimcore.data.gpf.quantitative.GenotypeCalculatorAllEqual;
+import mimcore.data.gpf.quantitative.IGenotypeCalculator;
 import mimcore.data.gpf.quantitative.PhenotypeCalculator;
 import mimcore.data.gpf.quantitative.GenotypeCalculator;
 import mimcore.data.gpf.survival.*;
@@ -105,7 +107,8 @@ public class QtSimulationFramework {
 		ArrayList<DiploidGenome> dipGenomes=new mimcore.io.DiploidGenomeReader(this.haplotypeFile,this.logger).readGenomes();
 
 		// Compute GPF
-		GenotypeCalculator genotypeCalculator=new SNPQuantitativeEffectSizeReader(this.effectSizeFile,this.logger).readAdditiveFitness();
+		IGenotypeCalculator genotypeCalculator= new GenotypeCalculatorAllEqual();
+		if(this.effectSizeFile!=null) genotypeCalculator=new SNPQuantitativeEffectSizeReader(this.effectSizeFile,this.logger).readAdditiveFitness();
 		PhenotypeCalculator phenotypeCalculator= GPFHelper.getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.ve,this.heritability,this.logger);
 		IFitnessCalculator fitnessCalculator=new FitnessCalculatorAllEqual();
 

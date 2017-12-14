@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 
 public class MultiSimulationQT {
 	private final ArrayList<DiploidGenome> dipGenomes;
-	private final GenotypeCalculator gc;
+	private final IGenotypeCalculator gc;
 	private final PhenotypeCalculator pc;
 	private final IFitnessCalculator fc;
 	private final ISurvivalFunction sf;
@@ -47,7 +47,7 @@ public class MultiSimulationQT {
 	private ArrayList<PopulationAlleleCount> pacs;
 	private ArrayList<GPFCollection> gpfs;
 
-	public MultiSimulationQT(ArrayList<DiploidGenome> dipGenomes, PopulationSizeContainer popcont, GenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
+	public MultiSimulationQT(ArrayList<DiploidGenome> dipGenomes, PopulationSizeContainer popcont, IGenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
                              IMigrationRegime migrationRegime, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
                              ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
 	{

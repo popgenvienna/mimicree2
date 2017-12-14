@@ -6,6 +6,8 @@ import mimcore.data.DiploidGenome;
 import mimcore.data.PopulationSizeContainer;
 import mimcore.data.gpf.fitness.FitnessFunctionContainer;
 import mimcore.data.gpf.quantitative.GenotypeCalculator;
+import mimcore.data.gpf.quantitative.GenotypeCalculatorAllEqual;
+import mimcore.data.gpf.quantitative.IGenotypeCalculator;
 import mimcore.data.gpf.quantitative.PhenotypeCalculator;
 import mimcore.data.gpf.survival.ISurvivalFunction;
 import mimcore.data.gpf.survival.SurvivalRegimeAllSurvive;
@@ -109,7 +111,8 @@ public class QsSimulationFramework {
 		ArrayList<DiploidGenome> dipGenomes=new DiploidGenomeReader(this.haplotypeFile,this.logger).readGenomes();
 
 		// Compute GPF
-		GenotypeCalculator genotypeCalculator=new SNPQuantitativeEffectSizeReader(this.effectSizeFile,this.logger).readAdditiveFitness();
+		IGenotypeCalculator genotypeCalculator = new GenotypeCalculatorAllEqual();
+		if(this.effectSizeFile!=null) genotypeCalculator=new SNPQuantitativeEffectSizeReader(this.effectSizeFile,this.logger).readAdditiveFitness();
 		PhenotypeCalculator phenotypeCalculator= GPFHelper.getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.ve,this.heritability,this.logger);
 		FitnessFunctionContainer ffc=new FitnessFunctionReader(this.fitnessFunctionFile,this.logger).readFitnessFunction();
 

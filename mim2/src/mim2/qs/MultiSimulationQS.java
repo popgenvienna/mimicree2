@@ -9,6 +9,7 @@ import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.gpf.mating.MatingFunctionFecundity;
 import mimcore.data.gpf.mating.MatingFunctionRandomMating;
 import mimcore.data.gpf.quantitative.GenotypeCalculator;
+import mimcore.data.gpf.quantitative.IGenotypeCalculator;
 import mimcore.data.gpf.quantitative.PhenotypeCalculator;
 import mimcore.data.gpf.survival.ISurvivalFunction;
 import mimcore.data.migration.IMigrationRegime;
@@ -29,7 +30,7 @@ import java.util.logging.Logger;
 
 public class MultiSimulationQS {
 	private final ArrayList<DiploidGenome> dipGenomes;
-	private final GenotypeCalculator gc;
+	private final IGenotypeCalculator gc;
 	private final PhenotypeCalculator pc;
 	private final FitnessFunctionContainer ffc;
 	private final ISurvivalFunction sf; //not used; but may be used in the future
@@ -50,7 +51,7 @@ public class MultiSimulationQS {
 	private ArrayList<PopulationAlleleCount> pacs;
 	private ArrayList<GPFCollection> gpfs;
 
-	public MultiSimulationQS(ArrayList<DiploidGenome> dipGenomes, PopulationSizeContainer popcont, GenotypeCalculator gc, PhenotypeCalculator pc, FitnessFunctionContainer ffc, ISurvivalFunction sf,
+	public MultiSimulationQS(ArrayList<DiploidGenome> dipGenomes, PopulationSizeContainer popcont, IGenotypeCalculator gc, PhenotypeCalculator pc, FitnessFunctionContainer ffc, ISurvivalFunction sf,
                              IMigrationRegime migrationRegime, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
                              ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
 	{

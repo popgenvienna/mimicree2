@@ -18,18 +18,18 @@ public class HaplotypeWriter {
 	{
 		// The extension will be decided at the level which output encoding should be used.
 		// Output encoding will be decided at this level, thus extension also here.
-		String gzipOutput=outputFile+".gz";
+
 		this.logger=logger;
 		try
 		{
-			bf=new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(gzipOutput))));
+			bf=new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(outputFile))));
 		}
 		catch(IOException e)
 		{
 			e.printStackTrace();
 			System.exit(0);
 		}
-		this.outputFile=gzipOutput;
+		this.outputFile=outputFile;
 	}
 	
 	

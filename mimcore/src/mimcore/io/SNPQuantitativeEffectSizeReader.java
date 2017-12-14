@@ -88,6 +88,7 @@ public class SNPQuantitativeEffectSizeReader {
 		GenomicPosition gp=new GenomicPosition(Chromosome.getChromosome(a[0]),Integer.parseInt(a[1]));
 		double aeffect=Double.parseDouble(a[3]);
 		if(aeffect<0) throw new IllegalArgumentException("Fitness effect must not be smaller than zero");
+		if(aeffect<0.000000001) throw new IllegalArgumentException("Fitness effects must not be null (or approximately null): "+aeffect);
 
 		String[] tmp=a[2].split("/");
 		char achar=tmp[0].charAt(0);
