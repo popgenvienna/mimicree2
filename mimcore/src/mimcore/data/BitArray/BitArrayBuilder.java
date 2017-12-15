@@ -37,7 +37,7 @@ public class BitArrayBuilder {
 			int mod=position % 8;
 			
 			// flip the corresponding bit
-			this.bitar[real] = BitArrayBase.bitdec[mod];
+			this.bitar[real] ^= BitArrayBase.bitdec[mod];
 		}
 
 	/**

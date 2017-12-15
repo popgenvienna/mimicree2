@@ -412,5 +412,391 @@ public class Test_BitArrayBuilder {
 		
 	}
 
+	@Test
+	public void backflip_second_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.setBit(1);
+		b.flipBit(1);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void backflip_first_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.setBit(0);
+		b.flipBit(0);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void backflip_third_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.setBit(2);
+		b.flipBit(2);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void backflip_fourth_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.setBit(3);
+		b.flipBit(3);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void backflip_fifth_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.setBit(4);
+		b.flipBit(4);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void backflip_sixth_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.setBit(5);
+		b.flipBit(5);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void backflip_seventh_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.setBit(6);
+		b.flipBit(6);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void backflip_eighth_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.setBit(7);
+		b.flipBit(7);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void backflip_ninth_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(9);
+		b.setBit(8);
+		b.flipBit(8);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+		assertFalse(b.hasBit(8));
+	}
+
+	@Test
+	public void backflip_tenth_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(10);
+		b.setBit(9);
+		b.flipBit(9);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+		assertFalse(b.hasBit(8));
+		assertFalse(b.hasBit(9));
+	}
+
+	@Test
+	public void flip_second_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.flipBit(1);
+		assertFalse(b.hasBit(0));
+		assertTrue(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void flip_first_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.flipBit(0);
+		assertTrue(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void flip_third_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.flipBit(2);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertTrue(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void flip_fourth_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.flipBit(3);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertTrue(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void flip_fifth_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.flipBit(4);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertTrue(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void flip_sixth_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.flipBit(5);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertTrue(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void flip_seventh_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.flipBit(6);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertTrue(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void flip_eighth_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.flipBit(7);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertTrue(b.hasBit(7));
+	}
+
+	@Test
+	public void flip_ninth_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(9);
+		b.flipBit(8);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+		assertTrue(b.hasBit(8));
+	}
+
+	@Test
+	public void flip_tenth_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(10);
+		b.flipBit(9);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+		assertFalse(b.hasBit(8));
+		assertTrue(b.hasBit(9));
+	}
+
+
+	@Test
+	public void multiflip_first_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.flipBit(0);
+		b.flipBit(0);
+		b.flipBit(0);
+		assertTrue(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+
+	@Test
+	public void multiflip_seventh_bit() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.flipBit(6);
+		b.flipBit(6);
+		b.flipBit(6);
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertTrue(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+	@Test
+	public void flip_several_bits() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.flipBit(0);
+		b.flipBit(1);
+		b.flipBit(2);
+		b.flipBit(3);
+		b.flipBit(4);
+		b.flipBit(5);
+		b.flipBit(6);
+		b.flipBit(7);
+
+		assertTrue(b.hasBit(0));
+		assertTrue(b.hasBit(1));
+		assertTrue(b.hasBit(2));
+		assertTrue(b.hasBit(3));
+		assertTrue(b.hasBit(4));
+		assertTrue(b.hasBit(5));
+		assertTrue(b.hasBit(6));
+		assertTrue(b.hasBit(7));
+	}
+
+	@Test
+	public void backflip_several_bits() {
+		BitArrayBuilder b=new BitArrayBuilder(8);
+		b.flipBit(0);
+		b.flipBit(1);
+		b.flipBit(2);
+		b.flipBit(3);
+		b.flipBit(4);
+		b.flipBit(5);
+		b.flipBit(6);
+		b.flipBit(7);
+		b.flipBit(0);
+		b.flipBit(1);
+		b.flipBit(2);
+		b.flipBit(3);
+		b.flipBit(4);
+		b.flipBit(5);
+		b.flipBit(6);
+		b.flipBit(7);
+
+		assertFalse(b.hasBit(0));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(2));
+		assertFalse(b.hasBit(3));
+		assertFalse(b.hasBit(4));
+		assertFalse(b.hasBit(5));
+		assertFalse(b.hasBit(6));
+		assertFalse(b.hasBit(7));
+	}
+
+
+
+
+
 	
 }
