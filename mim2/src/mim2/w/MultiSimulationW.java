@@ -2,6 +2,7 @@ package mim2.w;
 
 
 import mimcore.data.DiploidGenome;
+import mimcore.data.Mutator.IMutator;
 import mimcore.data.Population;
 import mimcore.data.PopulationSizeContainer;
 import mimcore.data.gpf.fitness.FitnessFunctionContainer;
@@ -40,6 +41,7 @@ public class MultiSimulationW {
 	private final String outputGPF;
 	private final String outputDir;
 	private final RecombinationGenerator recGenerator;
+	private final IMutator mutator;
 
 	private final int maxGeneration;
 	private final int replicateRuns;
@@ -52,7 +54,7 @@ public class MultiSimulationW {
 	private ArrayList<GPFCollection> gpfs;
 
 	public MultiSimulationW(ArrayList<DiploidGenome> dipGenomes, PopulationSizeContainer popcont, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
-                            IMigrationRegime migrationRegime, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
+                            IMigrationRegime migrationRegime, IMutator mutator, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
                             ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
 	{
 
@@ -79,6 +81,7 @@ public class MultiSimulationW {
 		this.recGenerator=recGenerator;
 		this.replicateRuns=replicateRuns;
 		this.popcont=popcont;
+		this.mutator=mutator;
 
 
 		// internal variables
@@ -120,7 +123,7 @@ public class MultiSimulationW {
 				// Survival would go here if considered....(no survival needed for stabilizing selection);
 
 
-				nextPopulation=nextPopulation.getNextGeneration(gc,pc,fc,new MatingFunctionFecundity(),this.recGenerator,popsize);
+				nextPopulation=nextPopulation.getNextGeneration(gc,pc,fc,new MatingFunctionFecundity(),this.recGenerator,mutator, popsize);
 				this.logger.info("Average fitness of offspring "+nextPopulation.getAverageFitness());
 
 				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>

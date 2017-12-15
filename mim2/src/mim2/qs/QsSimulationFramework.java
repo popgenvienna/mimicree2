@@ -3,6 +3,8 @@ package mim2.qs;
 import mim2.shared.GPFHelper;
 import mim2.shared.SimulationMode;
 import mimcore.data.DiploidGenome;
+import mimcore.data.Mutator.IMutator;
+import mimcore.data.Mutator.MutatorGenomeWideRate;
 import mimcore.data.PopulationSizeContainer;
 import mimcore.data.gpf.fitness.FitnessFunctionContainer;
 import mimcore.data.gpf.quantitative.GenotypeCalculator;
@@ -43,13 +45,14 @@ public class QsSimulationFramework {
 	private final Double heritability;
 	private final SimulationMode simMode;
 	private final int replicateRuns;
+	private final double mutationRate;
 
 
 
 	private final java.util.logging.Logger logger;
 	//chromosomeDefinition,   	effectSizeFile,heritability,selectionRegimFile,outputFile,simMode,
 	public QsSimulationFramework(String haplotypeFile, String populationSizeFile, String recombinationFile, String chromosomeDefinition, String effectSizeFile, Double ve, Double heritability,
-                                 String fitnessFunctionFile, String migrationRegimeFile, String outputSync, String outputGPF, String outputDir, SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
+                                 String fitnessFunctionFile, String migrationRegimeFile, double mutationRate, String outputSync, String outputGPF, String outputDir, SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
 	{
 		// 'File' represents files and directories
 		// Test if input files exist
@@ -76,6 +79,7 @@ public class QsSimulationFramework {
 
 		if((populationSizeFile != null) && (!new File(populationSizeFile).exists())) throw new IllegalArgumentException("Population size file does not exist; "+populationSizeFile);
 
+		if(mutationRate<0.0 || mutationRate>1.0)throw new IllegalArgumentException("Mutation rate must be between 0.0 and 1.0");
 
 		if((heritability==null) && (ve == null)) throw new IllegalArgumentException("Either ve or the heritability needs to be provided");
 		if((heritability!=null) && (ve != null)) throw new IllegalArgumentException("Either ve or the heritability needs to be provided, NOT BOTH");
@@ -96,6 +100,7 @@ public class QsSimulationFramework {
 		this.simMode=simMode;
 		this.replicateRuns=replicateRuns;
 		this.logger=logger;
+		this.mutationRate=mutationRate;
 	}
 
 
@@ -123,12 +128,14 @@ public class QsSimulationFramework {
 		// Survival function; no selective deaths; all survive
 		ISurvivalFunction survivalFunction= new SurvivalRegimeAllSurvive();
 
+		// mutator
+		IMutator mutator=new MutatorGenomeWideRate(this.mutationRate);
 
 		// Migration regime; If none specified no migration
 		IMigrationRegime migrationRegime=new MigrationRegimeNoMigration();
 		if(migrationRegimeFile != null) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger,dipGenomes).readMigrationRegime();
 
-		MultiSimulationQS ms=new MultiSimulationQS(dipGenomes,popcont,genotypeCalculator,phenotypeCalculator,ffc,survivalFunction, migrationRegime, this.outputSync, this.outputGPF,this.outputDir,
+		MultiSimulationQS ms=new MultiSimulationQS(dipGenomes,popcont,genotypeCalculator,phenotypeCalculator,ffc,survivalFunction, migrationRegime, mutator, this.outputSync, this.outputGPF,this.outputDir,
 			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
 		ms.run();
 

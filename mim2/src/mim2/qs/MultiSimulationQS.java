@@ -2,6 +2,7 @@ package mim2.qs;
 
 
 import mimcore.data.DiploidGenome;
+import mimcore.data.Mutator.IMutator;
 import mimcore.data.Population;
 import mimcore.data.PopulationSizeContainer;
 import mimcore.data.gpf.fitness.FitnessFunctionContainer;
@@ -40,6 +41,7 @@ public class MultiSimulationQS {
 	private final String outputGPF;
 	private final String outputDir;
 	private final RecombinationGenerator recGenerator;
+	private final IMutator mutator;
 
 	private final int maxGeneration;
 	private final int replicateRuns;
@@ -52,7 +54,7 @@ public class MultiSimulationQS {
 	private ArrayList<GPFCollection> gpfs;
 
 	public MultiSimulationQS(ArrayList<DiploidGenome> dipGenomes, PopulationSizeContainer popcont, IGenotypeCalculator gc, PhenotypeCalculator pc, FitnessFunctionContainer ffc, ISurvivalFunction sf,
-                             IMigrationRegime migrationRegime, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
+                             IMigrationRegime migrationRegime, IMutator mutator, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
                              ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
 	{
 
@@ -78,6 +80,7 @@ public class MultiSimulationQS {
 		this.outputGenerations=toOutput;
 		this.logger=logger;
 		this.recGenerator=recGenerator;
+		this.mutator=mutator;
 		this.replicateRuns=replicateRuns;
 
 
@@ -121,7 +124,7 @@ public class MultiSimulationQS {
 
 				// Survival would go here if considered....(no survival needed for stabilizing selection);
 
-				nextPopulation=nextPopulation.getNextGeneration(gc,pc,fc,new MatingFunctionFecundity(),this.recGenerator,popsize);
+				nextPopulation=nextPopulation.getNextGeneration(gc,pc,fc,new MatingFunctionFecundity(),this.recGenerator,mutator,popsize);
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype()+"; average fitness of offspring "+nextPopulation.getAverageFitness());
 
 				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>

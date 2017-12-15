@@ -1,6 +1,9 @@
 package mimcore.data;
 
 
+import mimcore.data.BitArray.BitArrayBuilder;
+import mimcore.data.Mutator.IMutator;
+import mimcore.data.haplotypes.SNPCollection;
 import mimcore.data.recombination.*;
 import mimcore.data.haplotypes.HaploidGenome;
 import java.util.Random;
@@ -40,10 +43,13 @@ public class Specimen {
 	 * The gamete is a haploid and recombined product of the diploid genome
 	 * @return
 	 */
-	public HaploidGenome getGamete(RecombinationGenerator recGen, Random random)
+	public HaploidGenome getGamete(RecombinationGenerator recGen,  IMutator mutator, Random random)
 	{
+		SNPCollection snpCollection=this.genome.getHaplotypeA().getSNPCollection();
 		RecombinationEvent recEv=recGen.getRecombinationEvent(random);
-		return recEv.getGamete(this.genome);
+		BitArrayBuilder pristineGamete=recEv.getGamete(this.genome);
+		BitArrayBuilder mutatedGameted=mutator.introduceMutations(pristineGamete,snpCollection,random);
+		return new HaploidGenome(mutatedGameted.getBitArray(),snpCollection);
 	}
 	
 	public double quantGenotype()

@@ -1,6 +1,9 @@
 package mimcore.data;
 
+import mimcore.data.BitArray.BitArrayBuilder;
+import mimcore.data.Mutator.IMutator;
 import mimcore.data.haplotypes.HaploidGenome;
+import mimcore.data.haplotypes.SNPCollection;
 import mimcore.data.recombination.RecombinationGenerator;
 import java.util.Random;
 
@@ -17,10 +20,11 @@ public class MatePair {
 		this.male=male;
 	}
 
-	public DiploidGenome getChild(RecombinationGenerator recGenerator, Random random)
+	public DiploidGenome getChild(RecombinationGenerator recGenerator, IMutator mutator, Random random)
 	{
-		HaploidGenome semen	=male.getGamete(recGenerator, random);
-		HaploidGenome egg	=female.getGamete(recGenerator,random);
+
+		HaploidGenome semen	=male.getGamete(recGenerator, mutator, random);
+		HaploidGenome egg	=female.getGamete(recGenerator, mutator, random);
 		DiploidGenome fertilizedEgg=new DiploidGenome(semen,egg);
 		return fertilizedEgg;
 	}

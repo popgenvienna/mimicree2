@@ -79,7 +79,7 @@ public class MultiSimulationTimestampHaplotype {
 				this.logger.info("Processing generation "+i+ " of replicate run "+simulationNumber);
 				Population phenTail=sf.getSurvivors(nextPopulation, i, simulationNumber);
 				this.logger.info("Selection intensity " +sf.getSurvivorFraction(i, simulationNumber) +"; Selected "+phenTail.size()+ " for next generation; average genotype "+phenTail.getAverageGenotype() +"; average phenotype "+phenTail.getAveragePhenotype());
-				nextPopulation=phenTail.getNextGeneration(gc,pc,fc,new MatingFunctionRandomMating(),this.recGenerator,startpopulationsize);
+				nextPopulation=phenTail.getNextGeneration(gc,pc,fc,new MatingFunctionRandomMating(),this.recGenerator,null, startpopulationsize);
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype());
 				if(outputGenerations.contains(i))
 				{

@@ -18,7 +18,7 @@ public class RecombinationEvent {
 		this.randAssort=randAssort;
 	}
 
-	public HaploidGenome getGamete(DiploidGenome genome)
+	public BitArrayBuilder getGamete(DiploidGenome genome)
 	{
 		HaploidGenome haplotypeA = genome.getHaplotypeA();
 		HaploidGenome haplotypeB = genome.getHaplotypeB();
@@ -68,7 +68,7 @@ public class RecombinationEvent {
 			if(ancestralHaplotype) newHap.setBit(i);
 			// else leave the default => no haplotype
 		}
-		return new HaploidGenome(newHap.getBitArray(),scol);
+		return newHap;
 	}
 	
 

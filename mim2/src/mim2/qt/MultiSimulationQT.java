@@ -1,6 +1,7 @@
 package mim2.qt;
 
 
+import mimcore.data.Mutator.IMutator;
 import mimcore.data.PopulationSizeContainer;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.gpf.mating.MatingFunctionRandomMating;
@@ -36,6 +37,7 @@ public class MultiSimulationQT {
 	private final String outputGPF;
 	private final String outputDir;
 	private final RecombinationGenerator recGenerator;
+	private final IMutator mutator;
 
 	private final int maxGeneration;
 	private final int replicateRuns;
@@ -48,7 +50,7 @@ public class MultiSimulationQT {
 	private ArrayList<GPFCollection> gpfs;
 
 	public MultiSimulationQT(ArrayList<DiploidGenome> dipGenomes, PopulationSizeContainer popcont, IGenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
-                             IMigrationRegime migrationRegime, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
+                             IMigrationRegime migrationRegime, IMutator mutator, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
                              ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
 	{
 
@@ -75,6 +77,7 @@ public class MultiSimulationQT {
 		this.recGenerator=recGenerator;
 		this.replicateRuns=replicateRuns;
 		this.popcont=popcont;
+		this.mutator=mutator;
 
 
 		// internal variables
@@ -111,10 +114,10 @@ public class MultiSimulationQT {
 			for(int i=1; i<=this.maxGeneration; i++)
 			{
 				int popsize=popcont.getPopulationSize(i,simulationNumber);
-				this.logger.info("Processing generation "+i+ " of replicate run "+simulationNumber+ "with N="+popsize);
+				this.logger.info("Processing generation "+i+ " of replicate run "+simulationNumber+ " with N="+popsize);
 				Population phenTail=sf.getSurvivors(nextPopulation, i, simulationNumber);
 				this.logger.info("Selection intensity " +sf.getSurvivorFraction(i, simulationNumber) +"; Selected "+phenTail.size()+ " for next generation; average genotype "+phenTail.getAverageGenotype() +"; average phenotype "+phenTail.getAveragePhenotype());
-				nextPopulation=phenTail.getNextGeneration(gc,pc,fc,new MatingFunctionRandomMating(),this.recGenerator,popsize);
+				nextPopulation=phenTail.getNextGeneration(gc,pc,fc,new MatingFunctionRandomMating(),this.recGenerator,mutator, popsize);
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype());
 
 				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>

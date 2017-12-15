@@ -25,10 +25,10 @@ public class BitArrayBuilder {
 		}
 
 		/**
-		 * Set the bit at a given position
+		 * flip the bit at a given position
 		 * @param position
 		 */
-		public void setBit(int position)
+		public void flipBit(int position)
 		{
 			if(position >=size ) throw new IndexOutOfBoundsException("Index in BitArrayBuilder is out of range");
 			
@@ -36,9 +36,25 @@ public class BitArrayBuilder {
 			int real=(int)(position/8.0);
 			int mod=position % 8;
 			
-			// Set the corresponding bit; Only when value is true
-			this.bitar[real] |= BitArrayBase.bitdec[mod]; 
+			// flip the corresponding bit
+			this.bitar[real] = BitArrayBase.bitdec[mod];
 		}
+
+	/**
+	 * Set the bit at a given position
+	 * @param position
+	 */
+	public void setBit(int position)
+	{
+		if(position >=size ) throw new IndexOutOfBoundsException("Index in BitArrayBuilder is out of range");
+
+		// Calculate the components
+		int real=(int)(position/8.0);
+		int mod=position % 8;
+
+		// Set the corresponding bit; Only when value is true
+		this.bitar[real] |= BitArrayBase.bitdec[mod];
+	}
 		
 		/**
 		 * Test whether the bit at the given position has been set

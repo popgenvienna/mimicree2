@@ -1,6 +1,8 @@
 package mimcore.data.recombination;
 
 import mimcore.data.*;
+import mimcore.data.statistic.Poisson;
+
 import java.util.Random;
 
 public class RecombinationWindow {
@@ -9,18 +11,7 @@ public class RecombinationWindow {
 	private final int endPosition;
 	private final double lambda;
 
-	public static int getPoisson(double lambda, Random random) {
-		double L = Math.exp(-lambda);
-		double p = 1.0;
-		int k = 0;
 
-		do {
-			k++;
-			p *= random.nextDouble();
-		} while (p > L);
-
-		return k - 1;
-	}
 	
 	public RecombinationWindow(Chromosome chromosome, int startPosition, int endPosition, double lambda)
 	{
@@ -78,7 +69,7 @@ public class RecombinationWindow {
 	 */
 	public int getRecombinationEvents(Random random)
 	{
-		return getPoisson(this.lambda,random);
+		return Poisson.getPoisson(this.lambda,random);
 	}
 	
 	/**

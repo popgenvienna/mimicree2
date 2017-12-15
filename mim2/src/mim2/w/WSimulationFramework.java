@@ -2,6 +2,8 @@ package mim2.w;
 
 import mim2.shared.SimulationMode;
 import mimcore.data.DiploidGenome;
+import mimcore.data.Mutator.IMutator;
+import mimcore.data.Mutator.MutatorGenomeWideRate;
 import mimcore.data.PopulationSizeContainer;
 import mimcore.data.gpf.fitness.*;
 import mimcore.data.gpf.quantitative.*;
@@ -35,6 +37,7 @@ public class WSimulationFramework {
 	private final String outputDir;
 	private final SimulationMode simMode;
 	private final int replicateRuns;
+	private final double mutationRate;
 
 
 
@@ -43,7 +46,7 @@ public class WSimulationFramework {
 	//(haplotypeFile,recombinationFile,chromosomeDefinition,fitnessFile,epistasisFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
 
 	public WSimulationFramework(String haplotypeFile, String populationSizeFile, String recombinationFile, String chromosomeDefinition,
-                                String fitnessFile, String epistasisFile, String migrationRegimeFile, String outputSync, String outputGPF, String outputDir, SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
+                                String fitnessFile, String epistasisFile, String migrationRegimeFile, double mutationRate, String outputSync, String outputGPF, String outputDir, SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
 	{
 		// 'File' represents files and directories
 		// Test if input files exist
@@ -73,7 +76,7 @@ public class WSimulationFramework {
 		if(outputSync == null) logger.info("No output sync file was provided; Will not record allele frequencies");
 		else try {new File(outputSync).createNewFile();} catch(IOException e) {throw new IllegalArgumentException("Can not create output sync file "+outputSync);}
 
-
+		if(mutationRate<0.0 || mutationRate>1.0)throw new IllegalArgumentException("Mutation rate must be between 0.0 and 1.0");
 
 
 		if(!(replicateRuns>0)) throw new IllegalArgumentException("At least one replicate run should be provided; Provided by the user "+replicateRuns);
@@ -89,6 +92,7 @@ public class WSimulationFramework {
 		this.epistasisFile=epistasisFile;
 		this.migrationRegimeFile=migrationRegimeFile;
 		this.simMode=simMode;
+		this.mutationRate=mutationRate;
 		this.replicateRuns=replicateRuns;
 		this.logger=logger;
 	}
@@ -122,18 +126,18 @@ public class WSimulationFramework {
 
 		IFitnessCalculator snpAndEpistasisFitness=new FitnessCalculator_SNPandEpistasis(snpFitness,epistasisFitness);
 
-
-
-
 		// Survival function; no selective deaths; all surviveISurvivalFunction survivalFunction= new SurvivalRegimeAllSurvive();
 		ISurvivalFunction survivalFunction=new SurvivalRegimeAllSurvive();
+
+		// Mutation
+		IMutator mutator= new MutatorGenomeWideRate(this.mutationRate);
 
 
 		// Migration regime; If none specified no migration
 		IMigrationRegime migrationRegime=new MigrationRegimeNoMigration();
 		if(migrationRegimeFile != null) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger,dipGenomes).readMigrationRegime();
 
-		MultiSimulationW ws=new MultiSimulationW(dipGenomes,popcont,genotypeCalculator,phenotypeCalculator,snpAndEpistasisFitness,survivalFunction, migrationRegime, this.outputSync, this.outputGPF,this.outputDir,
+		MultiSimulationW ws=new MultiSimulationW(dipGenomes,popcont,genotypeCalculator,phenotypeCalculator,snpAndEpistasisFitness,survivalFunction, migrationRegime,mutator, this.outputSync, this.outputGPF,this.outputDir,
 			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
 		ws.run();
 

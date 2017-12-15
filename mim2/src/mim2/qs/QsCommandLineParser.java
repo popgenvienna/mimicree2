@@ -39,6 +39,7 @@ public class QsCommandLineParser {
 		Double heritability=null;
 		boolean detailedLog=false;
 		int threadCount=1;
+		double mutationRate=0.0;
 
 
 		// print help if not enough arguments
@@ -100,6 +101,10 @@ public class QsCommandLineParser {
             {
             	replicateRuns=Integer.parseInt(args.remove(0));
             }
+			else if(cu.equals("--mutation-rate"))
+			{
+				mutationRate=Double.parseDouble(args.remove(0));
+			}
             else if(cu.equals("--output-sync"))
             {
             	outputSync=args.remove(0);
@@ -131,7 +136,7 @@ public class QsCommandLineParser {
 
 		MimicreeThreadPool.setThreads(threadCount);
         QsSimulationFramework mimframe= new QsSimulationFramework(haplotypeFile,populationSizeFile,recombinationFile,chromosomeDefinition,
-				effectSizeFile,ve,heritability,fitnessFunctionFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
+				effectSizeFile,ve,heritability,fitnessFunctionFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
         
         mimframe.run();
 	}
@@ -155,6 +160,7 @@ public class QsCommandLineParser {
 		sb.append(CommandFormater.format("--output-gpf","the output file for genotype/phenotype/fitness; optional",null));
 		sb.append(CommandFormater.format("--fitness-function","a fitness function for mapping the phenotype to fitness; either --fitness-function or --gauss-fitness-function may be provided",null));
 		sb.append(CommandFormater.format("--migration-regime","the migration regime; migration from the base population to the evolved populations",null));
+		sb.append(CommandFormater.format("--mutation-rate","the mutation rate per site","0.0"));
 		sb.append(CommandFormater.format("--detailed-log","print detailed log messages",null));
 		sb.append(CommandFormater.format("--threads","the number of threads to use",null));
 		sb.append(CommandFormater.format("--help","print the help",null));

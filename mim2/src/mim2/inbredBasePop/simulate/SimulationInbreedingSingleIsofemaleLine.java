@@ -58,11 +58,11 @@ public class SimulationInbreedingSingleIsofemaleLine {
 			for(int i=1; i<=this.geninbreeding; i++)
 			{
 				this.logger.info("Processing generation "+i+ " of isofemale line "+runnumber);
-				nextPopulation=nextPopulation.getNextGeneration(this.gc,this.pc,fc,new MatingFunctionRandomMating(),recGenerator,this.sizeisofemaleLine);
+				nextPopulation=nextPopulation.getNextGeneration(this.gc,this.pc,fc,new MatingFunctionRandomMating(),recGenerator,null, this.sizeisofemaleLine);
 			}
 
 		this.logger.info("Propagating final isofemale line to a size of "+ targetCensus);
-		Population propagatedPopulation= nextPopulation.getNextGeneration(this.gc,this.pc,fc,new MatingFunctionRandomMating(),recGenerator,this.targetCensus);
+		Population propagatedPopulation= nextPopulation.getNextGeneration(this.gc,this.pc,fc,new MatingFunctionRandomMating(),recGenerator,null, this.targetCensus);
 		ArrayList<DiploidGenome> genomes=new ArrayList<DiploidGenome>();
 
 
@@ -78,7 +78,7 @@ public class SimulationInbreedingSingleIsofemaleLine {
 		ArrayList<Specimen> specs= new ArrayList<Specimen>();
 		for(int i=0; i<this.sizeisofemaleLine; i++)
 		{
-			DiploidGenome f1child=matepair.getChild(this.recGenerator,random);
+			DiploidGenome f1child=matepair.getChild(this.recGenerator, null,random);
 			double genotype =this.gc.getGenotype(f1child);
 			double phenotype=this.pc.getPhenotype(genotype,random);
 			double fitness=this.fc.getFitness(f1child,phenotype);

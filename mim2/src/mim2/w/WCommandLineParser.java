@@ -37,6 +37,7 @@ public class WCommandLineParser {
 		int replicateRuns=1;                   //
 		boolean detailedLog=false;
 		int threadCount=1;
+		double mutationRate=0.0;
 
 
 		// print help if not enough arguments
@@ -86,6 +87,10 @@ public class WCommandLineParser {
 			{
 				populationSizeFile=args.remove(0);
 			}
+			else if(cu.equals("--mutation-rate"))
+			{
+				mutationRate=Double.parseDouble(args.remove(0));
+			}
             else if(cu.equals("--replicate-runs"))
             {
             	replicateRuns=Integer.parseInt(args.remove(0));
@@ -120,7 +125,7 @@ public class WCommandLineParser {
         SimulationMode simMode = CommandLineParseHelp.parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
-        WSimulationFramework mimframe= new WSimulationFramework(haplotypeFile,populationSizeFile,recombinationFile,chromosomeDefinition,fitnessFile,epistasisFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
+        WSimulationFramework mimframe= new WSimulationFramework(haplotypeFile,populationSizeFile,recombinationFile,chromosomeDefinition,fitnessFile,epistasisFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
         
         mimframe.run();
 	}
@@ -142,6 +147,7 @@ public class WCommandLineParser {
 		sb.append(CommandFormater.format("--fitness","absolute fitness for selected SNPs",null));
 		sb.append(CommandFormater.format("--epistasis","absolute fitness for pairs of epistatics SNPs ",null));
 		sb.append(CommandFormater.format("--migration-regime","the migration regime; migration from the base population to the evolved populations",null));
+		sb.append(CommandFormater.format("--mutation-rate","the mutation rate per site","0.0"));
 		sb.append(CommandFormater.format("--detailed-log","print detailed log messages",null));
 		sb.append(CommandFormater.format("--threads","the number of threads to use",null));
 		sb.append(CommandFormater.format("--help","print the help",null));
