@@ -85,7 +85,9 @@ public class Mimhap2FastaFramework {
 			FastaCollectionBuilder fcb=new FastaCollectionBuilder(refGenome,this.stringent);
 			fcb.introduceChanges(haploidGenome);
 			ArrayList<FastaRecord> records=fcb.getRecords("_mimhap"+counter);
-			for(FastaRecord fr : records) writer.writeEntry(fr);
+			for(FastaRecord fr : records) {
+				writer.writeEntry(fr);
+			}
 			counter++;
 		}
 		writer.close();

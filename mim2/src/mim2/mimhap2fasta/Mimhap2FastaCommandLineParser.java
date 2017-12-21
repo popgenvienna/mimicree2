@@ -19,7 +19,7 @@ public class Mimhap2FastaCommandLineParser {
 	 * @param args the command line arguments
 	 * @return
 	 */
-	public static void runWSimulations(LinkedList<String> args)
+	public static void runConversion(LinkedList<String> args)
 	{
 
 		String referenceFile="";

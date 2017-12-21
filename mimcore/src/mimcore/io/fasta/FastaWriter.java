@@ -55,6 +55,7 @@ public class FastaWriter {
 					int endpos=currentPos+width;
 					if(endpos> sequence.length()) endpos=sequence.length();
 					String subseq = sequence.substring(currentPos,endpos);
+					bf.write(subseq+"\n");
 					currentPos += endpos;
 				}
 

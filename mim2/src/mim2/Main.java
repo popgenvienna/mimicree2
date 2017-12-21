@@ -1,5 +1,7 @@
 package mim2;
 
+import mim2.mimhap2fasta.Mimhap2FastaCommandLineParser;
+import mim2.mimhap2fasta.Mimhap2FastaFramework;
 import mim2.qs.QsCommandLineParser;
 import mim2.qt.QtCommandLineParser;
 import mim2.test.TestMain;
@@ -49,7 +51,7 @@ public class Main {
 			}
 			else if(subtask.toLowerCase().equals("mimhap2fasta"))
 			{
-				JunitMimcore.runTests();
+				Mimhap2FastaCommandLineParser.runConversion(rawarguments);
 			}
 			else
 			{
@@ -73,7 +75,7 @@ public class Main {
 
 
 			sb.append("\n== Secondary tasks ==\n");
-			sb.append(CommandFormater.format("mimhap2fasta","convert the haplotypes into a fasta file",null));
+			sb.append(CommandFormater.format("mimhap2fasta","convert the MimcrEE2 haplotypes into fasta",null));
 
 			sb.append(CommandFormater.format("unit-tests","run the unit-tests; unit-tests validate proper behaviour of MimicrEE2 components",null));
 
@@ -89,7 +91,7 @@ public class Main {
 
 		public static String getVersionNumber()
 		{
-			return "v0.15.2";
+			return "v0.16.1";
 		}
 
 
