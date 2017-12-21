@@ -102,6 +102,11 @@ public class SNPCollection {
 		}
 		return true;
 	}
+
+	public ArrayList<SNP> getSNPs()
+	{
+		return new ArrayList<SNP>(this.mysnps);
+	}
 	
 	
 

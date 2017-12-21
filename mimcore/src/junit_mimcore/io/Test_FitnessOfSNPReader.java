@@ -126,6 +126,23 @@ public class Test_FitnessOfSNPReader {
 		assertEquals(s.get(1).wAA(),1.2,0.0000001);
 	}
 
+	@Test
+	public void fitness_of_first_genotype_in_file_s()
+	{
+		SNPFitnessReader r=getReaderS();
+		ArrayList<FitnessOfSNP> s= r.getSNPFitness().getSNPs();
+		//"2R	1	C/A	0.1	0.5
+		char[] genoAA={'A','A'};
+		assertEquals(s.get(0).getEffectSizeOfGenotype(genoAA),1.1,0.0000001);
+		char[] genoCA={'C','A'};
+		assertEquals(s.get(0).getEffectSizeOfGenotype(genoCA),1.05,0.0000001);
+		char[] genoAC={'A','C'};
+		assertEquals(s.get(0).getEffectSizeOfGenotype(genoAC),1.05,0.0000001);
+		char[] genoCC={'C','C'};
+		assertEquals(s.get(0).getEffectSizeOfGenotype(genoCC),1.0,0.0000001);
+
+	}
+
 	
 
 }

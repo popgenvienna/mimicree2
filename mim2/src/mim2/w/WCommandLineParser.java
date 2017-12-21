@@ -40,8 +40,12 @@ public class WCommandLineParser {
 		double mutationRate=0.0;
 
 
+
+
 		// print help if not enough arguments
 		if(args.size()<1) printHelpMessage();
+		for(String s: args){if(s.equals("--help")) printHelpMessage();}
+
         while(args.size() > 0)
         {
             String cu=args.remove(0);
@@ -107,10 +111,6 @@ public class WCommandLineParser {
 			{
 				outputGPF=args.remove(0);
 			}
-            else if(cu.equals("--help"))
-            {
-            	printHelpMessage();
-            }
             else
             {
                 throw new IllegalArgumentException("Do not recognize command line option "+cu);

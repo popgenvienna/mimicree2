@@ -17,7 +17,7 @@ public class TestMain {
 
     public static void testMain()
     {
-        int bla=0;
+        mim2.test.fastaPlayground.fastaPlay.play();
     }
     public static void codeToTest()
     {
