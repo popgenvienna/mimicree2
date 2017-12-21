@@ -21,8 +21,8 @@ public class FastaRecordBuilder {
     }
 
 
-    public FastaRecord getFastaRecord()
+    public FastaRecord getFastaRecord(String headerAddendum)
     {
-        return new FastaRecord(this.header,new String(this.sequence));
+        return new FastaRecord(this.header+headerAddendum,new String(this.sequence));
     }
 }

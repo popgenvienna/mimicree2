@@ -69,7 +69,7 @@ public class Mimhap2FastaCommandLineParser {
 
 
 		MimicreeThreadPool.setThreads(1);
-        WSimulationFramework mimframe= new WSimulationFramework(haplotypeFile,populationSizeFile,recombinationFile,chromosomeDefinition,fitnessFile,epistasisFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
+        Mimhap2FastaFramework mimframe= new Mimhap2FastaFramework(referenceFile,mimhapFile,outputFasta,stringent,logger);
         
         mimframe.run();
 	}

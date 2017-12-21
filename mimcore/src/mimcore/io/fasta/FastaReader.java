@@ -7,6 +7,7 @@ import mimcore.data.fasta.FastaRecord;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -17,6 +18,16 @@ public class FastaReader {
 	private final Logger logger;
 	private BufferedReader br;
 	private String bufferedline;
+
+	public static ArrayList<FastaRecord> readAll(String inputFile, Logger logger)
+	{
+		FastaReader fr=new FastaReader(inputFile,logger);
+		ArrayList<FastaRecord> fastas=new ArrayList<FastaRecord>();
+		FastaRecord next=null;
+		while((next=fr.next())!=null) fastas.add(next);
+		return fastas;
+
+	}
 
 
 	public FastaReader(String inputFile, Logger logger)
