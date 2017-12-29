@@ -126,8 +126,8 @@ public class Population {
 		// the selected ones: go and mate ..populate the earth
 		IMatingFunction mf=matingfunction.factory(this);
 		SpecimenGenerator specGen=new SpecimenGenerator(mf,gc,pc,fc,recGenerator,mutator, targetN);
-
-		return new Population(specGen.getSpecimen());
+		ArrayList<Specimen> spec=specGen.getSpecimen();
+		return new Population(spec);
 	}
 
 
@@ -240,7 +240,8 @@ class SpecimenGenerator
 			System.exit(0);
 		}
 		ArrayList<Specimen> specs=col.getSpecimen();
-		assert(specs.size()==populationSize);
+
+		if(specs.size()!=populationSize) throw new IllegalArgumentException("Fatal error; obtained population size smaller than the target size; Please contact author");
 		return specs;
 	}
 

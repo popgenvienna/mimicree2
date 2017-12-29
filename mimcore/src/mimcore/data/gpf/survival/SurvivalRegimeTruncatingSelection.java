@@ -31,14 +31,29 @@ public class SurvivalRegimeTruncatingSelection implements ISurvivalFunction {
 	private Population getPenotypicTail(Population population, double selectedFraction)
 	{
 		ArrayList<Specimen> specs=population.getSpecimen();
-		Collections.sort(specs, new Comparator<Specimen>() {
-			@Override
-			public int compare(Specimen s1, Specimen s2) {
-				if (s1.quantPhenotype() < s2.quantPhenotype()) return 1;
-				if (s1.quantPhenotype() > s2.quantPhenotype()) return -1;
-				return 0;
-			}
-		});
+		if(selectedFraction>=0) {
+			Collections.sort(specs, new Comparator<Specimen>() {
+				@Override
+				public int compare(Specimen s1, Specimen s2) {
+					if (s1.quantPhenotype() < s2.quantPhenotype()) return 1;
+					if (s1.quantPhenotype() > s2.quantPhenotype()) return -1;
+					return 0;
+				}
+			});
+		}
+		else
+		{
+			selectedFraction=-1.0*selectedFraction;
+			Collections.sort(specs, new Comparator<Specimen>() {
+				@Override
+				public int compare(Specimen s1, Specimen s2) {
+					if (s1.quantPhenotype() < s2.quantPhenotype()) return -1;
+					if (s1.quantPhenotype() > s2.quantPhenotype()) return 1;
+					return 0;
+				}
+			});
+
+		}
 
 		ArrayList<Specimen> toret=new ArrayList<Specimen>();
 		int toselect=(int)((double)specs.size()*selectedFraction);
@@ -48,6 +63,32 @@ public class SurvivalRegimeTruncatingSelection implements ISurvivalFunction {
 		}
 		return new Population(toret);
 	}
+
+	/** security
+	 * 	private Population getPenotypicTail(Population population, double selectedFraction)
+	 {
+	 ArrayList<Specimen> specs=population.getSpecimen();
+	 Collections.sort(specs, new Comparator<Specimen>() {
+	@Override
+	public int compare(Specimen s1, Specimen s2) {
+	if (s1.quantPhenotype() < s2.quantPhenotype()) return 1;
+	if (s1.quantPhenotype() > s2.quantPhenotype()) return -1;
+	return 0;
+	}
+	});
+
+	 ArrayList<Specimen> toret=new ArrayList<Specimen>();
+	 int toselect=(int)((double)specs.size()*selectedFraction);
+	 for(int i=0; i<toselect; i++)
+	 {
+	 toret.add(specs.get(i));
+	 }
+	 return new Population(toret);
+	 }
+	 * @param generation
+	 * @param replicate
+	 * @return
+	 */
 
 	public double getSurvivorFraction(int generation, int replicate) {
 		return sr.getSelectionIntensity(generation, replicate);

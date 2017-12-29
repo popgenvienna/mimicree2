@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 public class CrossoverGenerator {
 	private final ArrayList<RecombinationWindow> windows;
+
+
 	
 	public CrossoverGenerator(ArrayList<RecombinationWindow> windows)
 	{

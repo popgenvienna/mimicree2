@@ -46,7 +46,7 @@ public class SelectionRegimeDefaultReader {
 				assert(a.length==2);
 				int generation=Integer.parseInt(a[0]);
 				double selectionIntensity=Double.parseDouble(a[1]);
-				if(!(selectionIntensity>0.0)) throw new IllegalArgumentException("Selection intensity must be larger than 0.0");
+				if(selectionIntensity<-1.0) throw new IllegalArgumentException("Selection intensity must be larger than -1.0");
 				if(selectionIntensity>1.0) throw new IllegalArgumentException("Selection intensity must be smaller than 1.0");
 				res.put(generation,selectionIntensity);
 			}

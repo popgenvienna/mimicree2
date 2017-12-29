@@ -76,7 +76,6 @@ public class Main {
 
 			sb.append("\n== Secondary tasks ==\n");
 			sb.append(CommandFormater.format("mimhap2fasta","convert the MimcrEE2 haplotypes into fasta",null));
-
 			sb.append(CommandFormater.format("unit-tests","run the unit-tests; unit-tests validate proper behaviour of MimicrEE2 components",null));
 
 
@@ -91,7 +90,7 @@ public class Main {
 
 		public static String getVersionNumber()
 		{
-			return "v0.16.1";
+			return "v0.16.3";
 		}
 
 

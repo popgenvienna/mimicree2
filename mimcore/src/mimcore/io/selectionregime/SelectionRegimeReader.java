@@ -64,12 +64,12 @@ public class SelectionRegimeReader {
 			this.logger.info("Selection regime file has 2 columns; Reading default selection regime (selection regimes applies to all replicates)");
 			return new SelectionRegimeDefaultReader(this.selectionRegimeFile,this.logger).readSelectionRegime();
 		}
-		else if(a.length==3)
-		{
-			this.logger.info("Selection regime file has 3 columns; Reading replicate specific selection regime file");
-			return new SelectionRegimeReplicateSpecificReader(this.selectionRegimeFile, this.logger).readSelectionRegime();
-		}
-		else throw new IllegalArgumentException("Selection regime file must either have 2 or 3 columns; Found "+a.length+ " columns");
+		//else if(a.length==3)
+		//{
+		//	this.logger.info("Selection regime file has 3 columns; Reading replicate specific selection regime file");
+		//	return new SelectionRegimeReplicateSpecificReader(this.selectionRegimeFile, this.logger).readSelectionRegime();
+		//}
+		else throw new IllegalArgumentException("Selection regime file must have 2 columns; Found "+a.length+ " columns");
 
 		//return null;
 	}

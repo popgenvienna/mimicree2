@@ -1,7 +1,9 @@
 package mimcore.data.recombination;
 
 import mimcore.data.*;
+import mimcore.data.haplotypes.SNPCollection;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -29,6 +31,16 @@ public class RecombinationGenerator {
 		CrossoverEvents crossovers=recRate.generateCrossoverEvents(random);
 		RandomAssortment randas=assortGen.getRandomAssortment(crossovers,random);
 		return new RecombinationEvent(randas,crossovers);
+	}
+
+	public boolean isValid(ArrayList<DiploidGenome> genomes)
+	{
+		SNPCollection snpcol=genomes.get(0).getHaplotypeA().getSNPCollection();
+		for(Chromosome chr: snpcol.getChromosomes() )
+		{
+			if(!assortGen.containsChromosome(chr)) return false;
+		}
+		return true;
 	}
 	
 	

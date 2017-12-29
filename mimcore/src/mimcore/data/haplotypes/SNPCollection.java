@@ -1,10 +1,12 @@
 package mimcore.data.haplotypes;
 
+import mimcore.data.Chromosome;
 import mimcore.data.GenomicPosition;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Immutable representation of a collection of SNPs.
@@ -106,6 +108,16 @@ public class SNPCollection {
 	public ArrayList<SNP> getSNPs()
 	{
 		return new ArrayList<SNP>(this.mysnps);
+	}
+
+	public ArrayList<Chromosome> getChromosomes()
+	{
+		HashSet<Chromosome> chromosomes=new HashSet<Chromosome>();
+		for(SNP s: this.getSNPs())
+		{
+			chromosomes.add(s.genomicPosition().chromosome());
+		}
+		return new ArrayList<Chromosome>(chromosomes);
 	}
 	
 	

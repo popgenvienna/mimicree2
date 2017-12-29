@@ -5,6 +5,7 @@ import mimcore.data.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 
 /**
@@ -16,14 +17,17 @@ import java.util.Random;
 public class RandomAssortmentGenerator {
 	
 	private ArrayList<ArrayList<Chromosome>> chroms;
+	private HashSet<Chromosome> chrset;
 	public RandomAssortmentGenerator(ArrayList<ArrayList<Chromosome>> chromosomes)
 	{
 
 		// in order to have the thing immutable  create a deep copy;
 		ArrayList<ArrayList<Chromosome>> toret=new ArrayList<ArrayList<Chromosome>>();
+		chrset=new HashSet<Chromosome>();
 		for(ArrayList<Chromosome> list:chromosomes)
 		{
 			toret.add(new ArrayList<Chromosome>(list));
+			for(Chromosome chr: list) chrset.add(chr);
 		}
 		this.chroms=toret;
 	}
@@ -78,6 +82,12 @@ public class RandomAssortmentGenerator {
 			return !haplotype;
 		}
 		
+	}
+
+	public boolean containsChromosome(Chromosome chromosome)
+	{
+		if(chrset.contains(chromosome)) return true;
+		else return false;
 	}
 
 

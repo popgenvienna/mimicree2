@@ -30,7 +30,15 @@ public class RandomAssortment {
 	 */
 	public boolean startWithFirstHaplotype(Chromosome chromosome)
 	{
+		if(!randomAssortment.containsKey(chromosome)) throw new IllegalArgumentException("Fatal error; can not find random assortment for chromosome "+chromosome);
 		return this.randomAssortment.get(chromosome);
+	}
+
+
+	public boolean containsChromosome(Chromosome chromosome)
+	{
+		if(randomAssortment.containsKey(chromosome)) return true;
+		else return false;
 	}
 
 }

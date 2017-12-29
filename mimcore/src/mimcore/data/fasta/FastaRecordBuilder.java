@@ -15,7 +15,8 @@ public class FastaRecordBuilder {
 
     public void replaceCharacter(int position, char refChar, char targetChar, boolean reportErrors)
     {
-        if(reportErrors && this.sequence[position]!=refChar) throw new IllegalArgumentException("Reference characters from fasta-file and the MimicrEE2 haplotype file do not match for "+header+" position "+position);
+        int refpos=position+1;
+        if(reportErrors && this.sequence[position]!=refChar) throw new IllegalArgumentException("Reference characters from fasta-file and the MimicrEE2 haplotype file do not match for "+header+" position "+refpos);
 
         this.sequence[position]=targetChar;
     }

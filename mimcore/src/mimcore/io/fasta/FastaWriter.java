@@ -5,10 +5,7 @@ import mimcore.data.haplotypes.HaploidGenome;
 import mimcore.data.haplotypes.SNP;
 import mimcore.data.haplotypes.SNPCollection;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.zip.GZIPOutputStream;
@@ -24,7 +21,8 @@ public class FastaWriter {
 		this.logger=logger;
 		try
 		{
-			bf=new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(outputFile))));
+			// bf=new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(outputFile))));
+			bf=new BufferedWriter(new FileWriter(outputFile));
 		}
 		catch(IOException e)
 		{

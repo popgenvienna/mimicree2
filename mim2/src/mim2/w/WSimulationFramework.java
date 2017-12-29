@@ -10,6 +10,7 @@ import mimcore.data.gpf.quantitative.*;
 import mimcore.data.gpf.survival.SurvivalRegimeAllSurvive;
 import mimcore.data.migration.IMigrationRegime;
 import mimcore.data.migration.MigrationRegimeNoMigration;
+import mimcore.data.recombination.CrossoverGenerator;
 import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.io.ChromosomeDefinitionReader;
 import mimcore.io.DiploidGenomeReader;
@@ -51,10 +52,10 @@ public class WSimulationFramework {
 		// 'File' represents files and directories
 		// Test if input files exist
 		if(! new File(haplotypeFile).exists()) throw new IllegalArgumentException("Haplotype file does not exist "+haplotypeFile);
+
+
+
 		if(! new File(recombinationFile).exists()) throw new IllegalArgumentException("Recombination file does not exist " + recombinationFile);
-
-
-
 		if((populationSizeFile != null) && (!new File(populationSizeFile).exists())) throw new IllegalArgumentException("Population size file does not exist; "+populationSizeFile);
 		if((fitnessFile != null) && (!new File(fitnessFile).exists())) throw new IllegalArgumentException("Fitness file does not exist; "+fitnessFile);
 		if((epistasisFile != null) && (!new File(epistasisFile).exists())) throw new IllegalArgumentException("Epistasis file does not exist; "+epistasisFile);
@@ -108,6 +109,7 @@ public class WSimulationFramework {
 				new ChromosomeDefinitionReader(this.chromosomeDefinition).getRandomAssortmentGenerator());
 
 		ArrayList<DiploidGenome> dipGenomes=new DiploidGenomeReader(this.haplotypeFile,this.logger).readGenomes();
+		if(!recGenerator.isValid(dipGenomes)) throw new IllegalArgumentException("Recombination rate file is not valid, not all chromosomes are contained");
 
 		// genotype and phenotype are set to 1.0 (this is ignored)
 		IGenotypeCalculator genotypeCalculator=new GenotypeCalculatorAllEqual();
