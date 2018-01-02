@@ -114,7 +114,7 @@ public class QsSimulationFramework {
 				new ChromosomeDefinitionReader(this.chromosomeDefinition).getRandomAssortmentGenerator());
 
 		ArrayList<DiploidGenome> dipGenomes=new DiploidGenomeReader(this.haplotypeFile,this.logger).readGenomes();
-		if(!recGenerator.isValid(dipGenomes)) throw new IllegalArgumentException("Recombination rate file is not valid, not all chromosomes are contained");
+		if(!recGenerator.isValid(dipGenomes)) throw new IllegalArgumentException("Recombination rate file is not valid; an entry needs to be provided for each chromosome of the base population");
 
 		// Compute GPF
 		IGenotypeCalculator genotypeCalculator = new GenotypeCalculatorAllEqual();

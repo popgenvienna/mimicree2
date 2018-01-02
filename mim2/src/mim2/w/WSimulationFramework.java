@@ -109,7 +109,7 @@ public class WSimulationFramework {
 				new ChromosomeDefinitionReader(this.chromosomeDefinition).getRandomAssortmentGenerator());
 
 		ArrayList<DiploidGenome> dipGenomes=new DiploidGenomeReader(this.haplotypeFile,this.logger).readGenomes();
-		if(!recGenerator.isValid(dipGenomes)) throw new IllegalArgumentException("Recombination rate file is not valid, not all chromosomes are contained");
+		if(!recGenerator.isValid(dipGenomes)) throw new IllegalArgumentException("Recombination rate file is not valid; an entry needs to be provided for each chromosome of the base population");
 
 		// genotype and phenotype are set to 1.0 (this is ignored)
 		IGenotypeCalculator genotypeCalculator=new GenotypeCalculatorAllEqual();
