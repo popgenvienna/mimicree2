@@ -6,7 +6,7 @@ import mimcore.data.Population;
 import mimcore.data.Specimen;
 import mimcore.data.gpf.fitness.FitnessCalculatorAllEqual;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
-import mimcore.data.gpf.mating.MatingFunctionRandomMating;
+import mimcore.data.mating.MatingFunctionRandomMating;
 import mimcore.data.gpf.quantitative.*;
 import mimcore.data.recombination.RecombinationGenerator;
 

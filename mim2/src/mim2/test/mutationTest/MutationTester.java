@@ -1,13 +1,11 @@
 package mim2.test.mutationTest;
 
-import mim2.test.recombinationTest.RecombinationWriter;
 import mimcore.data.*;
-import mimcore.data.BitArray.BitArray;
 import mimcore.data.BitArray.BitArrayBuilder;
 import mimcore.data.Mutator.IMutator;
 import mimcore.data.Mutator.MutatorGenomeWideRate;
 import mimcore.data.gpf.fitness.FitnessCalculatorAllEqual;
-import mimcore.data.gpf.mating.MatingFunctionRandomMating;
+import mimcore.data.mating.MatingFunctionRandomMating;
 import mimcore.data.gpf.quantitative.GenotypeCalculatorAllEqual;
 import mimcore.data.gpf.quantitative.PhenotypeCalculatorAllEqual;
 import mimcore.data.haplotypes.HaploidGenome;
@@ -15,19 +13,14 @@ import mimcore.data.haplotypes.SNP;
 import mimcore.data.haplotypes.SNPCollection;
 import mimcore.data.misc.Tuple;
 import mimcore.data.recombination.CrossoverGenerator;
-import mimcore.data.recombination.RandomAssortmentGenerator;
 import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.data.recombination.RecombinationWindow;
 import mimcore.io.ChromosomeDefinitionReader;
-import mimcore.io.recombination.RRRRecFraction;
-import mimcore.io.recombination.RRRcMpMb;
 import mimcore.misc.MimicreeThreadPool;
 
-import javax.lang.model.type.IntersectionType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Created by robertkofler on 08/11/2017.

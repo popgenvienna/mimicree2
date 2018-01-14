@@ -3,7 +3,7 @@ package mimcore.data;
 
 
 import mimcore.data.Mutator.IMutator;
-import mimcore.data.gpf.mating.IMatingFunction;
+import mimcore.data.mating.IMatingFunction;
 import mimcore.data.gpf.quantitative.IGenotypeCalculator;
 import mimcore.data.gpf.quantitative.IPhenotypeCalculator;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
