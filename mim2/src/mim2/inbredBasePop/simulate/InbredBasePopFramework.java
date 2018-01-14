@@ -2,6 +2,7 @@ package mim2.inbredBasePop.simulate;
 
 import mimcore.data.*;
 import mimcore.data.recombination.*;
+import mimcore.data.sex.Sex;
 import mimcore.io.*;
 import mimcore.io.haplotypes.DiploidGenomeWriter;
 import mimcore.io.recombination.RecombinationRateReader;
@@ -74,7 +75,7 @@ public class InbredBasePopFramework {
 		if(dipGenomes.size()!=2) throw new IllegalArgumentException("Only two diploid genomes are allowed");
 
 
-	 	MatePair matepair=new MatePair(new Specimen(1.0,1.0,1.0,dipGenomes.get(0)),new Specimen(1.0,1.0,1.0,dipGenomes.get(1)));
+	 	MatePair matepair=new MatePair(new Specimen(Sex.Female,1.0,1.0,1.0,dipGenomes.get(0)),new Specimen(Sex.Male,1.0,1.0,1.0,dipGenomes.get(1)));
 
 		ArrayList<DiploidGenome> basepopulation=new SimulationInbreeding(matepair, isofemaleLines, sizeBasePop, sizeisofemaleLine, geninbreeding, recGenerator, this.logger).run();
 		this.logger.info("Writing final base population of size "+basepopulation.size());

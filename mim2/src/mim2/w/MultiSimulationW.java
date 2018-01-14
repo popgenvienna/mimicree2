@@ -6,12 +6,14 @@ import mimcore.data.Mutator.IMutator;
 import mimcore.data.Population;
 import mimcore.data.PopulationSizeContainer;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
+import mimcore.data.sex.IMatingFunction;
 import mimcore.data.sex.MatingFunctionFecundity;
 import mimcore.data.gpf.quantitative.IGenotypeCalculator;
 import mimcore.data.gpf.quantitative.IPhenotypeCalculator;
 import mimcore.data.gpf.survival.ISurvivalFunction;
 import mimcore.data.migration.IMigrationRegime;
 import mimcore.data.recombination.RecombinationGenerator;
+import mimcore.data.sex.SexInfo;
 import mimcore.data.statistic.GPFCollection;
 import mimcore.data.statistic.GPFReducer;
 import mimcore.data.statistic.PACReducer;
@@ -39,6 +41,7 @@ public class MultiSimulationW {
 	private final String outputDir;
 	private final RecombinationGenerator recGenerator;
 	private final IMutator mutator;
+	private final SexInfo si;
 
 	private final int maxGeneration;
 	private final int replicateRuns;
@@ -50,7 +53,7 @@ public class MultiSimulationW {
 	private ArrayList<PopulationAlleleCount> pacs;
 	private ArrayList<GPFCollection> gpfs;
 
-	public MultiSimulationW(ArrayList<DiploidGenome> dipGenomes, PopulationSizeContainer popcont, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
+	public MultiSimulationW(SexInfo si, ArrayList<DiploidGenome> dipGenomes, PopulationSizeContainer popcont, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
                             IMigrationRegime migrationRegime, IMutator mutator, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
                             ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
 	{
@@ -79,6 +82,7 @@ public class MultiSimulationW {
 		this.replicateRuns=replicateRuns;
 		this.popcont=popcont;
 		this.mutator=mutator;
+		this.si=si;
 
 
 		// internal variables
@@ -91,14 +95,15 @@ public class MultiSimulationW {
 	public void run()
 	{
 
-
+		IMatingFunction mf=new MatingFunctionFecundity(si.getSelfingRate());
 
 
 		for(int k =0; k < this.replicateRuns; k++)
 		{
 			// Base population generated always anew, because new env. variance for each individual
 			// for different replicates you dont use the same individuals (phenotypes) but only the same genotypes (with different phenotypes)
-			Population basePopulation=Population.loadPopulation(dipGenomes,gc,pc,fc,new Random());
+			Population basePopulation=Population.loadPopulation(dipGenomes,si.getSexAssigner(),gc,pc,fc,new Random());
+
 
 			int simulationNumber=k+1;
 			this.logger.info("Starting simulation replicate number " + simulationNumber);
@@ -120,14 +125,14 @@ public class MultiSimulationW {
 				// Survival would go here if considered....(no survival needed for stabilizing selection);
 
 
-				nextPopulation=nextPopulation.getNextGeneration(gc,pc,fc,new MatingFunctionFecundity(),this.recGenerator,mutator, popsize);
+				nextPopulation=nextPopulation.getNextGeneration(si.getSexAssigner(),gc,pc,fc,mf,this.recGenerator,mutator, popsize);
 				this.logger.info("Average fitness of offspring "+nextPopulation.getAverageFitness());
 
 				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>
 				ArrayList<DiploidGenome> migrants=this.migrationRegime.getMigrants(i,simulationNumber);
 				if(migrants.size()>0) {
 					this.logger.info("Adding "+migrants.size()+ " migrants to the evolved population (randomly removing an equivalent number of evolved individuals)");
-					Population migrantPop=Population.loadPopulation(migrants,gc,pc,fc, new Random());
+					Population migrantPop=Population.loadPopulation(migrants,si.getSexAssigner(),gc,pc,fc, new Random());
 					this.logger.info("Average fitness of migrants "+migrantPop.getAverageFitness());
 					nextPopulation = Population.loadMigration(migrantPop, nextPopulation, new Random(),this.logger);
 					this.logger.info("Average fitness of new population "+nextPopulation.getAverageFitness());

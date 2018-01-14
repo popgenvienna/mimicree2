@@ -9,6 +9,7 @@ import mimcore.data.gpf.quantitative.GenotypeCalculator;
 import mimcore.data.gpf.quantitative.PhenotypeCalculator;
 import mimcore.data.gpf.survival.ISurvivalFunction;
 import mimcore.data.recombination.RecombinationGenerator;
+import mimcore.data.sex.SexInfo;
 import mimcore.io.HaplotypeMultiWriter;
 
 import java.util.ArrayList;
@@ -59,9 +60,10 @@ public class MultiSimulationTimestampHaplotype {
 	public void run()
 	{
 
+		SexInfo si=null;
 		for(int k =0; k<this.replicateRuns; k++)
 		{
-			Population startingPopulation=Population.loadPopulation(dipGenomes,gc,pc,fc,new Random());
+			Population startingPopulation=Population.loadPopulation(dipGenomes,si.getSexAssigner(), gc,pc,fc,new Random());
 			int startpopulationsize=startingPopulation.size();
 			int simulationNumber=k+1;
 			this.logger.info("Starting simulation replicate number " + simulationNumber);
@@ -79,7 +81,7 @@ public class MultiSimulationTimestampHaplotype {
 				this.logger.info("Processing generation "+i+ " of replicate run "+simulationNumber);
 				Population phenTail=sf.getSurvivors(nextPopulation, i, simulationNumber);
 				this.logger.info("Selection intensity " +sf.getSurvivorFraction(i, simulationNumber) +"; Selected "+phenTail.size()+ " for next generation; average genotype "+phenTail.getAverageGenotype() +"; average phenotype "+phenTail.getAveragePhenotype());
-				nextPopulation=phenTail.getNextGeneration(gc,pc,fc,new MatingFunctionRandomMating(),this.recGenerator,null, startpopulationsize);
+				nextPopulation=phenTail.getNextGeneration(si.getSexAssigner(),gc,pc,fc,new MatingFunctionRandomMating(si.getSelfingRate()),this.recGenerator,null, startpopulationsize);
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype());
 				if(outputGenerations.contains(i))
 				{

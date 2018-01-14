@@ -27,7 +27,7 @@ public class GPFReducer {
 
         for(Specimen s :this.pop.getSpecimen())
         {
-            GPF toadd=new GPF(s.quantGenotype(),s.quantPhenotype(),s.fitness());
+            GPF toadd=new GPF(s.getSex(),s.quantGenotype(),s.quantPhenotype(),s.fitness());
             gpfs.add(toadd);
         }
         return new GPFCollection(gpfs,this.replicate,this.generation);

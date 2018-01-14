@@ -9,6 +9,8 @@ import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.sex.MatingFunctionRandomMating;
 import mimcore.data.gpf.quantitative.*;
 import mimcore.data.recombination.RecombinationGenerator;
+import mimcore.data.sex.Sex;
+import mimcore.data.sex.SexInfo;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -46,6 +48,7 @@ public class SimulationInbreedingSingleIsofemaleLine {
 	public ArrayList<DiploidGenome> run()
 	{
 
+		SexInfo si=null;
 
 			Population startingPopulation=getStartingPopulation(new Random());
 			int startpopulationsize=startingPopulation.size();
@@ -58,11 +61,11 @@ public class SimulationInbreedingSingleIsofemaleLine {
 			for(int i=1; i<=this.geninbreeding; i++)
 			{
 				this.logger.info("Processing generation "+i+ " of isofemale line "+runnumber);
-				nextPopulation=nextPopulation.getNextGeneration(this.gc,this.pc,fc,new MatingFunctionRandomMating(),recGenerator,null, this.sizeisofemaleLine);
+				nextPopulation=nextPopulation.getNextGeneration(si.getSexAssigner(),this.gc,this.pc,fc,new MatingFunctionRandomMating(si.getSelfingRate()),recGenerator,null, this.sizeisofemaleLine);
 			}
 
 		this.logger.info("Propagating final isofemale line to a size of "+ targetCensus);
-		Population propagatedPopulation= nextPopulation.getNextGeneration(this.gc,this.pc,fc,new MatingFunctionRandomMating(),recGenerator,null, this.targetCensus);
+		Population propagatedPopulation= nextPopulation.getNextGeneration(si.getSexAssigner(),this.gc,this.pc,fc,new MatingFunctionRandomMating(si.getSelfingRate()),recGenerator,null, this.targetCensus);
 		ArrayList<DiploidGenome> genomes=new ArrayList<DiploidGenome>();
 
 
@@ -82,7 +85,7 @@ public class SimulationInbreedingSingleIsofemaleLine {
 			double genotype =this.gc.getGenotype(f1child);
 			double phenotype=this.pc.getPhenotype(genotype,random);
 			double fitness=this.fc.getFitness(f1child,phenotype);
-			Specimen s=new Specimen(genotype,phenotype,fitness,f1child);
+			Specimen s=new Specimen(Sex.Hermaphrodite,genotype,phenotype,fitness,f1child);
 		specs.add(s);
 		}
 		return new Population(specs);

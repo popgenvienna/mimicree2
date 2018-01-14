@@ -15,6 +15,8 @@ import mimcore.data.misc.Tuple;
 import mimcore.data.recombination.CrossoverGenerator;
 import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.data.recombination.RecombinationWindow;
+import mimcore.data.sex.Sex;
+import mimcore.data.sex.SexAssigner;
 import mimcore.io.ChromosomeDefinitionReader;
 import mimcore.misc.MimicreeThreadPool;
 
@@ -49,7 +51,7 @@ public class MutationTester {
             HaploidGenome hap1 =new HaploidGenome(new BitArrayBuilder(5000).getBitArray(),sc);
             HaploidGenome hap2 =new HaploidGenome(new BitArrayBuilder(5000).getBitArray(),sc);
             DiploidGenome dg=new DiploidGenome(hap1,hap2);
-            Specimen s=new Specimen(1.0,1.0,1.0, dg);
+            Specimen s=new Specimen(Sex.Female,1.0,1.0,1.0, dg);
             diploids.add(s);
         }
 
@@ -75,8 +77,8 @@ public class MutationTester {
 
         for(int i=0;i<250000; i++) {
 
-           Population next= pop.getNextGeneration(new GenotypeCalculatorAllEqual(), new PhenotypeCalculatorAllEqual(),
-                    new FitnessCalculatorAllEqual(), new MatingFunctionRandomMating(), recgen, mutator, pop.size());
+           Population next= pop.getNextGeneration(new SexAssigner(0.5,0.5,0.0,1),new GenotypeCalculatorAllEqual(), new PhenotypeCalculatorAllEqual(),
+                    new FitnessCalculatorAllEqual(), new MatingFunctionRandomMating(0.0), recgen, mutator, pop.size());
            for(Specimen s: next.getSpecimen())
            {
                for(SNP snp: s.getGenome().getHaplotypeA().getSNPCollection().getSNPs())

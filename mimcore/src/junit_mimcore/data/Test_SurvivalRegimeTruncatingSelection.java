@@ -7,6 +7,7 @@ import mimcore.data.Specimen;
 import mimcore.data.gpf.fitness.FitnessOfSNP;
 import mimcore.data.gpf.survival.SelectionRegimeReplicateSpecific;
 import mimcore.data.gpf.survival.SurvivalRegimeTruncatingSelection;
+import mimcore.data.sex.Sex;
 import org.junit.Test;
 
 import java.lang.reflect.Array;
@@ -22,17 +23,18 @@ import static org.junit.Assert.assertEquals;
 public class Test_SurvivalRegimeTruncatingSelection {
     public static Population getPopulation()
     {
+        Sex s = Sex.Female;
         ArrayList<Specimen> specs=new ArrayList<Specimen>();
-        specs.add(new Specimen(0.0,0.1,0.0,null));
-        specs.add(new Specimen(0.0,0.2,0.0,null));
-        specs.add(new Specimen(0.0,0.3,0.0,null));
-        specs.add(new Specimen(0.0,0.4,0.0,null));
-        specs.add(new Specimen(0.0,0.5,0.0,null));
-        specs.add(new Specimen(0.0,0.6,0.0,null));
-        specs.add(new Specimen(0.0,0.7,0.0,null));
-        specs.add(new Specimen(0.0,0.8,0.0,null));
-        specs.add(new Specimen(0.0,0.9,0.0,null));
-        specs.add(new Specimen(0.0,1.0,0.0,null));
+        specs.add(new Specimen(s,0.0,0.1,0.0,null));
+        specs.add(new Specimen(s,0.0,0.2,0.0,null));
+        specs.add(new Specimen(s,0.0,0.3,0.0,null));
+        specs.add(new Specimen(s,0.0,0.4,0.0,null));
+        specs.add(new Specimen(s,0.0,0.5,0.0,null));
+        specs.add(new Specimen(s,0.0,0.6,0.0,null));
+        specs.add(new Specimen(s,0.0,0.7,0.0,null));
+        specs.add(new Specimen(s,0.0,0.8,0.0,null));
+        specs.add(new Specimen(s,0.0,0.9,0.0,null));
+        specs.add(new Specimen(s,0.0,1.0,0.0,null));
         return new Population(specs);
 
     }

@@ -7,12 +7,14 @@ import mimcore.data.Population;
 import mimcore.data.PopulationSizeContainer;
 import mimcore.data.gpf.fitness.FitnessFunctionContainer;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
+import mimcore.data.sex.IMatingFunction;
 import mimcore.data.sex.MatingFunctionFecundity;
 import mimcore.data.gpf.quantitative.IGenotypeCalculator;
 import mimcore.data.gpf.quantitative.PhenotypeCalculator;
 import mimcore.data.gpf.survival.ISurvivalFunction;
 import mimcore.data.migration.IMigrationRegime;
 import mimcore.data.recombination.RecombinationGenerator;
+import mimcore.data.sex.SexInfo;
 import mimcore.data.statistic.GPFCollection;
 import mimcore.data.statistic.GPFReducer;
 import mimcore.data.statistic.PACReducer;
@@ -40,6 +42,7 @@ public class MultiSimulationQS {
 	private final String outputDir;
 	private final RecombinationGenerator recGenerator;
 	private final IMutator mutator;
+	private final SexInfo si;
 
 	private final int maxGeneration;
 	private final int replicateRuns;
@@ -51,7 +54,7 @@ public class MultiSimulationQS {
 	private ArrayList<PopulationAlleleCount> pacs;
 	private ArrayList<GPFCollection> gpfs;
 
-	public MultiSimulationQS(ArrayList<DiploidGenome> dipGenomes, PopulationSizeContainer popcont, IGenotypeCalculator gc, PhenotypeCalculator pc, FitnessFunctionContainer ffc, ISurvivalFunction sf,
+	public MultiSimulationQS(SexInfo si, ArrayList<DiploidGenome> dipGenomes, PopulationSizeContainer popcont, IGenotypeCalculator gc, PhenotypeCalculator pc, FitnessFunctionContainer ffc, ISurvivalFunction sf,
                              IMigrationRegime migrationRegime, IMutator mutator, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
                              ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
 	{
@@ -62,6 +65,7 @@ public class MultiSimulationQS {
 		this.sf=sf;
 		this.ffc=ffc;
 		this.popcont=popcont;
+		this.si=si;
 
 		int max=0;
 		HashSet<Integer> toOutput=new HashSet<Integer>();
@@ -92,14 +96,14 @@ public class MultiSimulationQS {
 	public void run()
 	{
 		IFitnessCalculator fc=ffc.getFitnessCalculator(1,1);
-
+		IMatingFunction mf=new MatingFunctionFecundity(si.getSelfingRate());
 
 
 		for(int k =0; k < this.replicateRuns; k++)
 		{
 			// Base population generated always anew, because new env. variance for each individual
 			// for different replicates you dont use the same individuals (phenotypes) but only the same genotypes (with different phenotypes)
-			Population basePopulation=Population.loadPopulation(dipGenomes,gc,pc,fc,new Random());
+			Population basePopulation=Population.loadPopulation(dipGenomes,si.getSexAssigner(),gc,pc,fc,new Random());
 
 			int simulationNumber=k+1;
 			this.logger.info("Starting simulation replicate number " + simulationNumber);
@@ -122,14 +126,14 @@ public class MultiSimulationQS {
 
 				// Survival would go here if considered....(no survival needed for stabilizing selection);
 
-				nextPopulation=nextPopulation.getNextGeneration(gc,pc,fc,new MatingFunctionFecundity(),this.recGenerator,mutator,popsize);
+				nextPopulation=nextPopulation.getNextGeneration(si.getSexAssigner(),gc,pc,fc,mf,this.recGenerator,mutator,popsize);
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype()+"; average fitness of offspring "+nextPopulation.getAverageFitness());
 
 				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>
 				ArrayList<DiploidGenome> migrants=this.migrationRegime.getMigrants(i,simulationNumber);
 				if(migrants.size()>0) {
 					this.logger.info("Adding "+migrants.size()+ " migrants to the evolved population (randomly removing an equivalent number of evolved individuals)");
-					Population migrantPop=Population.loadPopulation(migrants,gc,pc,fc, new Random());
+					Population migrantPop=Population.loadPopulation(migrants,si.getSexAssigner(),gc,pc,fc, new Random());
 					this.logger.info("Average genotype of migrants "+migrantPop.getAverageGenotype()+"; average phenotype of migrants "+migrantPop.getAveragePhenotype()+"; average fitness of migrants "+migrantPop.getAverageFitness());
 					nextPopulation = Population.loadMigration(migrantPop, nextPopulation, new Random(),this.logger);
 

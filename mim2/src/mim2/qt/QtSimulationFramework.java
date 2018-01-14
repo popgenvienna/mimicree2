@@ -15,6 +15,7 @@ import mimcore.data.gpf.survival.*;
 import mimcore.data.migration.IMigrationRegime;
 import mimcore.data.migration.MigrationRegimeNoMigration;
 import mimcore.data.recombination.*;
+import mimcore.data.sex.SexInfo;
 import mimcore.io.*;
 import mimcore.io.migrationRegime.MigrationRegimeReader;
 import mimcore.io.recombination.RecombinationRateReader;
@@ -108,6 +109,8 @@ public class QtSimulationFramework {
 	{
 		this.logger.info("Starting qt simulations: a quantitative trait with truncating selection");
 
+		SexInfo si=SexInfo.getDefaultSexInfo();
+		if(sexInfoFile!=null) si=new SexReader(this.sexInfoFile,this.logger).readSexInfo();
 
 		// Load the data
 		RecombinationGenerator recGenerator = new RecombinationGenerator(new RecombinationRateReader(this.recombinationFile,this.logger).getRecombinationRate(),
@@ -140,7 +143,7 @@ public class QtSimulationFramework {
 
 		IMutator mutator=new MutatorGenomeWideRate(this.mutationRate);
 
-		MultiSimulationQT mst=new MultiSimulationQT(dipGenomes,popcont,genotypeCalculator,phenotypeCalculator,fitnessCalculator,survivalFunction, migrationRegime, mutator, this.outputSync, this.outputGPF,this.outputDir,
+		MultiSimulationQT mst=new MultiSimulationQT(si,dipGenomes,popcont,genotypeCalculator,phenotypeCalculator,fitnessCalculator,survivalFunction, migrationRegime, mutator, this.outputSync, this.outputGPF,this.outputDir,
 			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
 		mst.run();
 

@@ -2,6 +2,7 @@ package mimcore.io.misc;
 
 import mimcore.data.haplotypes.SNP;
 import mimcore.data.haplotypes.SNPCollection;
+import mimcore.data.sex.Sex;
 import mimcore.data.statistic.GPF;
 import mimcore.data.statistic.GPFCollection;
 import mimcore.data.statistic.PopulationAlleleCount;
@@ -47,6 +48,7 @@ public class GPFWriter{
 				StringBuilder sb=new StringBuilder();
 				sb.append(replicate); sb.append("\t");
 				sb.append(generation); sb.append("\t");
+				sb.append(getSexCharacter(g.getSex())); sb.append("\t");
 				sb.append(g.getGenotype()); sb.append("\t");
 				sb.append(g.getPhenotype()); sb.append("\t");
 				sb.append(g.getFitness());
@@ -74,6 +76,15 @@ public class GPFWriter{
 		}
 		
 		this.logger.info("Finished writing GPF file");
+	}
+
+	private String getSexCharacter(Sex sex)
+	{
+		if(sex==Sex.Female) return "F";
+		else if(sex==Sex.Male) return "M";
+		else if(sex==Sex.Hermaphrodite) return "H";
+		else throw new IllegalArgumentException("Unknown sex "+sex);
+
 	}
 	
 

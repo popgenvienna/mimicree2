@@ -111,7 +111,7 @@ public class WSimulationFramework {
 		this.logger.info("Starting simulations with directly provided fitness effects of SNPs (w)");
 
 		SexInfo si=SexInfo.getDefaultSexInfo();
-		if(sexInfoFile!=null) new SexReader(this.sexInfoFile,this.logger).readSexInfo();
+		if(sexInfoFile!=null) si=new SexReader(this.sexInfoFile,this.logger).readSexInfo();
 
 		// Load the data
 		RecombinationGenerator recGenerator = new RecombinationGenerator(new RecombinationRateReader(this.recombinationFile,this.logger).getRecombinationRate(),
@@ -148,7 +148,7 @@ public class WSimulationFramework {
 		IMigrationRegime migrationRegime=new MigrationRegimeNoMigration();
 		if(migrationRegimeFile != null) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger,dipGenomes).readMigrationRegime();
 
-		MultiSimulationW ws=new MultiSimulationW(dipGenomes,popcont,genotypeCalculator,phenotypeCalculator,snpAndEpistasisFitness,survivalFunction, migrationRegime,mutator, this.outputSync, this.outputGPF,this.outputDir,
+		MultiSimulationW ws=new MultiSimulationW(si, dipGenomes,popcont,genotypeCalculator,phenotypeCalculator,snpAndEpistasisFitness,survivalFunction, migrationRegime,mutator, this.outputSync, this.outputGPF,this.outputDir,
 			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
 		ws.run();
 

@@ -16,10 +16,8 @@ import mimcore.data.gpf.survival.SurvivalRegimeAllSurvive;
 import mimcore.data.migration.IMigrationRegime;
 import mimcore.data.migration.MigrationRegimeNoMigration;
 import mimcore.data.recombination.RecombinationGenerator;
-import mimcore.io.ChromosomeDefinitionReader;
-import mimcore.io.DiploidGenomeReader;
-import mimcore.io.PopulationSizeReader;
-import mimcore.io.SNPQuantitativeEffectSizeReader;
+import mimcore.data.sex.SexInfo;
+import mimcore.io.*;
 import mimcore.io.fitnessfunction.FitnessFunctionReader;
 import mimcore.io.recombination.RecombinationRateReader;
 import mimcore.io.fitnessfunction.FFRArbitraryFunction;
@@ -112,6 +110,8 @@ public class QsSimulationFramework {
 	{
 		this.logger.info("Starting qff simulations: selection for a quantitative trait mapping to fitness using a fitness function");
 
+		SexInfo si=SexInfo.getDefaultSexInfo();
+		if(sexInfoFile!=null) si=new SexReader(this.sexInfoFile,this.logger).readSexInfo();
 
 		// Load the data
 		RecombinationGenerator recGenerator = new RecombinationGenerator(new RecombinationRateReader(this.recombinationFile,this.logger).getRecombinationRate(),
@@ -140,7 +140,7 @@ public class QsSimulationFramework {
 		IMigrationRegime migrationRegime=new MigrationRegimeNoMigration();
 		if(migrationRegimeFile != null) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger,dipGenomes).readMigrationRegime();
 
-		MultiSimulationQS ms=new MultiSimulationQS(dipGenomes,popcont,genotypeCalculator,phenotypeCalculator,ffc,survivalFunction, migrationRegime, mutator, this.outputSync, this.outputGPF,this.outputDir,
+		MultiSimulationQS ms=new MultiSimulationQS(si,dipGenomes,popcont,genotypeCalculator,phenotypeCalculator,ffc,survivalFunction, migrationRegime, mutator, this.outputSync, this.outputGPF,this.outputDir,
 			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
 		ms.run();
 
