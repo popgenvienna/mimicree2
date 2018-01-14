@@ -1,4 +1,4 @@
-package mimcore.data.mating;
+package mimcore.data.sex;
 
 import mimcore.data.MatePair;
 import mimcore.data.Population;

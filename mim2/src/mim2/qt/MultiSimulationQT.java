@@ -4,7 +4,7 @@ package mim2.qt;
 import mimcore.data.Mutator.IMutator;
 import mimcore.data.PopulationSizeContainer;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
-import mimcore.data.mating.MatingFunctionRandomMating;
+import mimcore.data.sex.MatingFunctionRandomMating;
 import mimcore.data.gpf.quantitative.*;
 import mimcore.data.gpf.survival.ISurvivalFunction;
 import mimcore.data.migration.IMigrationRegime;

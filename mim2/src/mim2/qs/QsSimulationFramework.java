@@ -38,6 +38,7 @@ public class QsSimulationFramework {
 	private final String fitnessFunctionFile;
 	private final String migrationRegimeFile;
 	private final String populationSizeFile;
+	private final String sexInfoFile;
 	private final String outputSync;
 	private final String outputGPF;
 	private final String outputDir;
@@ -51,7 +52,7 @@ public class QsSimulationFramework {
 
 	private final java.util.logging.Logger logger;
 	//chromosomeDefinition,   	effectSizeFile,heritability,selectionRegimFile,outputFile,simMode,
-	public QsSimulationFramework(String haplotypeFile, String populationSizeFile, String recombinationFile, String chromosomeDefinition, String effectSizeFile, Double ve, Double heritability,
+	public QsSimulationFramework(String haplotypeFile, String populationSizeFile, String recombinationFile, String chromosomeDefinition, String sexInfoFile, String effectSizeFile, Double ve, Double heritability,
                                  String fitnessFunctionFile, String migrationRegimeFile, double mutationRate, String outputSync, String outputGPF, String outputDir, SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
 	{
 		// 'File' represents files and directories
@@ -61,6 +62,8 @@ public class QsSimulationFramework {
 		if(! new File(effectSizeFile).exists()) logger.info("No effect size file found; Commencing neutral simulations");
 		// fitness function
 		if(!new File(fitnessFunctionFile).exists()) throw new IllegalArgumentException("Fitness function file does not exist; "+fitnessFunctionFile);
+
+		if((sexInfoFile != null) && (!new File(sexInfoFile).exists())) throw new IllegalArgumentException("Sex defintion file does not exist; "+sexInfoFile);
 
 		// migration regime
 		if(migrationRegimeFile == null)logger.info("No migration regime file found; Proceeding without migration");
@@ -101,6 +104,7 @@ public class QsSimulationFramework {
 		this.replicateRuns=replicateRuns;
 		this.logger=logger;
 		this.mutationRate=mutationRate;
+		this.sexInfoFile=sexInfoFile;
 	}
 
 

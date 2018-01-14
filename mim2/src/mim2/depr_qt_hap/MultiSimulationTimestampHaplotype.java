@@ -4,7 +4,7 @@ package mim2.depr_qt_hap;
 import mimcore.data.DiploidGenome;
 import mimcore.data.Population;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
-import mimcore.data.mating.MatingFunctionRandomMating;
+import mimcore.data.sex.MatingFunctionRandomMating;
 import mimcore.data.gpf.quantitative.GenotypeCalculator;
 import mimcore.data.gpf.quantitative.PhenotypeCalculator;
 import mimcore.data.gpf.survival.ISurvivalFunction;

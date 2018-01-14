@@ -32,6 +32,7 @@ public class QtCommandLineParser {
 		String selectionRegimFile=null;         //
 		String populationSizeFile=null;
 		String migrationRegimeFile=null;
+		String sexInfoFile=null;
 		String chromosomeDefinition="";
 		Integer seed=null;
 		int replicateRuns=1;                   //
@@ -63,6 +64,10 @@ public class QtCommandLineParser {
             {
                 haplotypeFile = args.remove(0);
             }
+			else if(cu.equals("--sex"))
+			{
+				sexInfoFile = args.remove(0);
+			}
             else if(cu.equals("--recombination-rate"))
             {
             	recombinationFile=args.remove(0);
@@ -133,7 +138,7 @@ public class QtCommandLineParser {
         SimulationMode simMode = CommandLineParseHelp.parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
-        QtSimulationFramework mimframe= new QtSimulationFramework(haplotypeFile,populationSizeFile,recombinationFile,chromosomeDefinition,
+        QtSimulationFramework mimframe= new QtSimulationFramework(haplotypeFile,populationSizeFile,recombinationFile,chromosomeDefinition,sexInfoFile,
 				effectSizeFile,ve,heritability,selectionRegimFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
         
         mimframe.run();
@@ -151,6 +156,7 @@ public class QtCommandLineParser {
 		sb.append(CommandFormater.format( "--ve", "environmental variance; either --ve or --heritability needs to be provided", null));
 		sb.append(CommandFormater.format( "--heritability", "heritability; either --ve or --heritability needs to be provided", null));
 		sb.append(CommandFormater.format("--chromosome-definition","which chromosomes parts constitute a chromosome",null));
+		sb.append(CommandFormater.format("--sex","a file specifying the sex ratios",null));
 		sb.append(CommandFormater.format("--snapshots","a coma separated list of generations to output",null));
 		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));
 		sb.append(CommandFormater.format("--output-sync","the output file (sync); --output-dir or --output-sync or both may be provided",null));

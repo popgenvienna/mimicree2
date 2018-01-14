@@ -35,6 +35,7 @@ public class QtSimulationFramework {
 	private final String outputSync;
 	private final String outputGPF;
 	private final String outputDir;
+	private final String sexInfoFile;
 	private final Double ve;
 	private final Double heritability;
 	private final SimulationMode simMode;
@@ -45,7 +46,7 @@ public class QtSimulationFramework {
 
 	private final java.util.logging.Logger logger;
 	//chromosomeDefinition,   	effectSizeFile,heritability,selectionRegimFile,outputFile,simMode,
-	public QtSimulationFramework(String haplotypeFile, String populationSizeFile, String recombinationFile, String chromosomeDefinition, String effectSizeFile, Double ve, Double heritability,
+	public QtSimulationFramework(String haplotypeFile, String populationSizeFile, String recombinationFile, String chromosomeDefinition, String sexInfoFile, String effectSizeFile, Double ve, Double heritability,
                                  String selectionRegimeFile, String migrationRegimeFile, double mutationRate, String outputSync, String outputGPF, String outputDir, SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
 	{
 		// 'File' represents files and directories
@@ -56,6 +57,8 @@ public class QtSimulationFramework {
 		// selection regime
 		if(selectionRegimeFile == null)logger.info("No selection regime file found; Commencing neutral simulations");
 		else if (! new File(selectionRegimeFile).exists()) throw new IllegalArgumentException("Selection regime file does not exist; "+selectionRegimeFile);
+
+		if((sexInfoFile != null) && (!new File(sexInfoFile).exists())) throw new IllegalArgumentException("Sex defintion file does not exist; "+sexInfoFile);
 
 		// migration regime
 		if(migrationRegimeFile == null)logger.info("No migration regime file found; Proceeding without migration");
@@ -97,6 +100,7 @@ public class QtSimulationFramework {
 		this.replicateRuns=replicateRuns;
 		this.logger=logger;
 		this.mutationRate=mutationRate;
+		this.sexInfoFile=sexInfoFile;
 	}
 	
 	

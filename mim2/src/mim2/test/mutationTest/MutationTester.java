@@ -5,7 +5,7 @@ import mimcore.data.BitArray.BitArrayBuilder;
 import mimcore.data.Mutator.IMutator;
 import mimcore.data.Mutator.MutatorGenomeWideRate;
 import mimcore.data.gpf.fitness.FitnessCalculatorAllEqual;
-import mimcore.data.mating.MatingFunctionRandomMating;
+import mimcore.data.sex.MatingFunctionRandomMating;
 import mimcore.data.gpf.quantitative.GenotypeCalculatorAllEqual;
 import mimcore.data.gpf.quantitative.PhenotypeCalculatorAllEqual;
 import mimcore.data.haplotypes.HaploidGenome;

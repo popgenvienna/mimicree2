@@ -17,7 +17,7 @@ public class MatingDistribution {
 	}
 
 	/**
-	 * Length of the mating distribution
+	 * Length of the sex distribution
 	 * Corresponding to the largest number of matings
 	 * @return
 	 */

@@ -12,9 +12,11 @@ import mimcore.data.migration.IMigrationRegime;
 import mimcore.data.migration.MigrationRegimeNoMigration;
 import mimcore.data.recombination.CrossoverGenerator;
 import mimcore.data.recombination.RecombinationGenerator;
+import mimcore.data.sex.SexInfo;
 import mimcore.io.ChromosomeDefinitionReader;
 import mimcore.io.DiploidGenomeReader;
 import mimcore.io.PopulationSizeReader;
+import mimcore.io.SexReader;
 import mimcore.io.recombination.RecombinationRateReader;
 import mimcore.io.migrationRegime.MigrationRegimeReader;
 import mimcore.data.gpf.survival.ISurvivalFunction;
@@ -35,6 +37,7 @@ public class WSimulationFramework {
 	private final String migrationRegimeFile;
 	private final String outputSync;
 	private final String outputGPF;
+	private final String sexInfoFile;
 	private final String outputDir;
 	private final SimulationMode simMode;
 	private final int replicateRuns;
@@ -46,7 +49,7 @@ public class WSimulationFramework {
 	private final java.util.logging.Logger logger;
 	//(haplotypeFile,recombinationFile,chromosomeDefinition,fitnessFile,epistasisFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
 
-	public WSimulationFramework(String haplotypeFile, String populationSizeFile, String recombinationFile, String chromosomeDefinition,
+	public WSimulationFramework(String haplotypeFile, String populationSizeFile, String recombinationFile, String chromosomeDefinition, String sexInfoFile,
                                 String fitnessFile, String epistasisFile, String migrationRegimeFile, double mutationRate, String outputSync, String outputGPF, String outputDir, SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
 	{
 		// 'File' represents files and directories
@@ -59,6 +62,9 @@ public class WSimulationFramework {
 		if((populationSizeFile != null) && (!new File(populationSizeFile).exists())) throw new IllegalArgumentException("Population size file does not exist; "+populationSizeFile);
 		if((fitnessFile != null) && (!new File(fitnessFile).exists())) throw new IllegalArgumentException("Fitness file does not exist; "+fitnessFile);
 		if((epistasisFile != null) && (!new File(epistasisFile).exists())) throw new IllegalArgumentException("Epistasis file does not exist; "+epistasisFile);
+		if((sexInfoFile != null) && (!new File(sexInfoFile).exists())) throw new IllegalArgumentException("Sex defintion file does not exist; "+sexInfoFile);
+
+
 		if(fitnessFile==null) logger.info("No fitness file found; commencing simulations without selected SNPs");
 		if(epistasisFile==null) logger.info("No epistasis file found; commencing simulations without pairs of interacting SNPs");
 
@@ -96,6 +102,7 @@ public class WSimulationFramework {
 		this.mutationRate=mutationRate;
 		this.replicateRuns=replicateRuns;
 		this.logger=logger;
+		this.sexInfoFile=sexInfoFile;
 	}
 
 
@@ -103,6 +110,8 @@ public class WSimulationFramework {
 	{
 		this.logger.info("Starting simulations with directly provided fitness effects of SNPs (w)");
 
+		SexInfo si=SexInfo.getDefaultSexInfo();
+		if(sexInfoFile!=null) new SexReader(this.sexInfoFile,this.logger).readSexInfo();
 
 		// Load the data
 		RecombinationGenerator recGenerator = new RecombinationGenerator(new RecombinationRateReader(this.recombinationFile,this.logger).getRecombinationRate(),

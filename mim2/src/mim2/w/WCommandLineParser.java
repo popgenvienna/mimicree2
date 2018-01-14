@@ -32,6 +32,7 @@ public class WCommandLineParser {
 		String epistasisFile=null;            //
 		String migrationRegimeFile=null;
 		String populationSizeFile=null;
+		String sexInfoFile=null;
 		String chromosomeDefinition="";
 		Integer seed=null;
 		int replicateRuns=1;                   //
@@ -99,6 +100,10 @@ public class WCommandLineParser {
             {
             	replicateRuns=Integer.parseInt(args.remove(0));
             }
+			else if(cu.equals("--sex"))
+			{
+				sexInfoFile=args.remove(0);
+			}
             else if(cu.equals("--output-sync"))
             {
             	outputSync=args.remove(0);
@@ -125,7 +130,7 @@ public class WCommandLineParser {
         SimulationMode simMode = CommandLineParseHelp.parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
-        WSimulationFramework mimframe= new WSimulationFramework(haplotypeFile,populationSizeFile,recombinationFile,chromosomeDefinition,fitnessFile,epistasisFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
+        WSimulationFramework mimframe= new WSimulationFramework(haplotypeFile,populationSizeFile,recombinationFile,chromosomeDefinition,sexInfoFile,fitnessFile,epistasisFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
         
         mimframe.run();
 	}
@@ -139,6 +144,7 @@ public class WCommandLineParser {
 		sb.append(CommandFormater.format("--recombination-rate","a file with the recombination rate for windows of fixed size",null));
 		sb.append(CommandFormater.format("--population-size","a file with the population size during the simulations",null));
 		sb.append(CommandFormater.format("--chromosome-definition","which chromosomes parts constitute a chromosome",null));
+		sb.append(CommandFormater.format("--sex","a file specifying the sex ratios",null));
 		sb.append(CommandFormater.format("--snapshots","a coma separated list of generations to output",null));
 		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));
 		sb.append(CommandFormater.format("--output-sync","the output file (sync); --output-dir or --output-sync or both may be provided",null));

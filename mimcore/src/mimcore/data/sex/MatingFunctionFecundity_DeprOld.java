@@ -1,4 +1,4 @@
-package mimcore.data.mating;
+package mimcore.data.sex;
 
 import mimcore.data.MatePair;
 import mimcore.data.Population;
@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Mating function generates couples for mating for a given population of specimen.
+ * Mating function generates couples for sex for a given population of specimen.
  * Mating success is directly proportional to gpf
  * @author robertkofler
  *
  */
-public class MatingFunctionFecundity implements IMatingFunction {
+public class MatingFunctionFecundity_DeprOld implements IMatingFunction {
 
 
 
@@ -21,7 +21,7 @@ public class MatingFunctionFecundity implements IMatingFunction {
 	private final int leng;
 
 
-	public MatingFunctionFecundity(Population pop)
+	public MatingFunctionFecundity_DeprOld(Population pop)
 	{
 		ArrayList<Specimen> popSpecimen=pop.getSpecimen();
 		this.leng=popSpecimen.size();
@@ -46,7 +46,7 @@ public class MatingFunctionFecundity implements IMatingFunction {
 	}
 
 
-	public MatingFunctionFecundity()
+	public MatingFunctionFecundity_DeprOld()
 	{
 		this.specimens=new ArrayList<FitnessTransformedSpecimen>();
 		this.leng=0;
@@ -68,14 +68,14 @@ public class MatingFunctionFecundity implements IMatingFunction {
 
 	public  IMatingFunction factory(Population population)
 	{
-		return new MatingFunctionFecundity(population);
+		return new MatingFunctionFecundity_DeprOld(population);
 	}
 
 	
 
 	
 	/**
-	 * Choose a couple for mating; Allow selfing
+	 * Choose a couple for sex; Allow selfing
 	 * Note that most simulations tools allow selfing, so for the sake of comparability we do this too.
 	 * (Although it would be simple to forbid)
 	 * @return
@@ -115,7 +115,7 @@ public class MatingFunctionFecundity implements IMatingFunction {
 		{
 			if(tspec.transformedFitnessSum > random) return tspec;
 		}
-		throw new IllegalArgumentException("State not allowed in mating function");
+		throw new IllegalArgumentException("State not allowed in sex function");
 	}
 
 }

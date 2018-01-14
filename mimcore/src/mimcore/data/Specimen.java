@@ -6,6 +6,8 @@ import mimcore.data.Mutator.IMutator;
 import mimcore.data.haplotypes.SNPCollection;
 import mimcore.data.recombination.*;
 import mimcore.data.haplotypes.HaploidGenome;
+import mimcore.data.sex.Sex;
+
 import java.util.Random;
 
 /**
@@ -23,10 +25,13 @@ public class Specimen {
 	private final double quantGenotype;
 	private final double quantPhenotype;
 	private final double fitness;
+	private final Sex sex;
 	private final DiploidGenome genome;
 
-	public Specimen( double quantGenotype, double quantPhenotype, double fitness, DiploidGenome genome)
+
+	public Specimen(Sex sex, double quantGenotype, double quantPhenotype, double fitness, DiploidGenome genome)
 	{
+		this.sex=sex;
 		this.quantGenotype=quantGenotype;
 		this.quantPhenotype=quantPhenotype;
 		this.fitness=fitness;
@@ -66,6 +71,9 @@ public class Specimen {
 	{
 		return this.fitness;
 	}
+
+	public  Sex getSex(){return this.sex;}
+
 
 
 

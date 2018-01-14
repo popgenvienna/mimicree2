@@ -3,11 +3,13 @@ package mimcore.data;
 
 
 import mimcore.data.Mutator.IMutator;
-import mimcore.data.mating.IMatingFunction;
+import mimcore.data.sex.IMatingFunction;
 import mimcore.data.gpf.quantitative.IGenotypeCalculator;
 import mimcore.data.gpf.quantitative.IPhenotypeCalculator;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.recombination.*;
+import mimcore.data.sex.Sex;
+import mimcore.data.sex.SexAssigner;
 import mimcore.misc.MimicreeThreadPool;
 
 
@@ -95,16 +97,17 @@ public class Population {
 	}
 
 
-	public static Population loadPopulation(ArrayList<DiploidGenome> genomes, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, Random random)
+	public static Population loadPopulation(ArrayList<DiploidGenome> genomes, SexAssigner sa, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, Random random)
 	{
 		ArrayList<Specimen> specimens=new ArrayList<Specimen>();
 		ArrayList<Double> genotypes=new ArrayList<Double>();
+		LinkedList<Sex> sexes=new LinkedList<Sex>(sa.getSexes(genomes.size(),random));
 		for(DiploidGenome genome: genomes)
 		{
 			double genotype=gc.getGenotype(genome);
 			double phenotype=pc.getPhenotype(genotype,random);
 			double fitness=fc.getFitness(genome,phenotype);
-			Specimen s=new Specimen(genotype,phenotype,fitness,genome);
+			Specimen s=new Specimen(sexes.remove(0), genotype,phenotype,fitness,genome);
 			specimens.add(s);
 
 		}
@@ -121,11 +124,12 @@ public class Population {
 	 * Obtain the next generation of the population;
 	 * @return
 	 */
-	public Population getNextGeneration( IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, IMatingFunction matingfunction,  RecombinationGenerator recGenerator, IMutator mutator, int targetN)
+	public Population getNextGeneration( SexAssigner sa, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, IMatingFunction matingfunction,
+										 RecombinationGenerator recGenerator, IMutator mutator, int targetN)
 	{
 		// the selected ones: go and mate ..populate the earth
 		IMatingFunction mf=matingfunction.factory(this);
-		SpecimenGenerator specGen=new SpecimenGenerator(mf,gc,pc,fc,recGenerator,mutator, targetN);
+		SpecimenGenerator specGen=new SpecimenGenerator(sa, mf,gc,pc,fc,recGenerator,mutator, targetN);
 		ArrayList<Specimen> spec=specGen.getSpecimen();
 		return new Population(spec);
 	}
@@ -194,6 +198,7 @@ public class Population {
 
 class SpecimenGenerator
 {
+	private final SexAssigner sa;
 	private final IGenotypeCalculator gc;
 	private final IPhenotypeCalculator pc;
 	private final IFitnessCalculator fc;
@@ -203,7 +208,7 @@ class SpecimenGenerator
 	private final IMutator mutator;
 
 	
-	public SpecimenGenerator(IMatingFunction mf, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, RecombinationGenerator recGen, IMutator mutator, int populationSize )
+	public SpecimenGenerator(SexAssigner sa, IMatingFunction mf, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, RecombinationGenerator recGen, IMutator mutator, int populationSize )
 	{
 		//	 * (mf,gc,pc,recGenerator,this.size());
 
@@ -214,6 +219,7 @@ class SpecimenGenerator
 		this.recGen=recGen;
 		this.fc=fc;
 		this.mutator=mutator;
+		this.sa=sa;
 
 
 	}
@@ -223,10 +229,11 @@ class SpecimenGenerator
 		SpecimenCollector col=new SpecimenCollector();
 		ExecutorService executor= MimicreeThreadPool.getExector();
 		ArrayList<Callable<Object>> call=new ArrayList<Callable<Object>>();
+		LinkedList<Sex> sexes=new LinkedList<Sex>(sa.getSexes(this.populationSize,new Random()));
 
 		for(int i=0; i<this.populationSize; i++)
 		{
-			call.add(Executors.callable(new SingleSpecimenGenerator(this.mf,this.gc,this.pc,this.fc,this.recGen,col,mutator,MimicreeThreadPool.getRandomForThread(i))));
+			call.add(Executors.callable(new SingleSpecimenGenerator(sexes.remove(0),this.mf,this.gc,this.pc,this.fc,this.recGen,col,mutator,MimicreeThreadPool.getRandomForThread(i))));
 		}
 
 		try
@@ -289,6 +296,7 @@ class SpecimenCollector
 class SingleSpecimenGenerator implements Runnable
 {
 	//this.mf,this.gc,this.pc,this.recGen,col,MimicreeThreadPool.getRandomForThread(i))
+	private final Sex mysex;
 	private final IMatingFunction mf;
 	private final SpecimenCollector collector;
 	private final IGenotypeCalculator gc;
@@ -297,7 +305,7 @@ class SingleSpecimenGenerator implements Runnable
 	private final IMutator mutator;
 	private final Random random;
 	private final RecombinationGenerator recGenerator;
-	public SingleSpecimenGenerator(IMatingFunction mf, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, RecombinationGenerator recGen, SpecimenCollector collector, IMutator mutator, Random random)
+	public SingleSpecimenGenerator(Sex mysex, IMatingFunction mf, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, RecombinationGenerator recGen, SpecimenCollector collector, IMutator mutator, Random random)
 	{
 		this.mf=mf;
 		this.pc=pc;
@@ -307,6 +315,7 @@ class SingleSpecimenGenerator implements Runnable
 		this.recGenerator=recGen;
 		this.random = random;
 		this.mutator=mutator;
+		this.mysex=mysex;
 	}
 	
 	public void run()
@@ -316,7 +325,7 @@ class SingleSpecimenGenerator implements Runnable
 		double genotype=gc.getGenotype(fertilizedEgg);
 		double phenotype=pc.getPhenotype(genotype,random);
 		double fitness=fc.getFitness(fertilizedEgg,phenotype);
-		Specimen spec=   new Specimen(genotype,phenotype,fitness,fertilizedEgg);
+		Specimen spec=   new Specimen(mysex,genotype,phenotype,fitness,fertilizedEgg);
 		collector.addSpecimen(spec);
 	}
 	
