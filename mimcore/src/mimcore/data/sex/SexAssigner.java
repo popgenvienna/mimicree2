@@ -64,4 +64,10 @@ public class SexAssigner {
         return sexlist;
     }
 
+    public double getMaleFraction(){return this.maleFraction;}
+    public double getFemaleFraction(){return this.femaleFraction;}
+    public double getHermaphroditeFraction(){return this.hermaphroditeFraction;}
+    public int getMinCount(){return this.minCount;}
+
+
 }

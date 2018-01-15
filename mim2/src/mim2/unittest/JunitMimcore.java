@@ -32,6 +32,7 @@ public class JunitMimcore {
             junit_mimcore.data.Test_FitnessOfSNP.class,
             junit_mimcore.data.basic.Test_PACReducer.class,
             junit_mimcore.io.Test_FitnessOfSNPReader.class,
+            junit_mimcore.io.Test_SexReader.class,
             junit_mimcore.data.Test_FitnessOfEpistaticPair.class,
             junit_mimcore.io.Test_EpistasisFitnessReader.class,
             junit_mimcore.data.Test_AdditiveSNPEffect.class,
