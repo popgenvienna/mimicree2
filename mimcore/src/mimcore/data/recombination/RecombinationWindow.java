@@ -1,11 +1,12 @@
 package mimcore.data.recombination;
 
 import mimcore.data.*;
+import mimcore.data.sex.Sex;
 import mimcore.data.statistic.Poisson;
 
 import java.util.Random;
 
-public class RecombinationWindow {
+public class RecombinationWindow implements IRecombinationWindow {
 	private final Chromosome chromosome;
 	private final int startPosition;
 	private final int endPosition;
@@ -23,55 +24,19 @@ public class RecombinationWindow {
 
 	}
 	
-	/**
-	private double calculateP(double recRate,int windowsize)
-	{
-		
-		// Recombination rate is in cM
-		double recFraction=recRate/100;
-		
-		// return 0 for small recombination rates
-		if(Math.abs(recFraction)<0.000001) return 0.0;
-		double cWin=1000000.0/windowsize;
-		double dMb=inverseKosambiFunction(recFraction); // tested correct
-		double dWin=dMb/cWin;
-		double rWin=kosambiFunction(dWin);
-		return rWin;
-	}
-	
-	
-	private double kosambiFunction(double mapDistance)
-	{
-		double po=Math.pow(Math.E, (4.0*mapDistance));
-		double above= (po - 1.0);
-		double below = (po + 1.0);
-		double below2=2.0*below;
-		double toRet=above/below2;
-		return toRet;
-	}
-	
-	private double inverseKosambiFunction(double recRate)
-	{
-		double div=(1.0 + 2.0 * recRate)/(1.0 - 2.0 * recRate);
-		double toRet=0.25 * Math.log( div );
-		return toRet;
-		
-	}
-	 **/
-	
 
-	
-	
+
 	
 	/**
 	 * A random number generator decides whether a recombination event takes place within the given window
 	 * @return
 	 */
-	public int getRecombinationEvents(Random random)
+	public int getRecombinationEvents(Sex sex, Random random)
 	{
 		return Poisson.getPoisson(this.lambda,random);
 	}
-	
+
+
 	/**
 	 * Obtain a random postion within the range of the RecombinationWindow 
 	 * @return a random position

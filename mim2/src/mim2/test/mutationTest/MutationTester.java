@@ -5,6 +5,7 @@ import mimcore.data.BitArray.BitArrayBuilder;
 import mimcore.data.Mutator.IMutator;
 import mimcore.data.Mutator.MutatorGenomeWideRate;
 import mimcore.data.gpf.fitness.FitnessCalculatorAllEqual;
+import mimcore.data.recombination.IRecombinationWindow;
 import mimcore.data.sex.MatingFunctionRandomMating;
 import mimcore.data.gpf.quantitative.GenotypeCalculatorAllEqual;
 import mimcore.data.gpf.quantitative.PhenotypeCalculatorAllEqual;
@@ -73,7 +74,7 @@ public class MutationTester {
 
         Population pop=getPopulation();
         IMutator mutator=new MutatorGenomeWideRate(0.0002);
-        RecombinationGenerator recgen=new RecombinationGenerator(new CrossoverGenerator(new ArrayList<RecombinationWindow>()),new ChromosomeDefinitionReader("").getRandomAssortmentGenerator());
+        RecombinationGenerator recgen=new RecombinationGenerator(new CrossoverGenerator(new ArrayList<IRecombinationWindow>()),new ChromosomeDefinitionReader("").getRandomAssortmentGenerator());
 
         for(int i=0;i<250000; i++) {
 

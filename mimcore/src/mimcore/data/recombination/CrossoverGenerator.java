@@ -1,18 +1,19 @@
 package mimcore.data.recombination;
 
 import mimcore.data.*;
+import mimcore.data.sex.Sex;
 
 import java.util.Random;
 import java.util.ArrayList;
 
 public class CrossoverGenerator {
-	private final ArrayList<RecombinationWindow> windows;
+	private final ArrayList<IRecombinationWindow> windows;
 
 
 	
-	public CrossoverGenerator(ArrayList<RecombinationWindow> windows)
+	public CrossoverGenerator(ArrayList<IRecombinationWindow> windows)
 	{
-		this.windows=new ArrayList<RecombinationWindow>(windows);
+		this.windows=new ArrayList<IRecombinationWindow>(windows);
 	}
 
 	
@@ -22,12 +23,12 @@ public class CrossoverGenerator {
 	 * the other half is the random assortment of chromosomes
 	 * @return
 	 */
-	public CrossoverEvents generateCrossoverEvents(Random random)
+	public CrossoverEvents generateCrossoverEvents(Random random, Sex sex)
 	{
 		ArrayList<GenomicPosition> recEvents=new ArrayList<GenomicPosition>();
-		for(RecombinationWindow window:windows)
+		for(IRecombinationWindow window:windows)
 		{
-			int recs=window.getRecombinationEvents(random);
+			int recs=window.getRecombinationEvents(sex,random);
 			for(int i =0; i<recs; i++) recEvents.add(window.getRandomPosition(random));
 			// if(window.hasRecombinationEvent(random)) recEvents.add(window.getRandomPosition(random));
 		}
@@ -42,9 +43,9 @@ public class CrossoverGenerator {
 	 * mostly for debugging
 	 * @return
 	 */
-	public ArrayList<RecombinationWindow> getWindows()
+	public ArrayList<IRecombinationWindow> getWindows()
 	{
-		return new ArrayList<RecombinationWindow>(this.windows);
+		return new ArrayList<IRecombinationWindow>(this.windows);
 	}
 
 }

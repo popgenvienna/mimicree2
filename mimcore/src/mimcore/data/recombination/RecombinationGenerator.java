@@ -2,6 +2,7 @@ package mimcore.data.recombination;
 
 import mimcore.data.*;
 import mimcore.data.haplotypes.SNPCollection;
+import mimcore.data.sex.Sex;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -26,9 +27,9 @@ public class RecombinationGenerator {
 	 * This method will return a new random recombination event upon each call
 	 * @return
 	 */
-	public RecombinationEvent getRecombinationEvent(Random random)
+	public RecombinationEvent getRecombinationEvent(Sex sex, Random random)
 	{
-		CrossoverEvents crossovers=recRate.generateCrossoverEvents(random);
+		CrossoverEvents crossovers=recRate.generateCrossoverEvents(random, sex);
 		RandomAssortment randas=assortGen.getRandomAssortment(crossovers,random);
 		return new RecombinationEvent(randas,crossovers);
 	}

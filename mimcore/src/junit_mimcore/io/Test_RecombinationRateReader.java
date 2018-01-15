@@ -1,6 +1,7 @@
 package junit_mimcore.io;
 
 import junit_mimcore.factories.SharedFactory;
+import mimcore.data.recombination.IRecombinationWindow;
 import mimcore.data.recombination.RecombinationWindow;
 import mimcore.io.recombination.RecombinationRateReader;
 import org.junit.Test;
@@ -58,22 +59,24 @@ public class Test_RecombinationRateReader {
 	@Test
 	public void position_of_first_window_lambda()
 	{
-		ArrayList<RecombinationWindow> s= getReaderLambda().getRecombinationRate().getWindows();
+		ArrayList<IRecombinationWindow> s= getReaderLambda().getRecombinationRate().getWindows();
+		RecombinationWindow rw=(RecombinationWindow)s.get(0);
 
-		assertEquals(s.get(0).getChromosome().toString(),"2L");
-		assertEquals(s.get(0).getStartPosition(),4501);
-		assertEquals(s.get(0).getEndPosition(),4600);
+		assertEquals(rw.getChromosome().toString(),"2L");
+		assertEquals(rw.getStartPosition(),4501);
+		assertEquals(rw.getEndPosition(),4600);
 
 	}
 
 	@Test
 	public void position_of_first_window_rf()
 	{
-		ArrayList<RecombinationWindow> s= getReaderRecFraction().getRecombinationRate().getWindows();
+		ArrayList<IRecombinationWindow> s= getReaderRecFraction().getRecombinationRate().getWindows();
+		RecombinationWindow rw=(RecombinationWindow)s.get(0);
 
-		assertEquals(s.get(0).getChromosome().toString(),"2L");
-		assertEquals(s.get(0).getStartPosition(),4501);
-		assertEquals(s.get(0).getEndPosition(),4600);
+		assertEquals(rw.getChromosome().toString(),"2L");
+		assertEquals(rw.getStartPosition(),4501);
+		assertEquals(rw.getEndPosition(),4600);
 
 	}
 
@@ -82,18 +85,19 @@ public class Test_RecombinationRateReader {
 	@Test
 	public void position_of_second_window_rf()
 	{
-		ArrayList<RecombinationWindow> s= getReaderRecFraction().getRecombinationRate().getWindows();
+		ArrayList<IRecombinationWindow> s= getReaderRecFraction().getRecombinationRate().getWindows();
+		RecombinationWindow rw=(RecombinationWindow)s.get(1);
 
-		assertEquals(s.get(1).getChromosome().toString(),"2L");
-		assertEquals(s.get(1).getStartPosition(),4701);
-		assertEquals(s.get(1).getEndPosition(),4800);
+		assertEquals(rw.getChromosome().toString(),"2L");
+		assertEquals(rw.getStartPosition(),4701);
+		assertEquals(rw.getEndPosition(),4800);
 
 	}
 
 	@Test
 	public void position_of_second_window_lambda()
 	{
-		ArrayList<RecombinationWindow> s= getReaderLambda().getRecombinationRate().getWindows();
+		ArrayList<IRecombinationWindow> s= getReaderLambda().getRecombinationRate().getWindows();
 
 		assertEquals(s.get(1).getChromosome().toString(),"2L");
 		assertEquals(s.get(1).getStartPosition(),4701);
@@ -104,7 +108,7 @@ public class Test_RecombinationRateReader {
 	@Test
 	public void position_of_last_window_rf()
 	{
-		ArrayList<RecombinationWindow> s= getReaderRecFraction().getRecombinationRate().getWindows();
+		ArrayList<IRecombinationWindow> s= getReaderRecFraction().getRecombinationRate().getWindows();
 
 		assertEquals(s.get(3).getChromosome().toString(),"3L");
 		assertEquals(s.get(3).getStartPosition(),4201);
@@ -115,7 +119,7 @@ public class Test_RecombinationRateReader {
 	@Test
 	public void position_of_last_window_lambda()
 	{
-		ArrayList<RecombinationWindow> s= getReaderLambda().getRecombinationRate().getWindows();
+		ArrayList<IRecombinationWindow> s= getReaderLambda().getRecombinationRate().getWindows();
 
 		assertEquals(s.get(3).getChromosome().toString(),"3L");
 		assertEquals(s.get(3).getStartPosition(),4201);
@@ -126,7 +130,9 @@ public class Test_RecombinationRateReader {
 	@Test
 	public void lambda_correct_recognized()
 	{
-		ArrayList<RecombinationWindow> s= getReaderLambda().getRecombinationRate().getWindows();
+		ArrayList<IRecombinationWindow> s2= getReaderLambda().getRecombinationRate().getWindows();
+		ArrayList<RecombinationWindow> s=new ArrayList<RecombinationWindow>();
+		for(IRecombinationWindow rw: s2)s.add((RecombinationWindow)rw);
 
 		assertEquals(s.get(0).getLambda(),0.1,0.0000001);
 		assertEquals(s.get(1).getLambda(),0.2,0.0000001);
@@ -137,7 +143,9 @@ public class Test_RecombinationRateReader {
 	@Test
 	public void rf_correct_recognized()
 	{
-		ArrayList<RecombinationWindow> s= getReaderRecFraction().getRecombinationRate().getWindows();
+		ArrayList<IRecombinationWindow> s2= getReaderRecFraction().getRecombinationRate().getWindows();
+		ArrayList<RecombinationWindow> s=new ArrayList<RecombinationWindow>();
+		for(IRecombinationWindow rw: s2)s.add((RecombinationWindow)rw);
 
 		assertNotEquals(s.get(0).getLambda(),0.1,0.00001);
 		assertNotEquals(s.get(1).getLambda(),0.2,0.00001);
@@ -148,7 +156,9 @@ public class Test_RecombinationRateReader {
 	@Test
 	public void rf_haldane_1919()
 	{
-		ArrayList<RecombinationWindow> s= getReaderRecFraction().getRecombinationRate().getWindows();
+		ArrayList<IRecombinationWindow> s2= getReaderRecFraction().getRecombinationRate().getWindows();
+		ArrayList<RecombinationWindow> s=new ArrayList<RecombinationWindow>();
+		for(IRecombinationWindow rw: s2)s.add((RecombinationWindow)rw);
 // 0.1115718 0.2554128 0.4581454 0.8047190
 
 		assertEquals(s.get(0).getLambda(),0.1115718,0.00001);

@@ -25,4 +25,6 @@ public class SexInfo {
 
     public SexAssigner getSexAssigner(){return this.sexAssigner;}
     public double getSelfingRate(){return this.selfingRate;}
+
+
 }

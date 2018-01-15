@@ -2,7 +2,9 @@ package mimcore.io.recombination;
 
 import mimcore.data.Chromosome;
 import mimcore.data.recombination.CrossoverGenerator;
+import mimcore.data.recombination.IRecombinationWindow;
 import mimcore.data.recombination.RecombinationWindow;
+import mimcore.data.recombination.RecombinationWindowSexSpecific;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -33,7 +35,7 @@ public class RRRLambda {
 	}
 	
 	
-	private RecombinationWindow parseLine(String line)
+	private IRecombinationWindow parseLine(String line)
 	{
 		// 2L:0..100000            2.1
 		// 2L:100000..200000       2.2
@@ -41,7 +43,7 @@ public class RRRLambda {
 		// 2L:300000..400000       3.1
 		
 		String[] a=line.split("\t");
-		if(a.length>2) throw new IllegalArgumentException("Input must have two columns; the genomic position (chr:start..end) followed by the recombination fraction");
+
 		String[] tmp1=a[0].split(":");
 		String[] tmp2=tmp1[1].split("\\.\\.");
 		
@@ -49,14 +51,26 @@ public class RRRLambda {
 		int start=Integer.parseInt(tmp2[0].trim())+1;
 		int end=Integer.parseInt(tmp2[1].trim());
 
-		double lambda= Double.parseDouble(a[1]);
+		if(a.length==2) {
+			double lambda = Double.parseDouble(a[1]);
+			return new RecombinationWindow(chr,start,end,lambda);
+		}
+		else if(a.length==4)
+		{
+			// male female hermaphrodite
+			double mlambda = Double.parseDouble(a[1]);
+			double flambda = Double.parseDouble(a[2]);
+			double hlambda = Double.parseDouble(a[3]);
+			return new RecombinationWindowSexSpecific(chr,start,end,mlambda,flambda,hlambda);
+		}
+		else throw new IllegalArgumentException("Input must have two or four columns; the genomic position (chr:start..end) followed by the recombination fraction(s)");
 
 
 
 		// MALES are not recombining and the published recombination rate is for females
 		// deactivated male halfing - because mim2 is intented for general audience
 		//recrate=recrate * 0.5;
-		return new RecombinationWindow(chr,start,end,lambda);
+
 		
 	}
 	
@@ -67,7 +81,7 @@ public class RRRLambda {
 	{
 		
 		String line;
-		ArrayList<RecombinationWindow> entries=new ArrayList<RecombinationWindow>();
+		ArrayList<IRecombinationWindow> entries=new ArrayList<IRecombinationWindow>();
 
 
 		try
