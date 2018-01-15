@@ -1,6 +1,7 @@
 package mimcore.data.gpf.fitness;
 
 import mimcore.data.DiploidGenome;
+import mimcore.data.sex.Sex;
 
 import java.util.ArrayList;
 
@@ -15,7 +16,7 @@ public class FitnessCalculator_Epistasis implements IFitnessCalculator {
 		this.epistasis=new ArrayList<FitnessOfEpistasisPair>(epistasis);
 	}
 
-	public  double getFitness(DiploidGenome dipGenome, double phenotype)
+	public  double getFitness(DiploidGenome dipGenome, double phenotype, Sex sex)
 	{
 		double epiFitness=1.0;
 		for(FitnessOfEpistasisPair epi:this.epistasis)

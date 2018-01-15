@@ -104,10 +104,11 @@ public class Population {
 		LinkedList<Sex> sexes=new LinkedList<Sex>(sa.getSexes(genomes.size(),random));
 		for(DiploidGenome genome: genomes)
 		{
+			Sex mysex=sexes.remove(0);
 			double genotype=gc.getGenotype(genome);
 			double phenotype=pc.getPhenotype(genotype,random);
-			double fitness=fc.getFitness(genome,phenotype);
-			Specimen s=new Specimen(sexes.remove(0), genotype,phenotype,fitness,genome);
+			double fitness=fc.getFitness(genome,phenotype,mysex);
+			Specimen s=new Specimen(mysex, genotype,phenotype,fitness,genome);
 			specimens.add(s);
 
 		}
@@ -324,7 +325,7 @@ class SingleSpecimenGenerator implements Runnable
 		DiploidGenome fertilizedEgg=mp.getChild(recGenerator,mutator,this.random);
 		double genotype=gc.getGenotype(fertilizedEgg);
 		double phenotype=pc.getPhenotype(genotype,random);
-		double fitness=fc.getFitness(fertilizedEgg,phenotype);
+		double fitness=fc.getFitness(fertilizedEgg,phenotype,mysex);
 		Specimen spec=   new Specimen(mysex,genotype,phenotype,fitness,fertilizedEgg);
 		collector.addSpecimen(spec);
 	}

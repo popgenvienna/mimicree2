@@ -1,6 +1,7 @@
 package mimcore.data.gpf.fitness;
 
 import mimcore.data.DiploidGenome;
+import mimcore.data.sex.Sex;
 
 /**
  * Created by robertkofler on 11/20/16.
@@ -28,7 +29,7 @@ public class FitnessFunctionQuantitativeDirectionalSelection implements IFitness
 		this.deltaFitness=this.maxFitness-this.minFitness;
 	}
 
-	public  double getFitness(DiploidGenome dipGenome, double phenotype)
+	public  double getFitness(DiploidGenome dipGenome, double phenotype, Sex sex)
 	{
 		double part1= 1 + this.s * Math.exp(r * (phenotype+this.beta));
 		double part2=deltaFitness/Math.pow(part1,(1/this.s));

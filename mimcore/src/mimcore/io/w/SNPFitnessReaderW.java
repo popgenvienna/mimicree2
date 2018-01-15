@@ -1,9 +1,12 @@
 package mimcore.io.w;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import mimcore.data.Chromosome;
 import mimcore.data.GenomicPosition;
 import mimcore.data.gpf.fitness.FitnessCalculator_SNP;
 import mimcore.data.gpf.fitness.FitnessOfSNP;
+import mimcore.data.gpf.fitness.FitnessOfSNPSexSpecific;
+import mimcore.data.gpf.fitness.IFitnessOfSNP;
 import mimcore.data.gpf.quantitative.AdditiveSNPeffect;
 import mimcore.data.gpf.quantitative.GenotypeCalculator;
 
@@ -36,7 +39,7 @@ public class SNPFitnessReaderW {
 	 */
 	public FitnessCalculator_SNP readSNPFitness()
 	{
-		ArrayList<FitnessOfSNP> snps=new ArrayList<FitnessOfSNP>();
+		ArrayList<IFitnessOfSNP> snps=new ArrayList<IFitnessOfSNP>();
 		String line;
 		try
 		{
@@ -67,7 +70,7 @@ public class SNPFitnessReaderW {
 	
 	
 	
-	private FitnessOfSNP parseLine(String line)
+	private IFitnessOfSNP parseLine(String line)
 	{
 
 		// X        3929069    C/A       0.8    1.0    1.2
@@ -77,18 +80,55 @@ public class SNPFitnessReaderW {
 		String[] a=line.split("\t");
 		GenomicPosition gp=new GenomicPosition(Chromosome.getChromosome(a[0]),Integer.parseInt(a[1]));
 		String alleles=a[2];
-		double waa=Double.parseDouble(a[3]);
-		double waA=Double.parseDouble(a[4]);
-		double wAA=Double.parseDouble(a[5]);
-		if(waa<0) throw new InvalidParameterException("Fitness of waa must be larger than zero");
-		if(waA<0) throw new InvalidParameterException("Fitness of waA must be larger than zero");
-		if(wAA<0) throw new InvalidParameterException("Fitness of wAA must be larger than zero");
-		if(waa<minEffect && waA <minEffect && wAA< minEffect) throw new InvalidParameterException("Fitness of at least one genotype must be larger than zero");
 		String[] tmp=alleles.split("/");
 		char achar=tmp[0].charAt(0);
 		char Achar=tmp[1].charAt(0);
+		if(a.length==6) {
+			double waa = Double.parseDouble(a[3]);
+			double waA = Double.parseDouble(a[4]);
+			double wAA = Double.parseDouble(a[5]);
+			if (waa < 0) throw new InvalidParameterException("Fitness of waa must be larger than zero");
+			if (waA < 0) throw new InvalidParameterException("Fitness of waA must be larger than zero");
+			if (wAA < 0) throw new InvalidParameterException("Fitness of wAA must be larger than zero");
+			if (waa < minEffect && waA < minEffect && wAA < minEffect)
+				throw new InvalidParameterException("Fitness of at least one genotype must be larger than zero");
+			return new FitnessOfSNP(gp, achar, Achar, waa, waA, wAA);
+		}
+		if(a.length==12)
+		{
+			double mwaa = Double.parseDouble(a[3]);
+			double mwaA = Double.parseDouble(a[4]);
+			double mwAA = Double.parseDouble(a[5]);
+			if (mwaa < 0) throw new InvalidParameterException("Fitness of waa must be larger than zero");
+			if (mwaA < 0) throw new InvalidParameterException("Fitness of waA must be larger than zero");
+			if (mwAA < 0) throw new InvalidParameterException("Fitness of wAA must be larger than zero");
+			if (mwaa < minEffect && mwaA < minEffect && mwAA < minEffect)
+				throw new InvalidParameterException("Fitness of at least one genotype must be larger than zero");
 
-		return new FitnessOfSNP(gp,achar,Achar,waa,waA,wAA);
+			double fwaa = Double.parseDouble(a[6]);
+			double fwaA = Double.parseDouble(a[7]);
+			double fwAA = Double.parseDouble(a[8]);
+			if (fwaa < 0) throw new InvalidParameterException("Fitness of waa must be larger than zero");
+			if (fwaA < 0) throw new InvalidParameterException("Fitness of waA must be larger than zero");
+			if (fwAA < 0) throw new InvalidParameterException("Fitness of wAA must be larger than zero");
+			if (fwaa < minEffect && fwaA < minEffect && fwAA < minEffect)
+				throw new InvalidParameterException("Fitness of at least one genotype must be larger than zero");
+
+			double hwaa = Double.parseDouble(a[9]);
+			double hwaA = Double.parseDouble(a[10]);
+			double hwAA = Double.parseDouble(a[11]);
+			if (hwaa < 0) throw new InvalidParameterException("Fitness of waa must be larger than zero");
+			if (hwaA < 0) throw new InvalidParameterException("Fitness of waA must be larger than zero");
+			if (hwAA < 0) throw new InvalidParameterException("Fitness of wAA must be larger than zero");
+			if (hwaa < minEffect && hwaA < minEffect && hwAA < minEffect)
+				throw new InvalidParameterException("Fitness of at least one genotype must be larger than zero");
+
+			return new FitnessOfSNPSexSpecific(
+					new FitnessOfSNP(gp, achar, Achar, mwaa, mwaA, mwAA),
+					new FitnessOfSNP(gp, achar, Achar, fwaa, fwaA, fwAA),
+					new FitnessOfSNP(gp, achar, Achar, hwaa, hwaA, hwAA));
+		}
+		else throw new InvalidParameterException("Invalid entry of SNP fitness; must either have 6 or 12 columns");
 		
 	}
 	

@@ -4,6 +4,7 @@ import mim2.test.recombinationTest.RecombinationTester;
 import mimcore.data.DiploidGenome;
 import mimcore.data.gpf.fitness.ArbitraryLandscapeEntry;
 import mimcore.data.gpf.fitness.FitnessFunctionQuantitativeGauss;
+import mimcore.data.sex.Sex;
 import mimcore.data.statistic.Gaussian;
 
 import java.util.ArrayList;
@@ -87,7 +88,7 @@ public class TestMain {
         FitnessFunctionQuantitativeGauss ffg=new FitnessFunctionQuantitativeGauss(0.7,1.2,6,2);
         for(double i=0.0; i<12.0; i+=0.1)
         {
-            double res=ffg.getFitness(null,i);
+            double res=ffg.getFitness(null,i, Sex.Female);
             System.out.printf("%f\t%f\n",i,res);
         }
 

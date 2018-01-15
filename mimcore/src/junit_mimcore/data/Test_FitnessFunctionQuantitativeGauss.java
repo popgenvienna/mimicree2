@@ -4,6 +4,8 @@ import junit_mimcore.factories.QsDataFactory;
 import mimcore.data.gpf.fitness.FitnessFunctionArbitraryLandscape;
 import mimcore.data.gpf.fitness.FitnessFunctionQuantitativeGauss;
 import static org.junit.Assert.*;
+
+import mimcore.data.sex.Sex;
 import org.junit.Test;
 
 /**
@@ -30,18 +32,20 @@ public class Test_FitnessFunctionQuantitativeGauss {
     public void correct_fitness_normal_phenotypes() {
 
         FitnessFunctionQuantitativeGauss ff=new FitnessFunctionQuantitativeGauss(0.7,1.2,2,2);
-        assertEquals(ff.getFitness(null,2.0),1.2,0.00001);
-        assertEquals(ff.getFitness(null,1.0),1.141248,0.00001);
-        assertEquals(ff.getFitness(null,0),1.003265,0.00001);
+        Sex m= Sex.Male;
+        assertEquals(ff.getFitness(null,2.0,m),1.2,0.00001);
+        assertEquals(ff.getFitness(null,1.0,m),1.141248,0.00001);
+        assertEquals(ff.getFitness(null,0,m),1.003265,0.00001);
     }
 
 
     @Test
     public void correct_fitness_extreme_phenotypes() {
 
+        Sex m= Sex.Male;
         FitnessFunctionQuantitativeGauss ff=new FitnessFunctionQuantitativeGauss(0.7,1.2,2,2);
-        assertEquals(ff.getFitness(null,100.0),0.7,0.00001);
-        assertEquals(ff.getFitness(null,-100.0),0.7,0.00001);
+        assertEquals(ff.getFitness(null,100.0,m),0.7,0.00001);
+        assertEquals(ff.getFitness(null,-100.0,m),0.7,0.00001);
     }
 
 
@@ -50,10 +54,11 @@ public class Test_FitnessFunctionQuantitativeGauss {
     public void correct_fitness_flat_gaussian() {
 
         FitnessFunctionQuantitativeGauss ff=new FitnessFunctionQuantitativeGauss(0.0,2,20,10);
-        assertEquals(ff.getFitness(null,20.0),2,0.00001);
-        assertEquals(ff.getFitness(null,0.0),0.2706706,0.00001);
-        assertEquals(ff.getFitness(null,40.0),0.2706706,0.00001);
-        assertEquals(ff.getFitness(null,50.0),0.02221799,0.00001);
+        Sex m= Sex.Male;
+        assertEquals(ff.getFitness(null,20.0,m),2,0.00001);
+        assertEquals(ff.getFitness(null,0.0,m),0.2706706,0.00001);
+        assertEquals(ff.getFitness(null,40.0,m),0.2706706,0.00001);
+        assertEquals(ff.getFitness(null,50.0,m),0.02221799,0.00001);
 
     }
 }

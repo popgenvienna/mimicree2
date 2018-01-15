@@ -6,6 +6,7 @@ import mimcore.data.gpf.fitness.*;
 import mimcore.data.haplotypes.SNP;
 import mimcore.data.migration.MigrationEntry;
 import mimcore.data.migration.MigrationRegime;
+import mimcore.data.sex.Sex;
 import mimcore.io.fitnessfunction.FitnessFunctionReader;
 import mimcore.io.migrationRegime.MigrationRegimeReader;
 import org.junit.Test;
@@ -178,11 +179,11 @@ public class Test_FitnessFunctionReader {
 	public void interpolate_correctly_read()
 	{
 		FitnessFunctionContainer ffc=getInterpolate().readFitnessFunction();
-
+		Sex m= Sex.Male;
 		FitnessFunctionArbitraryLandscape g=(FitnessFunctionArbitraryLandscape)ffc.getFitnessCalculator(1,1);
-		assertEquals(g.getFitness(null,0),0.0,0.00001);
-		assertEquals(g.getFitness(null,0.5),1.0,0.00001);
-		assertEquals(g.getFitness(null,1.7),3.4,0.00001);
+		assertEquals(g.getFitness(null,0,m),0.0,0.00001);
+		assertEquals(g.getFitness(null,0.5,m),1.0,0.00001);
+		assertEquals(g.getFitness(null,1.7,m),3.4,0.00001);
 
 	}
 

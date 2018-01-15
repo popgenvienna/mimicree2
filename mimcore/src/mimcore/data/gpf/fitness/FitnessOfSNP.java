@@ -1,6 +1,7 @@
 package mimcore.data.gpf.fitness;
 
 import mimcore.data.GenomicPosition;
+import mimcore.data.sex.Sex;
 
 
 /**
@@ -8,7 +9,7 @@ import mimcore.data.GenomicPosition;
  * @author robertkofler
  *
  */
-public class FitnessOfSNP {
+public class FitnessOfSNP implements IFitnessOfSNP {
 	private final GenomicPosition position;
 	private final char achar;
 	private final char Achar;
@@ -33,7 +34,7 @@ public class FitnessOfSNP {
 	 * The ordering of the alleles is not important
 	 * @return
 	 */
-	public double getEffectSizeOfGenotype(char[] genotype)
+	public double getEffectSizeOfGenotype(char[] genotype, Sex sex)
 	{
 		char allele1=genotype[0];
 		char allele2=genotype[1];

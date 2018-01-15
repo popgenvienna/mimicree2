@@ -1,6 +1,7 @@
 package mimcore.data.gpf.fitness;
 
 import mimcore.data.DiploidGenome;
+import mimcore.data.sex.Sex;
 import mimcore.data.statistic.Gaussian;
 
 /**
@@ -26,7 +27,7 @@ public class FitnessFunctionQuantitativeDimRet implements IFitnessCalculator {
 		this.deltaFitness=this.maxFitness-this.minFitness;
 	}
 
-	public  double getFitness(DiploidGenome dipGenome, double phenotype)
+	public  double getFitness(DiploidGenome dipGenome, double phenotype, Sex sex)
 	{
 		double part1=1.0-1.0/Math.exp(this.alpha*(phenotype+this.beta));
 		double fitness=minFitness+deltaFitness*part1;

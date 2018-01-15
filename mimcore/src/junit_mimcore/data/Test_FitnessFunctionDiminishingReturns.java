@@ -2,6 +2,7 @@ package junit_mimcore.data;
 
 import mimcore.data.gpf.fitness.FitnessFunctionQuantitativeDimRet;
 import mimcore.data.gpf.fitness.FitnessFunctionQuantitativeGauss;
+import mimcore.data.sex.Sex;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -29,38 +30,40 @@ public class Test_FitnessFunctionDiminishingReturns {
     @Test
     public void correct_fitness_normal_phenotypes() {
 
+        Sex m= Sex.Male;
         FitnessFunctionQuantitativeDimRet ff=new FitnessFunctionQuantitativeDimRet(0.0,1.2,0.2,0);
-        assertEquals(ff.getFitness(null,1.0),0.2175231,0.00001);
-        assertEquals(ff.getFitness(null,10.0),1.037598,0.00001);
-        assertEquals(ff.getFitness(null,20),1.178021,0.00001);
+        assertEquals(ff.getFitness(null,1.0,m),0.2175231,0.00001);
+        assertEquals(ff.getFitness(null,10.0,m),1.037598,0.00001);
+        assertEquals(ff.getFitness(null,20,m),1.178021,0.00001);
     }
 
 
     @Test
     public void correct_fitness_min_fit() {
-
+        Sex m= Sex.Male;
         FitnessFunctionQuantitativeDimRet ff=new FitnessFunctionQuantitativeDimRet(0.0,1.2,0.2,0);
-        assertEquals(ff.getFitness(null,-1.0),0.0,0.00001);
-        assertEquals(ff.getFitness(null,-10.0),0.0,0.00001);
-        assertEquals(ff.getFitness(null,-20),0.0,0.00001);
+        assertEquals(ff.getFitness(null,-1.0,m),0.0,0.00001);
+        assertEquals(ff.getFitness(null,-10.0,m),0.0,0.00001);
+        assertEquals(ff.getFitness(null,-20,m),0.0,0.00001);
     }
 
     @Test
     public void correct_fitness_min_fit_shift() {
 
+        Sex m= Sex.Male;
         FitnessFunctionQuantitativeDimRet ff=new FitnessFunctionQuantitativeDimRet(0.5,1.2,0.2,0);
-        assertEquals(ff.getFitness(null,-1.0),0.5,0.00001);
-        assertEquals(ff.getFitness(null,-10.0),0.5,0.00001);
-        assertEquals(ff.getFitness(null,-20),0.5,0.00001);
+        assertEquals(ff.getFitness(null,-1.0,m),0.5,0.00001);
+        assertEquals(ff.getFitness(null,-10.0,m),0.5,0.00001);
+        assertEquals(ff.getFitness(null,-20,m),0.5,0.00001);
     }
 
     @Test
     public void correct_fitness_normal_fit_shift() {
-
+        Sex m= Sex.Male;
         FitnessFunctionQuantitativeDimRet ff=new FitnessFunctionQuantitativeDimRet(0.5,1.2,0.2,0);
-        assertEquals(ff.getFitness(null,1.0),0.6268885,0.00001);
-        assertEquals(ff.getFitness(null,10.0),1.1052653,0.00001);
-        assertEquals(ff.getFitness(null,20),1.1871791,0.00001);
+        assertEquals(ff.getFitness(null,1.0,m),0.6268885,0.00001);
+        assertEquals(ff.getFitness(null,10.0,m),1.1052653,0.00001);
+        assertEquals(ff.getFitness(null,20,m),1.1871791,0.00001);
     }
 
 

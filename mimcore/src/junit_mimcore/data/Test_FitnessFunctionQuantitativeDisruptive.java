@@ -2,6 +2,7 @@ package junit_mimcore.data;
 
 import mimcore.data.gpf.fitness.FitnessFunctionQuantitativeDisruptive;
 import mimcore.data.gpf.fitness.FitnessFunctionQuantitativeGauss;
+import mimcore.data.sex.Sex;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -30,12 +31,13 @@ public class Test_FitnessFunctionQuantitativeDisruptive {
     @Test
     public void correct_valey() {
 
+        Sex m= Sex.Male;
         FitnessFunctionQuantitativeDisruptive ff=new FitnessFunctionQuantitativeDisruptive(0.1,1.2,0,2);
-        assertEquals(ff.getFitness(null,-4.0),1.0511312,0.00001);
-        assertEquals(ff.getFitness(null,-2.0),0.5328163,0.00001);
-        assertEquals(ff.getFitness(null,0.0),0.1000000,0.00001);
-        assertEquals(ff.getFitness(null,2.0),0.5328163,0.00001);
-        assertEquals(ff.getFitness(null,4.0),1.0511312,0.00001);
+        assertEquals(ff.getFitness(null,-4.0,m),1.0511312,0.00001);
+        assertEquals(ff.getFitness(null,-2.0,m),0.5328163,0.00001);
+        assertEquals(ff.getFitness(null,0.0,m),0.1000000,0.00001);
+        assertEquals(ff.getFitness(null,2.0,m),0.5328163,0.00001);
+        assertEquals(ff.getFitness(null,4.0,m),1.0511312,0.00001);
     }
 
 
@@ -43,9 +45,10 @@ public class Test_FitnessFunctionQuantitativeDisruptive {
     @Test
     public void correct_fitness_extreme_phenotypes() {
 
+        Sex m= Sex.Male;
         FitnessFunctionQuantitativeDisruptive ff=new FitnessFunctionQuantitativeDisruptive(0.7,1.2,2,2);
-        assertEquals(ff.getFitness(null,100.0),1.2,0.00001);
-        assertEquals(ff.getFitness(null,-100.0),1.2,0.00001);
+        assertEquals(ff.getFitness(null,100.0,m),1.2,0.00001);
+        assertEquals(ff.getFitness(null,-100.0,m),1.2,0.00001);
     }
 
 
@@ -53,11 +56,12 @@ public class Test_FitnessFunctionQuantitativeDisruptive {
     @Test
     public void correct_fitness_flat_disruptive() {
 
+        Sex m= Sex.Male;
         FitnessFunctionQuantitativeDisruptive ff=new FitnessFunctionQuantitativeDisruptive(0.0,2,20,10);
-        assertEquals(ff.getFitness(null,20.0),0.000000,0.00001);
-        assertEquals(ff.getFitness(null,0.0),1.729329,0.00001);
-        assertEquals(ff.getFitness(null,40.0),1.729329,0.00001);
-        assertEquals(ff.getFitness(null,50.0),1.977782,0.00001);
+        assertEquals(ff.getFitness(null,20.0,m),0.000000,0.00001);
+        assertEquals(ff.getFitness(null,0.0,m),1.729329,0.00001);
+        assertEquals(ff.getFitness(null,40.0,m),1.729329,0.00001);
+        assertEquals(ff.getFitness(null,50.0,m),1.977782,0.00001);
 
     }
 }

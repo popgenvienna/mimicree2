@@ -1,6 +1,7 @@
 package mimcore.data.gpf.fitness;
 
 import mimcore.data.DiploidGenome;
+import mimcore.data.sex.Sex;
 import mimcore.data.statistic.Gaussian;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class FitnessFunctionArbitraryLandscape implements IFitnessCalculator {
 
 	}
 
-	public  double getFitness(DiploidGenome dipGenome, double phenotype)
+	public  double getFitness(DiploidGenome dipGenome, double phenotype, Sex sex)
 	{
 		// Exclude the boundary conditions; if lower than lowest or higher than highest; return the boundary condition
 		if(phenotype <= this.lowest.getPhenotypicValue()) return this.lowest.getFitness();
