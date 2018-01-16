@@ -1,5 +1,7 @@
 package mimcore.data.gpf.quantitative;
 
+import mimcore.data.sex.Sex;
+
 import java.util.Random;
 
 /**
@@ -17,7 +19,7 @@ public class PhenotypeCalculatorAllEqual implements IPhenotypeCalculator {
 
 	
 
-	public double getPhenotype(double genotype,Random random)
+	public double getPhenotype(Sex sex, double genotype, Random random)
 	{
 		return 1.0;
 	}

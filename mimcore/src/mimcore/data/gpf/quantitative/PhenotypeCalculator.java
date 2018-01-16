@@ -1,5 +1,7 @@
 package mimcore.data.gpf.quantitative;
 
+import mimcore.data.sex.Sex;
+
 import java.util.Random;
 
 /**
@@ -30,7 +32,7 @@ public class PhenotypeCalculator implements IPhenotypeCalculator {
 
 	
 
-	public double getPhenotype(double genotype,Random random)
+	public double getPhenotype(Sex sex, double genotype, Random random)
 	{
 		double gaus=random.nextGaussian();
 		double environmenteffect=gaus*environmentalStdev;

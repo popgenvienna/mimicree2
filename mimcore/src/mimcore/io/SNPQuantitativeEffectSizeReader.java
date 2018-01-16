@@ -3,7 +3,9 @@ package mimcore.io;
 import mimcore.data.Chromosome;
 import mimcore.data.GenomicPosition;
 import mimcore.data.gpf.quantitative.AdditiveSNPeffect;
+import mimcore.data.gpf.quantitative.AdditiveSNPeffectSexSpecific;
 import mimcore.data.gpf.quantitative.GenotypeCalculator;
+import mimcore.data.gpf.quantitative.IAdditiveSNPeffect;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -43,7 +45,7 @@ public class SNPQuantitativeEffectSizeReader {
 	 */
 	public GenotypeCalculator readAdditiveFitness()
 	{
-		ArrayList<AdditiveSNPeffect> addSNPs=new ArrayList<AdditiveSNPeffect>();
+		ArrayList<IAdditiveSNPeffect> addSNPs=new ArrayList<IAdditiveSNPeffect>();
 		this.logger.info("Start reading additive genotypic effects from file "+this.additiveFile);
 		String line;
 		try
@@ -77,7 +79,7 @@ public class SNPQuantitativeEffectSizeReader {
 	
 	
 	
-	private AdditiveSNPeffect parseLine(String line)
+	private IAdditiveSNPeffect parseLine(String line)
 	{ 
 		//  0		1				2		3		4
 		//  X       3929069 		C       a    d
@@ -86,16 +88,42 @@ public class SNPQuantitativeEffectSizeReader {
 		//(GenomicPosition position, char achar, double a, double d)
 		String[] a=line.split("\t");
 		GenomicPosition gp=new GenomicPosition(Chromosome.getChromosome(a[0]),Integer.parseInt(a[1]));
-		double aeffect=Double.parseDouble(a[3]);
-		if(aeffect<0) throw new IllegalArgumentException("Fitness effect must not be smaller than zero");
-		if(aeffect<0.000000001) throw new IllegalArgumentException("Fitness effects must not be null (or approximately null): "+aeffect);
-
 		String[] tmp=a[2].split("/");
 		char achar=tmp[0].charAt(0);
 		char altchar=tmp[1].charAt(0);
 
 
-		return new AdditiveSNPeffect(gp,achar,altchar,aeffect,Double.parseDouble(a[4]));
+
+		if(a.length==5) {
+			double aeffect=Double.parseDouble(a[3]);
+			if(aeffect<0) throw new IllegalArgumentException("Genotype effect must not be smaller than zero");
+			if(aeffect<0.000000001) throw new IllegalArgumentException("Genotype effects must not be null (or approximately null): "+aeffect);
+			double deffect=Double.parseDouble(a[4]);
+			return new AdditiveSNPeffect(gp, achar, altchar, aeffect, deffect);
+		}
+		else if(a.length==9)
+		{
+			double maeffect=Double.parseDouble(a[3]);
+			if(maeffect<0) throw new IllegalArgumentException("Genotype effect must not be smaller than zero");
+			if(maeffect<0.000000001) throw new IllegalArgumentException("Genotype effects must not be null (or approximately null): "+maeffect);
+			double mdeffect=Double.parseDouble(a[4]);
+
+			double faeffect=Double.parseDouble(a[3]);
+			if(faeffect<0) throw new IllegalArgumentException("Genotype effect must not be smaller than zero");
+			if(faeffect<0.000000001) throw new IllegalArgumentException("Genotype effects must not be null (or approximately null): "+faeffect);
+			double fdeffect=Double.parseDouble(a[4]);
+
+			double haeffect=Double.parseDouble(a[3]);
+			if(haeffect<0) throw new IllegalArgumentException("Genotype effect must not be smaller than zero");
+			if(haeffect<0.000000001) throw new IllegalArgumentException("Genotype effects must not be null (or approximately null): "+haeffect);
+			double hdeffect=Double.parseDouble(a[4]);
+
+			return new AdditiveSNPeffectSexSpecific(new AdditiveSNPeffect(gp, achar, altchar, maeffect, mdeffect),
+					new AdditiveSNPeffect(gp, achar, altchar, faeffect, fdeffect),
+					new AdditiveSNPeffect(gp, achar, altchar, haeffect, hdeffect));
+
+		}
+		else throw new IllegalArgumentException("Invalid entry; must hae 6 or 10 columns");
 		
 	}
 	

@@ -1,6 +1,7 @@
 package mimcore.data.gpf.quantitative;
 
 import mimcore.data.*;
+import mimcore.data.sex.Sex;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,29 +12,29 @@ import java.util.HashSet;
  * Immutable; Also allows to calculate the additive gpf effect of SNPs
  */
 public class GenotypeCalculator implements IGenotypeCalculator{
-	private final ArrayList<AdditiveSNPeffect> additiveSNPs;
-	private final HashMap<GenomicPosition,AdditiveSNPeffect> pos2add;
+	private final ArrayList<IAdditiveSNPeffect> additiveSNPs;
+	private final HashMap<GenomicPosition,IAdditiveSNPeffect> pos2add;
 	
 
-	public GenotypeCalculator(ArrayList<AdditiveSNPeffect> addSnps)
+	public GenotypeCalculator(ArrayList<IAdditiveSNPeffect> addSnps)
 	{
-		this.pos2add=new HashMap<GenomicPosition,AdditiveSNPeffect>();
-		for(AdditiveSNPeffect as: addSnps)
+		this.pos2add=new HashMap<GenomicPosition,IAdditiveSNPeffect>();
+		for(IAdditiveSNPeffect as: addSnps)
 		{
 			pos2add.put(as.getPosition(), as);
 		}
-		this.additiveSNPs=new ArrayList<AdditiveSNPeffect>(addSnps);
+		this.additiveSNPs=new ArrayList<IAdditiveSNPeffect>(addSnps);
 	}
 
 	
 
-	public double getGenotype(DiploidGenome dipGenome)
+	public double getGenotype(DiploidGenome dipGenome, Sex sex)
 	{
 		double toret=0.0;
-		for(AdditiveSNPeffect snp: additiveSNPs)
+		for(IAdditiveSNPeffect snp: additiveSNPs)
 		{
 			char[] genotype=dipGenome.getSNPGenotype(snp.getPosition());
-			double effectSize=snp.getEffectSizeOfGenotype(genotype);
+			double effectSize=snp.getEffectSizeOfGenotype(genotype,sex);
 			toret+=effectSize;
 		}
 		return toret;
@@ -46,7 +47,7 @@ public class GenotypeCalculator implements IGenotypeCalculator{
 	 * @param position
 	 * @return
 	 */
-	public AdditiveSNPeffect getAdditiveforPosition(GenomicPosition position)
+	public IAdditiveSNPeffect getAdditiveforPosition(GenomicPosition position)
 	{
 		if(!this.pos2add.containsKey(position)) return null;
 		return this.pos2add.get(position);
@@ -58,9 +59,9 @@ public class GenotypeCalculator implements IGenotypeCalculator{
 	}
 
 
-	public ArrayList<AdditiveSNPeffect> getAdditiveSNPeffects()
+	public ArrayList<IAdditiveSNPeffect> getAdditiveSNPeffects()
 	{
-		return new ArrayList<AdditiveSNPeffect>(this.additiveSNPs);
+		return new ArrayList<IAdditiveSNPeffect>(this.additiveSNPs);
 	}
 
 

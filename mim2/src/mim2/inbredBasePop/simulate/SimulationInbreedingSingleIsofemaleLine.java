@@ -82,8 +82,8 @@ public class SimulationInbreedingSingleIsofemaleLine {
 		for(int i=0; i<this.sizeisofemaleLine; i++)
 		{
 			DiploidGenome f1child=matepair.getChild(this.recGenerator, null,random);
-			double genotype =this.gc.getGenotype(f1child);
-			double phenotype=this.pc.getPhenotype(genotype,random);
+			double genotype =this.gc.getGenotype(f1child,Sex.Male);
+			double phenotype=this.pc.getPhenotype(Sex.Male,genotype,random);
 			double fitness=this.fc.getFitness(f1child,phenotype,Sex.Male);
 			Specimen s=new Specimen(Sex.Hermaphrodite,genotype,phenotype,fitness,f1child);
 		specs.add(s);

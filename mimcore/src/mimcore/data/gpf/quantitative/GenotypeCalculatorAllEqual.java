@@ -1,6 +1,7 @@
 package mimcore.data.gpf.quantitative;
 
 import mimcore.data.DiploidGenome;
+import mimcore.data.sex.Sex;
 
 /**
  * Represents a summary of the additive gpf effects of SNPs
@@ -16,7 +17,7 @@ public class GenotypeCalculatorAllEqual implements IGenotypeCalculator{
 
 	
 
-	public double getGenotype(DiploidGenome dipGenome)
+	public double getGenotype(DiploidGenome dipGenome, Sex sex)
 	{
 		return 1.0;
 	}

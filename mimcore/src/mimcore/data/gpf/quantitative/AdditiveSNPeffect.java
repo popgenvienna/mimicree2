@@ -1,6 +1,7 @@
 package mimcore.data.gpf.quantitative;
 
 import mimcore.data.*;
+import mimcore.data.sex.Sex;
 
 
 /**
@@ -8,7 +9,7 @@ import mimcore.data.*;
  * @author robertkofler
  *
  */
-public class AdditiveSNPeffect {
+public class AdditiveSNPeffect implements IAdditiveSNPeffect {
 	private final GenomicPosition position;
 	private final char achar;
 	private final char alternativeChar;
@@ -29,7 +30,7 @@ public class AdditiveSNPeffect {
 	 * The ordering of the alleles is not important
 	 * @return
 	 */
-	public double getEffectSizeOfGenotype(char[] genotype)
+	public double getEffectSizeOfGenotype(char[] genotype, Sex sex)
 	{
 		char allele1=genotype[0];
 		char allele2=genotype[1];

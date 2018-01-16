@@ -4,8 +4,12 @@ import mimcore.data.DiploidGenome;
 import mimcore.data.gpf.quantitative.GenotypeCalculator;
 import mimcore.data.gpf.quantitative.IGenotypeCalculator;
 import mimcore.data.gpf.quantitative.PhenotypeCalculator;
+import mimcore.data.sex.Sex;
+import mimcore.data.sex.SexAssigner;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
 /**
@@ -13,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class GPFHelper {
 
-    public static PhenotypeCalculator getPhenotypeCalculator(ArrayList<DiploidGenome> dipGenomes, IGenotypeCalculator genotypeCalculator, Double ve, Double heritability, Logger logger)
+    public static PhenotypeCalculator getPhenotypeCalculator(ArrayList<DiploidGenome> dipGenomes, ArrayList<Sex> sexes, IGenotypeCalculator genotypeCalculator, Double ve, Double heritability, Logger logger)
     {
         // if environmental variance exists than use it directly
         if(ve!=null) {
@@ -25,9 +29,10 @@ public class GPFHelper {
 
         // if not compute the environmental variance from the heritability
         ArrayList<Double> genotypes=new ArrayList<Double>();
+        LinkedList<Sex> sl=new LinkedList<Sex>(sexes);
         for(DiploidGenome dg: dipGenomes)
         {
-            genotypes.add(genotypeCalculator.getGenotype(dg));
+            genotypes.add(genotypeCalculator.getGenotype(dg,sl.remove(0)));
         }
 
         double mean=0.0;

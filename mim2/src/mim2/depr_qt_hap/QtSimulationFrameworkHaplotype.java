@@ -10,6 +10,7 @@ import mimcore.data.gpf.survival.ISelectionRegime;
 import mimcore.data.gpf.survival.ISurvivalFunction;
 import mimcore.data.gpf.survival.SurvivalRegimeTruncatingSelection;
 import mimcore.data.recombination.RecombinationGenerator;
+import mimcore.data.sex.Sex;
 import mimcore.io.ChromosomeDefinitionReader;
 import mimcore.io.DiploidGenomeReader;
 import mimcore.io.SNPQuantitativeEffectSizeReader;
@@ -92,7 +93,7 @@ public class QtSimulationFrameworkHaplotype {
 		ArrayList<Double> genotypes=new ArrayList<Double>();
 		for(DiploidGenome dg: dipGenomes)
 		{
-			genotypes.add(genotypeCalculator.getGenotype(dg));
+			genotypes.add(genotypeCalculator.getGenotype(dg, Sex.Female));
 		}
 
 		double mean=0.0;

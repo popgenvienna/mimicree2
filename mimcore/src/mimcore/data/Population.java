@@ -105,8 +105,8 @@ public class Population {
 		for(DiploidGenome genome: genomes)
 		{
 			Sex mysex=sexes.remove(0);
-			double genotype=gc.getGenotype(genome);
-			double phenotype=pc.getPhenotype(genotype,random);
+			double genotype=gc.getGenotype(genome,mysex);
+			double phenotype=pc.getPhenotype(mysex,genotype,random);
 			double fitness=fc.getFitness(genome,phenotype,mysex);
 			Specimen s=new Specimen(mysex, genotype,phenotype,fitness,genome);
 			specimens.add(s);
@@ -323,8 +323,8 @@ class SingleSpecimenGenerator implements Runnable
 	{
 		MatePair mp=mf.getCouple(this.random);
 		DiploidGenome fertilizedEgg=mp.getChild(recGenerator,mutator,this.random);
-		double genotype=gc.getGenotype(fertilizedEgg);
-		double phenotype=pc.getPhenotype(genotype,random);
+		double genotype=gc.getGenotype(fertilizedEgg,mysex);
+		double phenotype=pc.getPhenotype(mysex,genotype,random);
 		double fitness=fc.getFitness(fertilizedEgg,phenotype,mysex);
 		Specimen spec=   new Specimen(mysex,genotype,phenotype,fitness,fertilizedEgg);
 		collector.addSpecimen(spec);

@@ -27,6 +27,7 @@ import mimcore.io.migrationRegime.MigrationRegimeReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class QsSimulationFramework {
 	private final String haplotypeFile;
@@ -123,7 +124,7 @@ public class QsSimulationFramework {
 		// Compute GPF
 		IGenotypeCalculator genotypeCalculator = new GenotypeCalculatorAllEqual();
 		if(this.effectSizeFile!=null) genotypeCalculator=new SNPQuantitativeEffectSizeReader(this.effectSizeFile,this.logger).readAdditiveFitness();
-		PhenotypeCalculator phenotypeCalculator= GPFHelper.getPhenotypeCalculator(dipGenomes,genotypeCalculator,this.ve,this.heritability,this.logger);
+		PhenotypeCalculator phenotypeCalculator= GPFHelper.getPhenotypeCalculator(dipGenomes,si.getSexAssigner().getSexes(dipGenomes.size(),new Random()),genotypeCalculator,this.ve,this.heritability,this.logger);
 		FitnessFunctionContainer ffc=new FitnessFunctionReader(this.fitnessFunctionFile,this.logger).readFitnessFunction();
 
 		// Load population size computer
