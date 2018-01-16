@@ -21,7 +21,7 @@ public class AdditiveSNPeffect implements IAdditiveSNPeffect {
 		this.achar=achar;
 		this.alternativeChar=alternativeChar;
 		this.a=a;
-		if(a<0)throw new IllegalArgumentException("Effect size of SNP must not be smaller than zero");
+		//if(a<0)throw new IllegalArgumentException("Effect size of SNP must not be smaller than zero");
 		this.d=d;
 	}
 	

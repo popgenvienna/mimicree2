@@ -2,6 +2,7 @@ package junit_mimcore.io;
 
 import junit_mimcore.factories.SharedFactory;
 import mimcore.data.gpf.quantitative.AdditiveSNPeffect;
+import mimcore.data.gpf.quantitative.GenotypeCalculator;
 import mimcore.data.gpf.quantitative.IAdditiveSNPeffect;
 import mimcore.data.sex.Sex;
 import mimcore.io.SNPQuantitativeEffectSizeReader;
@@ -16,6 +17,13 @@ import static org.junit.Assert.assertEquals;
 public class Test_SNPQuantitativeEffectSizeReader {
 
 
+	public static SNPQuantitativeEffectSizeReader getSexReader() {
+		String input =
+				"1R\t1\tC/A\t2.0\t1.1\t3.0\t0.0\t-2.0\t-1.0\n" +
+						"2R\t2\tA/C\t2.1\t1.2\n";
+		BufferedReader br=new BufferedReader(new StringReader(input));
+		return new SNPQuantitativeEffectSizeReader("fakefile",br, SharedFactory.getNullLogger());
+	}
 	
 
 	public static SNPQuantitativeEffectSizeReader getReader()
@@ -26,8 +34,6 @@ public class Test_SNPQuantitativeEffectSizeReader {
 						"3R\t3\tC/T\t2.2\t1.3\n"+
 						"4\t4\tG/C\t2.3\t1.4\n";
 
-
-		;
 		BufferedReader br=new BufferedReader(new StringReader(input));
 		return new SNPQuantitativeEffectSizeReader("fakefile",br, SharedFactory.getNullLogger());
 
@@ -106,6 +112,74 @@ public class Test_SNPQuantitativeEffectSizeReader {
 
 		char[] geno2={'C','C'};
 		assertEquals(s.get(3).getEffectSizeOfGenotype(geno2,m),-2.3,0.000001);
+
+	}
+
+
+	@Test
+	public void sex_specific()
+	{
+		SNPQuantitativeEffectSizeReader sr=getSexReader();
+		GenotypeCalculator gc=sr.readAdditiveFitness();
+		ArrayList<IAdditiveSNPeffect> s= gc.getAdditiveSNPeffects();
+
+
+		char[] geno={'A','A'};
+		char[] geno1={'C','A'};
+		char[] geno2={'C','C'};
+
+		Sex m=Sex.Male;
+		// "1R	1	C/A	2.0	1.1	3.0	0.0	-2.0	-1.0\
+		assertEquals(s.get(0).getEffectSizeOfGenotype(geno,m),-2.0,0.0000001);
+		assertEquals(s.get(0).getEffectSizeOfGenotype(geno1,m),1.1,0.000001);
+		assertEquals(s.get(0).getEffectSizeOfGenotype(geno2,m),2.0,0.000001);
+
+		m=Sex.Female;
+		// "1R	1	C/A	2.0	1.1	3.0	0.0	-2.0	-1.0\
+		assertEquals(s.get(0).getEffectSizeOfGenotype(geno,m),-3.0,0.0000001);
+		assertEquals(s.get(0).getEffectSizeOfGenotype(geno1,m),0.0,0.000001);
+		assertEquals(s.get(0).getEffectSizeOfGenotype(geno2,m),3.0,0.000001);
+
+
+		m=Sex.Hermaphrodite;
+		// "1R	1	C/A	2.0	1.1	3.0	0.0	-2.0	-1.0\
+		assertEquals(s.get(0).getEffectSizeOfGenotype(geno,m),2.0,0.0000001);
+		assertEquals(s.get(0).getEffectSizeOfGenotype(geno1,m),-1.0,0.000001);
+		assertEquals(s.get(0).getEffectSizeOfGenotype(geno2,m),-2.0,0.000001);
+
+	}
+
+
+	@Test
+	public void sex_specific_mixed()
+	{
+		SNPQuantitativeEffectSizeReader sr=getSexReader();
+		GenotypeCalculator gc=sr.readAdditiveFitness();
+		ArrayList<IAdditiveSNPeffect> s= gc.getAdditiveSNPeffects();
+
+
+		char[] geno={'A','A'};
+		char[] geno1={'C','A'};
+		char[] geno2={'C','C'};
+
+		Sex m=Sex.Male;
+		//"2R\t2\tA/C\t2.1\t1.2\n";
+		assertEquals(s.get(1).getEffectSizeOfGenotype(geno,m),2.1,0.0000001);
+		assertEquals(s.get(1).getEffectSizeOfGenotype(geno1,m),1.2,0.000001);
+		assertEquals(s.get(1).getEffectSizeOfGenotype(geno2,m),-2.1,0.000001);
+
+		m=Sex.Female;
+		// "1R	1	C/A	2.0	1.1	3.0	0.0	-2.0	-1.0\
+		assertEquals(s.get(1).getEffectSizeOfGenotype(geno,m),2.1,0.0000001);
+		assertEquals(s.get(1).getEffectSizeOfGenotype(geno1,m),1.2,0.000001);
+		assertEquals(s.get(1).getEffectSizeOfGenotype(geno2,m),-2.1,0.000001);
+
+
+		m=Sex.Hermaphrodite;
+		// "1R	1	C/A	2.0	1.1	3.0	0.0	-2.0	-1.0\
+		assertEquals(s.get(1).getEffectSizeOfGenotype(geno,m),2.1,0.0000001);
+		assertEquals(s.get(1).getEffectSizeOfGenotype(geno1,m),1.2,0.000001);
+		assertEquals(s.get(1).getEffectSizeOfGenotype(geno2,m),-2.1,0.000001);
 
 	}
 

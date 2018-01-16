@@ -42,6 +42,17 @@ public class Test_FitnessOfSNPReader {
 		return new SNPFitnessReader("fakefile",br, SharedFactory.getNullLogger());
 
 	}
+	public static SNPFitnessReader getMixReaderW()
+	{
+		String input=
+				"[w]\n"+
+				"2R\t1\tC/A\t0.1\t0.2\t0.3\t0.4\t0.5\t0.6\t0.7\t0.8\t0.9\n"+
+				"2R\t2\tC/A\t0.9\t1.0\t1.1\n";
+
+		BufferedReader br=new BufferedReader(new StringReader(input));
+		return new SNPFitnessReader("fakefile",br, SharedFactory.getNullLogger());
+
+	}
 
 	public static SNPFitnessReader getReaderS()
 	{
@@ -242,6 +253,52 @@ public class Test_FitnessOfSNPReader {
 
 	}
 
-	
+	@Test
+	public void mixing_sex_nonsex_in_file_w()
+	{
+
+		SNPFitnessReader r=getMixReaderW();
+
+		ArrayList<IFitnessOfSNP> s= r.getSNPFitness().getSNPs();
+
+		Sex m= Sex.Male;
+		char[] genoAA={'A','A'};
+		char[] genoCA={'C','A'};
+		char[] genoAC={'A','C'};
+		char[] genoCC={'C','C'};
+
+		m= Sex.Hermaphrodite;
+		assertEquals(s.get(0).getEffectSizeOfGenotype(genoAA,m),0.9,0.0000001);
+		assertEquals(s.get(0).getEffectSizeOfGenotype(genoCA,m),0.8,0.0000001);
+		assertEquals(s.get(0).getEffectSizeOfGenotype(genoAC,m),0.8,0.0000001);
+		assertEquals(s.get(0).getEffectSizeOfGenotype(genoCC,m),0.7,0.0000001);
+
+	}
+
+	@Test
+	public void mixing_sex_nonsex_in_file_w_entry_two()
+	{
+		//	    	a/A
+		//"2R\t2\t  C/A   0.9\t1.0\t1.1\n";
+		SNPFitnessReader r=getMixReaderW();
+
+		ArrayList<IFitnessOfSNP> s= r.getSNPFitness().getSNPs();
+
+		Sex m= Sex.Male;
+		char[] genoAA={'A','A'};
+		char[] genoCA={'C','A'};
+		char[] genoAC={'A','C'};
+		char[] genoCC={'C','C'};
+
+		m= Sex.Hermaphrodite;
+		assertEquals(s.get(1).getEffectSizeOfGenotype(genoAA,m),1.1,0.0000001);
+		assertEquals(s.get(1).getEffectSizeOfGenotype(genoCA,m),1.0,0.0000001);
+		assertEquals(s.get(1).getEffectSizeOfGenotype(genoAC,m),1.0,0.0000001);
+		assertEquals(s.get(1).getEffectSizeOfGenotype(genoCC,m),0.9,0.0000001);
+
+	}
+
+
+
 
 }
