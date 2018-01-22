@@ -1,8 +1,11 @@
 package mimcore.data.migration;
 
 import mimcore.data.DiploidGenome;
+import mimcore.data.SexedDiploids;
 import mimcore.data.haplotypes.SNP;
 import mimcore.data.haplotypes.SNPCollection;
+import mimcore.data.sex.ISexAssigner;
+import mimcore.data.sex.SexInfo;
 
 import java.io.File;
 import java.util.*;
@@ -15,25 +18,29 @@ import java.util.logging.Logger;
  */
 public class MigrationRegime implements IMigrationRegime {
 	private final HashMap<Integer,MigrationEntry> sr;
-	private final ArrayList<DiploidGenome> defaultSourcePopulation;
+	private final SexedDiploids defaultSourcePopulation;
+	private final ISexAssigner defaultSexAssigner;
 	private final SNPCollection controlCollection; // all SNPs of the migration file must match this collection!
 	private final Logger logger;
 
 
 
-	public MigrationRegime(HashMap<Integer, MigrationEntry> input, ArrayList<DiploidGenome> defaultSourcePopulation, Logger logger) {
+	public MigrationRegime(HashMap<Integer, MigrationEntry> input, SexedDiploids defaultSourcePopulation, ISexAssigner defaultSexAssigner, Logger logger) {
 		sr = new HashMap<Integer,MigrationEntry>(input);
 		this.logger=logger;
-		this.defaultSourcePopulation=new ArrayList<DiploidGenome>(defaultSourcePopulation);
+		this.defaultSourcePopulation=defaultSourcePopulation;
 		if(defaultSourcePopulation.size()<1) throw new IllegalArgumentException("Size of default source population must be larger than zero");
-		this.controlCollection=defaultSourcePopulation.get(0).getHaplotypeA().getSNPCollection();
+		this.controlCollection=defaultSourcePopulation.getDiploids().get(0).getHaplotypeA().getSNPCollection();
+		this.defaultSexAssigner=defaultSexAssigner;
 	}
 
 	public MigrationRegime(HashMap<Integer, MigrationEntry> input, SNPCollection controlCollection, Logger logger) {
 		sr = new HashMap<Integer,MigrationEntry>(input);
 		this.logger=logger;
-		this.defaultSourcePopulation=new ArrayList<DiploidGenome>();
+		defaultSexAssigner= SexInfo.getDefaultSexInfo().getSexAssigner();
+		this.defaultSourcePopulation=new SexedDiploids(new ArrayList<DiploidGenome>(),defaultSexAssigner);
 		this.controlCollection=controlCollection;
+
 	}
 
 
@@ -43,61 +50,42 @@ public class MigrationRegime implements IMigrationRegime {
 	 * @param generation
 	 * @return
 	 */
-	public ArrayList<DiploidGenome> getMigrants(int generation, int replicate)
+	public SexedDiploids getMigrants(int generation, int replicate)
 	{
 		if(generation<1)throw new IllegalArgumentException("No generations can be smaller 1");
 		if(sr.containsKey(generation))
 		{
 			MigrationEntry me=this.sr.get(generation);
+			if(me.getMigrantCount()==0) return SexedDiploids.getEmptySet();
 			if(me.useDefault())
 			{
-				return getMigrants(this.defaultSourcePopulation,me.getMigrantCount());
+				return this.defaultSourcePopulation.getRandomSubset(me.getMigrantCount());
+
 			}
 			else
 			{
-				ArrayList<DiploidGenome> fileContent=readDiploidGenomes(me.getPathToSourcePopulation());
-				return getMigrants(fileContent,me.getMigrantCount());
+				SexedDiploids fileContent=readDiploidGenomes(me.getPathToSourcePopulation());
+				return fileContent.getRandomSubset(me.getMigrantCount());
 			}
 
 		}
 		else
 		{
-			return new ArrayList<DiploidGenome>();
+			return SexedDiploids.getEmptySet();
 		}
 
 	}
 
 
-	private ArrayList<DiploidGenome> getMigrants(ArrayList<DiploidGenome> genomes, int migrantCount)
-	{
-		if(migrantCount>genomes.size()) throw new IllegalArgumentException("Can not get migrants; Requested migrant count larger than the size of the source population");
-		LinkedList<DiploidGenome> potentialMigrants=new LinkedList<DiploidGenome>(genomes);
-
-
-		ArrayList<DiploidGenome> toret=new ArrayList<DiploidGenome>();
-
-		for(int i=0; i<migrantCount; i++)
-		{
-			// get random index using ThreadLocalRandom
-			int targetindex=ThreadLocalRandom.current().nextInt(potentialMigrants.size());
-
-			DiploidGenome genome=potentialMigrants.remove(targetindex);
-			toret.add(genome);
-		}
-		return toret;
-
-
-	}
-
-	private ArrayList<DiploidGenome> readDiploidGenomes(String path)
+	private SexedDiploids readDiploidGenomes(String path)
 	{
 		this.logger.info("Loading potential migrants from file "+path);
 		if(! new File(path).exists()) throw new IllegalArgumentException("Haplotype file does not exist "+path);
 
-		ArrayList<DiploidGenome> dipGenomes=new mimcore.io.DiploidGenomeReader(path,this.logger).readGenomes();
+		SexedDiploids dipGenomes=new mimcore.io.DiploidGenomeReader(path,this.defaultSexAssigner,this.logger).readGenomes();
 		if(dipGenomes.size()<1) throw new IllegalArgumentException("Invalid input of migrant population; Number of diploid genomes must be larger than zero; file="+path);
 		this.logger.info("Successfully loaded "+dipGenomes.size()+ " potential migrants");
-		validateDiploidGenomes(dipGenomes);
+		validateDiploidGenomes(dipGenomes.getDiploids());
 		return dipGenomes;
 	}
 

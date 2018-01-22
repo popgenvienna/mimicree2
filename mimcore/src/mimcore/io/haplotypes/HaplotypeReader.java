@@ -2,6 +2,9 @@ package mimcore.io.haplotypes;
 
 import mimcore.data.BitArray.BitArray;
 import mimcore.data.haplotypes.*;
+import mimcore.data.sex.ISexAssigner;
+import mimcore.data.sex.SexAssignerDirect;
+
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,12 +20,15 @@ public class HaplotypeReader {
 	private String input;
 	private java.util.logging.Logger logger;
 	private boolean inputIsStringStream;
+	private SNPCollection snpCollection;
+	private SexAssignerDirect sexAssigner;
 
 	public HaplotypeReader(String haplotypeFile, java.util.logging.Logger logger)
 	{
 		this.logger=logger;
 		this.input=haplotypeFile;
 		this.inputIsStringStream=false;
+		readBasicInfo();
 	}
 
 	public HaplotypeReader(String inputStringStream, java.util.logging.Logger logger, boolean inputIsStringStream)
@@ -30,24 +36,38 @@ public class HaplotypeReader {
 		this.input=inputStringStream;
 		this.logger=logger;
 		this.inputIsStringStream=true;
+		readBasicInfo();
 	}
 
-	public ArrayList<HaploidGenome> getHaplotypes()
+	public void readBasicInfo()
 	{
 		this.logger.info("Starting reading haplotypes from file "+this.input);
 		this.logger.fine("Start reading the SNPs");
-		SNPCollection snpcol= new HaplotypeSNPReader(getBufferedReader()).getSNPcollection();
-		this.logger.fine("Finished reading SNPs; SNPs read "+ snpcol.size());
+		HaplotypeSNPReader hr=new HaplotypeSNPReader(getBufferedReader());
+		snpCollection= hr.getSNPCollection();
+		sexAssigner=hr.getSexAssigner();
+		this.logger.fine("Finished reading SNPs; SNPs read "+ snpCollection.size());
+	}
+
+	public SexAssignerDirect getSexAssigner()
+	{
+		return this.sexAssigner;
+	}
+
+
+	public ArrayList<HaploidGenome> getHaplotypes()
+	{
+
 		this.logger.fine("Start reading haplotype information");
-		ArrayList<BitArray> haps=new HaplotypeHaplotypeReader(getBufferedReader(),snpcol).getHaplotypes();
+		ArrayList<BitArray> haps=new HaplotypeHaplotypeReader(getBufferedReader(),snpCollection).getHaplotypes();
 		this.logger.fine("Finished reading haplotype information; Haplotypes read " + haps.size());
 
 		ArrayList<HaploidGenome> haplotypes=new ArrayList<HaploidGenome>();
 		for (BitArray ba : haps)
 		{
-			haplotypes.add(new HaploidGenome(ba,snpcol));
+			haplotypes.add(new HaploidGenome(ba,snpCollection));
 		}
-		this.logger.info("Finished reading haplotypes; Read "+snpcol.size() + " SNPs and " + haplotypes.size() + " haplotypes");
+		this.logger.info("Finished reading haplotypes; Read "+snpCollection.size() + " SNPs and " + haplotypes.size() + " haplotypes");
 
 		return haplotypes;
 	}

@@ -9,7 +9,7 @@ import mimcore.data.gpf.quantitative.IPhenotypeCalculator;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.recombination.*;
 import mimcore.data.sex.Sex;
-import mimcore.data.sex.SexAssigner;
+import mimcore.data.sex.ISexAssigner;
 import mimcore.misc.MimicreeThreadPool;
 
 
@@ -66,6 +66,24 @@ public class Population {
 		return toret/this.size();
 	}
 
+	public boolean isFertile()
+	{
+		int males=0;
+		int females=0;
+		int herma=0;
+		for(Specimen spec: this.specimen)
+		{
+			Sex s=spec.getSex();
+			if(s==Sex.Female)females++;
+			else if(s==Sex.Male)males++;
+			else if(s==Sex.Hermaphrodite)herma++;
+			else throw new IllegalArgumentException("Unknown sex "+s);
+		}
+		if(females==0 &&herma==0) return false;
+		if(males==0 &&herma==0) return false;
+		return true;
+	}
+
 
 
 
@@ -93,16 +111,18 @@ public class Population {
 		}
 		logger.fine("Added "+countAdded+" individuals from evolved population");
 		// Create a new population
-		return new Population(newPopulation);
+		Population toret=new Population(newPopulation);
+		if(!toret.isFertile()) throw new IllegalArgumentException("Population is not fertile; either only males or only females");
+		return toret;
 	}
 
 
-	public static Population loadPopulation(ArrayList<DiploidGenome> genomes, SexAssigner sa, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, Random random)
+	public static Population loadPopulation(SexedDiploids sexed, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, Random random,boolean checkValid)
 	{
 		ArrayList<Specimen> specimens=new ArrayList<Specimen>();
 		ArrayList<Double> genotypes=new ArrayList<Double>();
-		LinkedList<Sex> sexes=new LinkedList<Sex>(sa.getSexes(genomes.size(),random));
-		for(DiploidGenome genome: genomes)
+		LinkedList<Sex> sexes=new LinkedList<Sex>(sexed.getSexAssigner().getSexes(sexed.size(),random));
+		for(DiploidGenome genome: sexed.getDiploids())
 		{
 			Sex mysex=sexes.remove(0);
 			double genotype=gc.getGenotype(genome,mysex);
@@ -112,9 +132,10 @@ public class Population {
 			specimens.add(s);
 
 		}
-		
 		// Create a new population
-		return new Population(specimens);
+		Population toret=new Population(specimens);
+		if(checkValid && (!toret.isFertile())) throw new IllegalArgumentException("Population is not fertile; either only males or only females");
+		return toret;
 	}
 
 
@@ -125,7 +146,7 @@ public class Population {
 	 * Obtain the next generation of the population;
 	 * @return
 	 */
-	public Population getNextGeneration( SexAssigner sa, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, IMatingFunction matingfunction,
+	public Population getNextGeneration(ISexAssigner sa, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, IMatingFunction matingfunction,
 										 RecombinationGenerator recGenerator, IMutator mutator, int targetN)
 	{
 		// the selected ones: go and mate ..populate the earth
@@ -199,7 +220,7 @@ public class Population {
 
 class SpecimenGenerator
 {
-	private final SexAssigner sa;
+	private final ISexAssigner sa;
 	private final IGenotypeCalculator gc;
 	private final IPhenotypeCalculator pc;
 	private final IFitnessCalculator fc;
@@ -209,7 +230,7 @@ class SpecimenGenerator
 	private final IMutator mutator;
 
 	
-	public SpecimenGenerator(SexAssigner sa, IMatingFunction mf, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, RecombinationGenerator recGen, IMutator mutator, int populationSize )
+	public SpecimenGenerator(ISexAssigner sa, IMatingFunction mf, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, RecombinationGenerator recGen, IMutator mutator, int populationSize )
 	{
 		//	 * (mf,gc,pc,recGenerator,this.size());
 

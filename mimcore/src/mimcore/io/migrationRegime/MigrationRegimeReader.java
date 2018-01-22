@@ -1,9 +1,13 @@
 package mimcore.io.migrationRegime;
 
 import mimcore.data.DiploidGenome;
+import mimcore.data.SexedDiploids;
 import mimcore.data.migration.IMigrationRegime;
 import mimcore.data.migration.MigrationEntry;
 import mimcore.data.migration.MigrationRegime;
+import mimcore.data.sex.ISexAssigner;
+import mimcore.data.sex.Sex;
+import mimcore.data.sex.SexAssignerDirect;
 
 import javax.print.DocFlavor;
 import java.io.BufferedReader;
@@ -19,32 +23,32 @@ public class MigrationRegimeReader {
 	private BufferedReader bf;
 	private String migrationRegimeFile;
 	private Logger logger;
-	private ArrayList<DiploidGenome> defaultSourcePopulation;
+	private SexedDiploids defaultSourcePopulation;
+	private ISexAssigner defaultSexAssigner;
 
 
 
-	public MigrationRegimeReader(String migrationRegimeFile, BufferedReader br, Logger logger, ArrayList<DiploidGenome> defaultSourcePopulation)
+	public MigrationRegimeReader(String migrationRegimeFile, BufferedReader br, Logger logger)
 	{
 		this.migrationRegimeFile=migrationRegimeFile;
 		this.bf=br;
 		this.logger=logger;
-		this.defaultSourcePopulation=new ArrayList<DiploidGenome>(defaultSourcePopulation);
+		this.defaultSourcePopulation=SexedDiploids.getEmptySet();
+		this.defaultSexAssigner=new SexAssignerDirect(new ArrayList<Sex>());
 	}
 
 
-	public MigrationRegimeReader(String migrationRegimeFile, Logger logger, ArrayList<DiploidGenome> defaultSourcePopulation)
-	{
-		this.migrationRegimeFile=migrationRegimeFile;
-		try{
-			bf=new BufferedReader(new FileReader(migrationRegimeFile));
-		}
-		catch(FileNotFoundException e)
-		{
+	public MigrationRegimeReader(String migrationRegimeFile, Logger logger, SexedDiploids defaultSourcePopulation, ISexAssigner defaultSexAssigner) {
+		this.migrationRegimeFile = migrationRegimeFile;
+		try {
+			bf = new BufferedReader(new FileReader(migrationRegimeFile));
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
-		this.logger=logger;
-		this.defaultSourcePopulation=new ArrayList<DiploidGenome>(defaultSourcePopulation);
+		this.logger = logger;
+		this.defaultSourcePopulation = defaultSourcePopulation;
+		this.defaultSexAssigner=defaultSexAssigner;
 	}
 	
 	/**
@@ -93,7 +97,7 @@ public class MigrationRegimeReader {
 		}
 
 		this.logger.info("Finished reading the migration regime");
-		return new MigrationRegime(res,this.defaultSourcePopulation,this.logger);
+		return new MigrationRegime(res,this.defaultSourcePopulation,this.defaultSexAssigner,this.logger);
 	}
 
 }

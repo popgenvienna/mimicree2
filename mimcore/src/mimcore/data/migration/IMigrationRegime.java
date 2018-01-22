@@ -1,6 +1,7 @@
 package mimcore.data.migration;
 
 import mimcore.data.DiploidGenome;
+import mimcore.data.SexedDiploids;
 
 import java.util.ArrayList;
 
@@ -9,5 +10,5 @@ import java.util.ArrayList;
  */
 public interface IMigrationRegime {
 
-	public abstract ArrayList<DiploidGenome> getMigrants(int generation, int replicate);
+	public abstract SexedDiploids getMigrants(int generation, int replicate);
 }

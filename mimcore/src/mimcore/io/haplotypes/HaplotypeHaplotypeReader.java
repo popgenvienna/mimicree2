@@ -38,21 +38,32 @@ class HaplotypeHaplotypeReader {
 	public ArrayList<BitArray> getHaplotypes()
 	{
 		ArrayList<BitArrayBuilder> haplotypeCollection=null;
-		HapFileContainer hc =null;
-		while((hc=next())!=null)
-		{
-			if(haplotypeCollection==null) haplotypeCollection= initializeHaplotypeCollection(snpcol.size(),hc.hapList.size());
-			
-			// Get the index of the SNP in the haplotype collection
-			int index=snpcol.getIndexforPosition(hc.pos);
-			// SNP only stores characters in uppercase as well as the haplotype collection
-			char maj=snpcol.getSNPforPosition(hc.pos).ancestralAllele();
-			
-			// Check for every haplotype SNP state whether it agrees with the major allele, if so set the bit to 1 else (minor allele) leave the default (0)
-			for(int i=0; i<hc.hapList.size(); i++)
+		String line=null;
+
+		try {
+
+
+			while ((line=bf.readLine())!=null)
 			{
-				if(hc.hapList.get(i) == maj) haplotypeCollection.get(i).setBit(index);
+				if(line.startsWith("#"))continue;
+				HapFileContainer hc = parseLine(line);
+				haplotypeCollection = initializeHaplotypeCollection(snpcol.size(), hc.hapList.size());
+
+				// Get the index of the SNP in the haplotype collection
+				int index = snpcol.getIndexforPosition(hc.pos);
+				// SNP only stores characters in uppercase as well as the haplotype collection
+				char maj = snpcol.getSNPforPosition(hc.pos).ancestralAllele();
+
+				// Check for every haplotype SNP state whether it agrees with the major allele, if so set the bit to 1 else (minor allele) leave the default (0)
+				for (int i = 0; i < hc.hapList.size(); i++) {
+					if (hc.hapList.get(i) == maj) haplotypeCollection.get(i).setBit(index);
+				}
 			}
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+			System.exit(0);
 		}
 		
 		// Convert the BitArrayBuilder into a BitArray
@@ -83,25 +94,7 @@ class HaplotypeHaplotypeReader {
 	}
 	
 	
-	/**
-	 * Read the next line of the file
-	 * @return
-	 */
-	private HapFileContainer next()
-	{
-		String line=null;
-		try
-		{
-			line=bf.readLine();
-		}
-		catch(IOException fe)
-		{
-			fe.printStackTrace();
-			System.exit(0);
-		}
-		if(line==null) return null;
-		return parseLine(line);
-	}
+
 	
 	/**
 	 * Parse the content of a haplotype line
@@ -118,8 +111,15 @@ class HaplotypeHaplotypeReader {
 		ArrayList<Character> snplist=new ArrayList<Character>(2*temp.length);
 		for(String s: temp)
 		{
-			snplist.add(Character.toUpperCase(s.charAt(0)));
-			snplist.add(Character.toUpperCase(s.charAt(1)));
+			if(s.length()==2) {
+				snplist.add(Character.toUpperCase(s.charAt(0)));
+				snplist.add(Character.toUpperCase(s.charAt(1)));
+			}
+			else if(s.length()==1)
+			{
+				snplist.add(Character.toUpperCase(s.charAt(0))); snplist.add(Character.toUpperCase(s.charAt(0)));
+			}
+			else throw new IllegalArgumentException("Invalid size of genotype");
 		}
 		assert(gp!=null);
 		return new HapFileContainer(gp,snplist);

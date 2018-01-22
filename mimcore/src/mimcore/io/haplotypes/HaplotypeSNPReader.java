@@ -3,6 +3,10 @@ package mimcore.io.haplotypes;
 import mimcore.data.Chromosome;
 import mimcore.data.GenomicPosition;
 import mimcore.data.haplotypes.*;
+import mimcore.data.sex.ISexAssigner;
+import mimcore.data.sex.Sex;
+import mimcore.data.sex.SexAssignerDirect;
+import mimcore.data.sex.ISexAssigner;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,24 +22,50 @@ import java.util.HashSet;
 class HaplotypeSNPReader {
 
 	private BufferedReader bf;
+	private SexAssignerDirect sa;
+	private SNPCollection snpCollection;
 	
 	public HaplotypeSNPReader(BufferedReader bf )
 	{
 		this.bf=bf;
+		sa=null;
+		snpCollection=process();
 	}
-	
+
+
+	public SNPCollection getSNPCollection(){return this.snpCollection;}
+	public SexAssignerDirect getSexAssigner(){return this.sa;}
 	/**
 	 * Obtain all SNPs from a haplotype file.
 	 * @return a unsorted collection of SNPs
 	 */
-	public SNPCollection getSNPcollection()
+	private SNPCollection process()
 	{
 		
 		ArrayList<SNP> snpcol=new ArrayList<SNP>();
-		SNP s;
-		while((s=next())!=null)
+
+		String line=null;
+		try
 		{
-			snpcol.add(s);
+			while((line=bf.readLine())!=null)
+			{
+				if(line.startsWith("#sex"))
+				{
+					this.sa=parseSexAssigner(line);
+				}
+				else if(line.startsWith("#")){}
+				else
+				{
+					SNP s=parseSNP(line);
+					snpcol.add(s);
+				}
+
+			}
+		}
+		catch(IOException fe)
+		{
+			fe.printStackTrace();
+			System.exit(0);
 		}
 		
 		
@@ -70,26 +100,24 @@ class HaplotypeSNPReader {
 		}
 	}
 	
-	/**
-	 * Read one SNP at the time from a haplotype file;
-	 * @return
-	 */
-	private SNP next()
+
+	private SexAssignerDirect parseSexAssigner(String line)
 	{
-		String line=null;
-		try
+
+		ArrayList<Sex> sexes=new ArrayList<Sex>();
+		String[] a =line.split(" ");
+
+		for(String s:a)
 		{
-			line=bf.readLine();
+			if(s.equals("#sex")){}
+			else if(s.toLowerCase().equals("m"))sexes.add(Sex.Male);
+			else if(s.toLowerCase().equals("f"))sexes.add(Sex.Female);
+			else if(s.toLowerCase().equals("h"))sexes.add(Sex.Hermaphrodite);
+			else throw new IllegalArgumentException("Invalid sex "+s);
 		}
-		catch(IOException fe)
-		{
-			fe.printStackTrace();
-			System.exit(0);
-		}
-		if(line==null) return null;
-		return parseSNP(line);
+		SexAssignerDirect sa=new SexAssignerDirect(sexes);
+		return sa;
 	}
-	
 	/**
 	 * Parse a line of the file to a SNP
 	 * @param line

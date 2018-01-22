@@ -5,11 +5,12 @@ import mimcore.data.gpf.quantitative.GenotypeCalculator;
 import mimcore.data.gpf.quantitative.IGenotypeCalculator;
 import mimcore.data.gpf.quantitative.PhenotypeCalculator;
 import mimcore.data.sex.Sex;
-import mimcore.data.sex.SexAssigner;
+
 
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.logging.Logger;
 
 /**
@@ -17,8 +18,13 @@ import java.util.logging.Logger;
  */
 public class GPFHelper {
 
-    public static PhenotypeCalculator getPhenotypeCalculator(ArrayList<DiploidGenome> dipGenomes, ArrayList<Sex> sexes, IGenotypeCalculator genotypeCalculator, Double ve, Double heritability, Logger logger)
+    public static PhenotypeCalculator getPhenotypeCalculator( IGenotypeCalculator genotypeCalculator, Double ve, Double heritability)
     {
+
+
+        ArrayList<DiploidGenome> dipGenomes=GlobalResourceManager.getBasePopulation().getDiploids();
+        ArrayList<Sex> sexes=GlobalResourceManager.getBasePopulation().getSexAssigner().getSexes(dipGenomes.size(),new Random());
+        Logger logger=GlobalResourceManager.getLogger();
         // if environmental variance exists than use it directly
         if(ve!=null) {
             logger.info("Enviromental variance was provided; Will proceed with VE="+ve);

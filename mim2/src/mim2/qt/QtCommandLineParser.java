@@ -3,6 +3,7 @@ package mim2.qt;
 
 import mim2.CommandFormater;
 import mim2.shared.CommandLineParseHelp;
+import mim2.shared.GlobalResourceManager;
 import mim2.shared.SimulationMode;
 import mimcore.misc.MimicreeLogFactory;
 import mimcore.misc.MimicreeThreadPool;
@@ -138,8 +139,8 @@ public class QtCommandLineParser {
         SimulationMode simMode = CommandLineParseHelp.parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
-        QtSimulationFramework mimframe= new QtSimulationFramework(haplotypeFile,populationSizeFile,recombinationFile,chromosomeDefinition,sexInfoFile,
-				effectSizeFile,ve,heritability,selectionRegimFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
+		GlobalResourceManager.setGlobalResources(logger,haplotypeFile,recombinationFile,populationSizeFile,chromosomeDefinition,sexInfoFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,simMode,replicateRuns);
+        QtSimulationFramework mimframe= new QtSimulationFramework(effectSizeFile,ve,heritability,selectionRegimFile);
         
         mimframe.run();
 	}
