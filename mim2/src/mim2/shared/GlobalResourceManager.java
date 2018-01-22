@@ -28,18 +28,18 @@ import java.util.logging.Logger;
  * Created by robertkofler on 22/01/2018.
  */
 public class GlobalResourceManager {
-    public static SexInfo sexInfo;
-    public static SexedDiploids basePopulation;
-    public static RecombinationGenerator recombinationGenerator;
-    public static IMigrationRegime migrationRegime;
-    public static PopulationSizeContainer populationSizeContainer;
-    public static IMutator mutator;
-    public static String outputSyncs;
-    public static String outputGPFs;
-    public static String outputDirs;
-    public static Logger logger;
-    public static int replicateRunss;
-    public static SimulationMode simulationModes;
+    private static SexInfo sexInfo;
+    private static SexedDiploids basePopulation;
+    private static RecombinationGenerator recombinationGenerator;
+    private static IMigrationRegime migrationRegime;
+    private static PopulationSizeContainer populationSizeContainer;
+    private static IMutator mutator;
+    private static String outputSyncs;
+    private static String outputGPFs;
+    private static String outputDirs;
+    private static Logger logger;
+    private static int replicateRunss;
+    private static SimulationMode simulationModes;
 
 
 

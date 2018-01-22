@@ -77,8 +77,7 @@ public class QtSimulationFramework {
 
 
 
-		MultiSimulationQT mst=new MultiSimulationQT(si,dipGenomes,popcont,genotypeCalculator,phenotypeCalculator,fitnessCalculator,survivalFunction, migrationRegime, mutator, this.outputSync, this.outputGPF,this.outputDir,
-			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
+		MultiSimulationQT mst=new MultiSimulationQT(genotypeCalculator,phenotypeCalculator,fitnessCalculator,survivalFunction);
 		mst.run();
 
 		this.logger.info("Finished simulations");

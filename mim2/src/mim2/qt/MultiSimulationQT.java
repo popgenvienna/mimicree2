@@ -1,8 +1,10 @@
 package mim2.qt;
 
 
+import mim2.shared.GlobalResourceManager;
 import mimcore.data.Mutator.IMutator;
 import mimcore.data.PopulationSizeContainer;
+import mimcore.data.SexedDiploids;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.sex.IMatingFunction;
 import mimcore.data.sex.MatingFunctionRandomMating;
@@ -28,7 +30,7 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 public class MultiSimulationQT {
-	private final ArrayList<DiploidGenome> dipGenomes;
+	private final SexedDiploids basePopulation;
 	private final IGenotypeCalculator gc;
 	private final PhenotypeCalculator pc;
 	private final IFitnessCalculator fc;
@@ -52,36 +54,34 @@ public class MultiSimulationQT {
 	private ArrayList<PopulationAlleleCount> pacs;
 	private ArrayList<GPFCollection> gpfs;
 
-	public MultiSimulationQT(SexInfo si, ArrayList<DiploidGenome> dipGenomes, PopulationSizeContainer popcont, IGenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf,
-                             IMigrationRegime migrationRegime, IMutator mutator, String outputSync, String outputGPF, String outputDir, RecombinationGenerator recGenerator,
-                             ArrayList<Integer> outputGenerations, int replicateRuns, Logger logger)
+	public MultiSimulationQT( IGenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf)
 	{
 
-		this.dipGenomes=dipGenomes;
+		this.basePopulation= GlobalResourceManager.getBasePopulation();
 		this.pc=pc;
 		this.gc=gc;
 		this.sf=sf;
 		this.fc=fc;
-		this.si=si;
+		this.si=GlobalResourceManager.getSexInfo();
 		
 		int max=0;
 		HashSet<Integer> toOutput=new HashSet<Integer>();
-		for(Integer i : outputGenerations)
+		for(Integer i : GlobalResourceManager.getSimulationMode().getTimestamps())
 		{
 			toOutput.add(i);
 			if(i > max ) max=i;
 		}
 		this.maxGeneration=max;
-		this.migrationRegime=migrationRegime;
-		this.outputSync=outputSync;
-		this.outputGPF=outputGPF;
-		this.outputDir=outputDir;
+		this.migrationRegime=GlobalResourceManager.getMigrationRegime();
 		this.outputGenerations=toOutput;
-		this.logger=logger;
-		this.recGenerator=recGenerator;
-		this.replicateRuns=replicateRuns;
-		this.popcont=popcont;
-		this.mutator=mutator;
+		this.logger=GlobalResourceManager.getLogger();
+		this.recGenerator=GlobalResourceManager.getRecombinationGenerator();
+		this.replicateRuns=GlobalResourceManager.getReplicateRuns();
+		this.popcont=GlobalResourceManager.getPopulationSizeContainer();
+		this.mutator=GlobalResourceManager.getMutator();
+		this.outputDir=GlobalResourceManager.getOutputDir();
+		this.outputGPF=GlobalResourceManager.getOutputGPF();
+		this.outputSync=GlobalResourceManager.getOutputSync();
 
 
 		// internal variables
@@ -100,7 +100,7 @@ public class MultiSimulationQT {
 		{
 			// Base population generated always anew, because new env. variance for each individual
 			// for different replicates you dont use the same individuals (phenotypes) but only the same genotypes (with different phenotypes)
-			Population basePopulation=Population.loadPopulation(dipGenomes,si.getSexAssigner(),gc,pc,fc,new Random());
+			Population basePopulation=Population.loadPopulation(this.basePopulation,gc,pc,fc,new Random(),true);
 
 
 			int simulationNumber=k+1;
@@ -125,13 +125,12 @@ public class MultiSimulationQT {
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype());
 
 				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>
-				ArrayList<DiploidGenome> migrants=this.migrationRegime.getMigrants(i,simulationNumber);
+				SexedDiploids migrants=this.migrationRegime.getMigrants(i,simulationNumber);
 				if(migrants.size()>0) {
 					this.logger.info("Adding "+migrants.size()+ " migrants to the evolved population (randomly removing an equivalent number of evolved individuals)");
-					Population migrantPop=Population.loadPopulation(migrants,si.getSexAssigner(),gc,pc,fc, new Random());
+					Population migrantPop=Population.loadPopulation(migrants,gc,pc,fc, new Random(),false);
 					this.logger.info("Average genotype of migrants "+migrantPop.getAverageGenotype()+"; average phenotype of migrants "+migrantPop.getAveragePhenotype());
 					nextPopulation = Population.loadMigration(migrantPop, nextPopulation, new Random(),this.logger);
-
 					this.logger.info("Average genotype of new population "+nextPopulation.getAverageGenotype()+"; average phenotype of new population "+nextPopulation.getAveragePhenotype()+ "; N="+nextPopulation.size());
 				}
 
