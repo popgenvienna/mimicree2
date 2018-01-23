@@ -28,12 +28,12 @@ public class MigrationRegimeReader {
 
 
 
-	public MigrationRegimeReader(String migrationRegimeFile, BufferedReader br, Logger logger)
+	public MigrationRegimeReader(String migrationRegimeFile, BufferedReader br, Logger logger, SexedDiploids defaultSourcePopulation)
 	{
 		this.migrationRegimeFile=migrationRegimeFile;
 		this.bf=br;
 		this.logger=logger;
-		this.defaultSourcePopulation=SexedDiploids.getEmptySet();
+		this.defaultSourcePopulation=defaultSourcePopulation;
 		this.defaultSexAssigner=new SexAssignerDirect(new ArrayList<Sex>());
 	}
 

@@ -47,7 +47,7 @@ class HaplotypeHaplotypeReader {
 			{
 				if(line.startsWith("#"))continue;
 				HapFileContainer hc = parseLine(line);
-				haplotypeCollection = initializeHaplotypeCollection(snpcol.size(), hc.hapList.size());
+				if(haplotypeCollection==null) haplotypeCollection = initializeHaplotypeCollection(snpcol.size(), hc.hapList.size());
 
 				// Get the index of the SNP in the haplotype collection
 				int index = snpcol.getIndexforPosition(hc.pos);

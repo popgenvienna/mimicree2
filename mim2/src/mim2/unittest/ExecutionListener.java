@@ -4,6 +4,7 @@ import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
+import sun.security.krb5.internal.crypto.Des;
 
 /**
  * Created by robertkofler on 02/11/2017.
@@ -25,7 +26,8 @@ public class ExecutionListener extends RunListener {
      * Called when an atomic test fails.
      */
     public void testFailure(Failure failure) throws java.lang.Exception {
-        System.out.println("Execution of test case failed : " + failure.getMessage());
+        Description description=failure.getDescription();
+        System.out.println("Execution of test case failed: "+description.getClassName()+ " " + description.getMethodName()+" "+ failure.getMessage());
     }
 
     /**

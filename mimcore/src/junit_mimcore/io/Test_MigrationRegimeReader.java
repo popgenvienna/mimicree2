@@ -2,8 +2,10 @@ package junit_mimcore.io;
 
 import junit_mimcore.factories.GenomicDataFactory;
 import junit_mimcore.factories.SharedFactory;
+import mimcore.data.SexedDiploids;
 import mimcore.data.migration.MigrationEntry;
 import mimcore.data.migration.MigrationRegime;
+import mimcore.data.sex.SexInfo;
 import mimcore.io.migrationRegime.MigrationRegimeReader;
 import org.junit.Test;
 
@@ -30,7 +32,8 @@ public class Test_MigrationRegimeReader {
 
 
 		BufferedReader br=new BufferedReader(new StringReader(input));
-		return new MigrationRegimeReader("fakefile",br, SharedFactory.getNullLogger());
+		SexedDiploids sd= new SexedDiploids(GenomicDataFactory.getMinimalGenomes(), SexInfo.getDefaultSexInfo().getSexAssigner());
+		return new MigrationRegimeReader("fakefile",br, SharedFactory.getNullLogger(),sd);
 
 	}
 	
