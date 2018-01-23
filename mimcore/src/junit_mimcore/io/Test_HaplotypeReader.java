@@ -3,11 +3,13 @@ package junit_mimcore.io;
 import junit_mimcore.factories.GenomicDataFactory;
 import mimcore.data.haplotypes.HaploidGenome;
 import mimcore.data.haplotypes.SNPCollection;
+import mimcore.data.sex.Sex;
 import mimcore.io.haplotypes.HaplotypeReader;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,6 +30,21 @@ public class Test_HaplotypeReader {
 
 		;
 		h=new HaplotypeReader(input,  GenomicDataFactory.getNullLogger(),true).getHaplotypes();
+	}
+
+	public static HaplotypeReader getSexedHaplotypeReader()
+	{
+		String input=
+				"# comment\n"+
+						"#sex   	    F  M   F  M  H \n" +
+						"2R\t10\tG\tA/G\tAG AA AA AA GG\n"+
+						"3L\t20\tG\tC/G\tGC CC GC CG GG\n"+
+						"3R\t30\tA\tT/A\tTT TA AA AT TA\n"+
+						"X\t40\tT\tG/T\tTG GG GG TT GG\n"+
+						"X\t50\tT\tT/C\tCC TC CC TT CT\n";
+
+		;
+		return new HaplotypeReader(input,  GenomicDataFactory.getNullLogger(),true);
 	}
 	
 	@Test
@@ -124,6 +141,43 @@ public class Test_HaplotypeReader {
 	public void ninth_haplotype()
 	{
 		HaploidGenome  ha=h.get(9);
+		assertEquals(ha.getAllele(0),'G');
+		assertEquals(ha.getAllele(1),'G');
+		assertEquals(ha.getAllele(2),'A');
+		assertEquals(ha.getAllele(3),'G');
+		assertEquals(ha.getAllele(4),'T');
+	}
+
+	@Test
+	public void sexlist()
+	{
+		HaplotypeReader hs=getSexedHaplotypeReader();
+		ArrayList<Sex> sex=hs.getSexAssigner().getSexes(5, new Random());
+		// F  M   F  M  H
+		assertEquals(sex.get(0),Sex.Female);
+		assertEquals(sex.get(1),Sex.Male);
+		assertEquals(sex.get(2),Sex.Female);
+		assertEquals(sex.get(3),Sex.Male);
+		assertEquals(sex.get(4),Sex.Hermaphrodite);
+
+
+	}
+
+	@Test
+	public void first_haplotype_with_comment()
+	{
+		HaploidGenome ha=getSexedHaplotypeReader().getHaplotypes().get(0);
+		assertEquals(ha.getAllele(0),'A');
+		assertEquals(ha.getAllele(1),'G');
+		assertEquals(ha.getAllele(2),'T');
+		assertEquals(ha.getAllele(3),'T');
+		assertEquals(ha.getAllele(4),'C');
+	}
+
+	@Test
+	public void ninth_haplotype_with_comment()
+	{
+		HaploidGenome  ha=getSexedHaplotypeReader().getHaplotypes().get(9);
 		assertEquals(ha.getAllele(0),'G');
 		assertEquals(ha.getAllele(1),'G');
 		assertEquals(ha.getAllele(2),'A');

@@ -105,7 +105,7 @@ class HaplotypeSNPReader {
 	{
 
 		ArrayList<Sex> sexes=new ArrayList<Sex>();
-		String[] a =line.split(" ");
+		String[] a =line.split("\\s+");
 
 		for(String s:a)
 		{
