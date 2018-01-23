@@ -2,6 +2,7 @@ package mimcore.io.haplotypes;
 
 import mimcore.data.*;
 import mimcore.data.haplotypes.*;
+import mimcore.data.sex.Sex;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
@@ -35,11 +36,12 @@ public class DiploidGenomeWriter {
 	
 
 	
-	public void write(ArrayList<DiploidGenome> genomes)
+	public void write(ArrayList<DiploidGenome> genomes, ArrayList<Sex> sexes)
 	{
 		this.logger.info("Writing diploid genomes to file " + this.outputFile);
 		if(!(genomes.size()>0)) throw new IllegalArgumentException("Invalid number of genomes for output, must be larger than zero");
 		ArrayList<HaploidGenome> haploids=this.getHaploids(genomes);
+		if(sexes!=null)	writeSex(sexes);
 	
 		SNPCollection scol=haploids.get(0).getSNPCollection();
 		for(int i=0; i<scol.size(); i++)
@@ -83,6 +85,29 @@ public class DiploidGenomeWriter {
 		}
 		
 		this.logger.info("Finished writing "+genomes.size() +" diploid genomes");
+	}
+
+	private void writeSex(ArrayList<Sex> sexes)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("#sex");
+		for(Sex s: sexes)
+		{
+			sb.append(" ");
+			if(s==Sex.Female)sb.append("F");
+			else if(s==Sex.Male)sb.append("M");
+			else if(s==Sex.Hermaphrodite)sb.append("H");
+			else throw new IllegalArgumentException("Unknown sex");
+		}
+		try
+		{
+			bf.write(sb.toString()+"\n");
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+			System.exit(0);
+		}
 	}
 
 	private ArrayList<HaploidGenome> getHaploids(ArrayList<DiploidGenome> diploids)
