@@ -115,6 +115,8 @@ public class GlobalResourceManager {
        basePopulation=dgr.readGenomes();
        if(!recombinationGenerator.isValid(basePopulation.getDiploids())) throw new IllegalArgumentException("Recombination rate file is not valid; an entry needs to be provided for each chromosome of the base population");
 
+        // set the sites of hemizygous chromosomes
+       sexInfo.setHemizygousSite(basePopulation.getDiploids().get(0).getHaplotypeA().getSNPCollection());
     }
 
     public static SexInfo getSexInfo(){return sexInfo;}

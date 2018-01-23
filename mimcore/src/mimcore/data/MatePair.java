@@ -30,16 +30,14 @@ public class MatePair {
 		SNPCollection snpCollection=s1.getGenome().getHaplotypeA().getSNPCollection();
 		BitArrayBuilder babsemen=s1.getGamete(recGenerator, mutator, random);
 		BitArrayBuilder babegg	=s2.getGamete(recGenerator, mutator, random);
-		if(si.getHemizygousChromosomes().containsKey(sex))
-		{
-			HashSet<Chromosome> chromos=si.getHemizygousChromosomes().get(sex);
-			if(chromos.size()>0){
-				ArrayList<Integer> hemizygousIndizes=snpCollection.getIndexListForChromosomes(chromos);
-				homozygotify(babsemen,babegg,hemizygousIndizes);
 
-			}
+		// take sex chromosomes into account; make hemizygous ones homozygous
+		ArrayList<Integer> hemizygousIndizi= si.getHemizygousSites(sex);
+		if(hemizygousIndizi.size()>0) homozygotify(babsemen,babegg,hemizygousIndizi);
 
-		}
+
+
+
 
 		HaploidGenome semen	=new HaploidGenome(babsemen.getBitArray(),snpCollection);
 		HaploidGenome egg	=new HaploidGenome(babegg.getBitArray(),snpCollection);
