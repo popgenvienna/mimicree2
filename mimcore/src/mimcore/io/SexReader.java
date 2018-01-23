@@ -125,9 +125,9 @@ public class SexReader {
 	private Sex parseSex(String a)
 	{
 		a=a.toLowerCase();
-		if(a=="m") return Sex.Male;
-		else if(a=="f") return Sex.Female;
-		else if(a=="h") return Sex.Hermaphrodite;
+		if(a.equals("m")) return Sex.Male;
+		else if(a.equals("f")) return Sex.Female;
+		else if(a.equals("h")) return Sex.Hermaphrodite;
 		else throw new IllegalArgumentException("Invalid sex "+a);
 	}
 
