@@ -3,6 +3,7 @@ package mimcore.io;
 import mimcore.data.Population;
 import mimcore.data.Specimen;
 import mimcore.data.haplotypes.HaploidGenome;
+import mimcore.data.sex.Sex;
 import mimcore.io.haplotypes.HaplotypeWriter;
 
 
@@ -32,6 +33,7 @@ public class HaplotypeMultiWriter {
 	{
 		ArrayList<HaploidGenome> haplotypes=new ArrayList<HaploidGenome>();
 		ArrayList<Specimen> specimens=population.getSpecimen();
+		ArrayList<Sex> sexes=new ArrayList<Sex>();
 		for(Specimen spec: specimens){
 			haplotypes.add(spec.getGenome().getHaplotypeA());
 			haplotypes.add(spec.getGenome().getHaplotypeB());
@@ -60,7 +62,7 @@ public class HaplotypeMultiWriter {
 			System.exit(0);
 		}
 		*/
-		new HaplotypeWriter(haplotypeOFile,this.logger).write(haplotypes);
+		new HaplotypeWriter(haplotypeOFile,this.logger).write(haplotypes,sexes);
 
 	}
 	

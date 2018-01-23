@@ -1,6 +1,7 @@
 package mimcore.io.haplotypes;
 
 import mimcore.data.haplotypes.*;
+import mimcore.data.sex.Sex;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
@@ -34,11 +35,17 @@ public class HaplotypeWriter {
 	
 	
 	
-	public void write(ArrayList<HaploidGenome> haplotypes)
+	public void write(ArrayList<HaploidGenome> haplotypes, ArrayList<Sex> sexes)
 	{
 		this.logger.info("Writing haplotypes to file " + this.outputFile);
 		if(!(haplotypes.size()>0)) throw new IllegalArgumentException("Invalid number of haplotypes for output, must be larger than zero");
-	
+
+		if(sexes!=null)
+		{
+			int dipcount=haplotypes.size()/2;
+			if(dipcount!=sexes.size()) throw new IllegalArgumentException("Number of sexes does not match number of diploids");
+			writeSex(sexes);
+		}
 		SNPCollection scol=haplotypes.get(0).getSNPCollection();
 		for(int i=0; i<scol.size(); i++)
 		{
@@ -100,6 +107,29 @@ public class HaplotypeWriter {
 		sb.append(formatHaplotypes(chars));
 		return sb.toString();
 		
+	}
+
+	private void writeSex(ArrayList<Sex> sexes)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("#sex");
+		for(Sex s: sexes)
+		{
+			sb.append(" ");
+			if(s==Sex.Female)sb.append("F");
+			else if(s==Sex.Male)sb.append("M");
+			else if(s==Sex.Hermaphrodite)sb.append("H");
+			else throw new IllegalArgumentException("Unknown sex");
+		}
+		try
+		{
+			bf.write(sb.toString()+"\n");
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+			System.exit(0);
+		}
 	}
 	
 	private String formatHaplotypes(ArrayList<Character> chars)
