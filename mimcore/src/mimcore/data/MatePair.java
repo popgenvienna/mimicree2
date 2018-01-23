@@ -5,8 +5,11 @@ import mimcore.data.Mutator.IMutator;
 import mimcore.data.haplotypes.HaploidGenome;
 import mimcore.data.haplotypes.SNPCollection;
 import mimcore.data.recombination.RecombinationGenerator;
+import mimcore.data.sex.Sex;
 import mimcore.data.sex.SexInfo;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 /**
@@ -22,11 +25,21 @@ public class MatePair {
 		this.s2=s2;
 	}
 
-	public DiploidGenome getChild(RecombinationGenerator recGenerator, IMutator mutator, SexInfo si, Random random)
+	public DiploidGenome getChild(RecombinationGenerator recGenerator, Sex sex, IMutator mutator, SexInfo si, Random random)
 	{
 		SNPCollection snpCollection=s1.getGenome().getHaplotypeA().getSNPCollection();
 		BitArrayBuilder babsemen=s1.getGamete(recGenerator, mutator, random);
 		BitArrayBuilder babegg	=s2.getGamete(recGenerator, mutator, random);
+		if(si.getHemizygousChromosomes().containsKey(sex))
+		{
+			HashSet<Chromosome> chromos=si.getHemizygousChromosomes().get(sex);
+			if(chromos.size()>0){
+				ArrayList<Integer> hemizygousIndizes=snpCollection.getIndexListForChromosomes(chromos);
+				homozygotify(babsemen,babegg,hemizygousIndizes);
+
+			}
+
+		}
 
 		HaploidGenome semen	=new HaploidGenome(babsemen.getBitArray(),snpCollection);
 		HaploidGenome egg	=new HaploidGenome(babegg.getBitArray(),snpCollection);
@@ -38,4 +51,14 @@ public class MatePair {
 	public Specimen getS2(){return this.s2;}
 
 
+
+	private void homozygotify(BitArrayBuilder bab1, BitArrayBuilder bab2, ArrayList<Integer> positions)
+	{
+		for(int i: positions)
+		{
+			boolean bab1hasit=bab1.hasBit(i);
+			boolean bab2hasit= bab2.hasBit(i);
+			if(bab1hasit!=bab2hasit) bab2.flipBit(i);
+		}
+	}
 }

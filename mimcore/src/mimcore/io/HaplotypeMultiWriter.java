@@ -37,6 +37,7 @@ public class HaplotypeMultiWriter {
 		for(Specimen spec: specimens){
 			haplotypes.add(spec.getGenome().getHaplotypeA());
 			haplotypes.add(spec.getGenome().getHaplotypeB());
+			sexes.add(spec.getSex());
 		}
 		
 		String haplotypeOFile="";

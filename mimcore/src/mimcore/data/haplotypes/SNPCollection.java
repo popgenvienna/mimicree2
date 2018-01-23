@@ -3,10 +3,7 @@ package mimcore.data.haplotypes;
 import mimcore.data.Chromosome;
 import mimcore.data.GenomicPosition;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * Immutable representation of a collection of SNPs.
@@ -32,6 +29,8 @@ public class SNPCollection {
 		this.pos2snp=hm;
 		this.isSorted=isSortedList(snps);
 	}
+
+
 	
 	
 	/**
@@ -45,6 +44,20 @@ public class SNPCollection {
 		int toret= this.pos2snp.get(gp);
 		return toret;
 	}
+
+
+	public ArrayList<Integer> getIndexListForChromosomes(HashSet<Chromosome> targetChrs)
+	{
+		ArrayList<Integer> toret=new ArrayList<Integer>();
+		for(Map.Entry<GenomicPosition,Integer> me: pos2snp.entrySet())
+		{
+			Chromosome chr=me.getKey().chromosome();
+			if(targetChrs.contains(chr))toret.add(me.getValue());
+		}
+		return toret;
+	}
+
+
 	
 	/**
 	 * Get the SNP for a given GenomicPosition;

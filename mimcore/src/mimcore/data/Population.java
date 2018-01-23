@@ -348,7 +348,7 @@ class SingleSpecimenGenerator implements Runnable
 	public void run()
 	{
 		MatePair mp=mf.getCouple(this.random);
-		DiploidGenome fertilizedEgg=mp.getChild(recGenerator,mutator,si,this.random);
+		DiploidGenome fertilizedEgg=mp.getChild(recGenerator,mysex, mutator,si,this.random);
 		double genotype=gc.getGenotype(fertilizedEgg,mysex);
 		double phenotype=pc.getPhenotype(mysex,genotype,random);
 		double fitness=fc.getFitness(fertilizedEgg,phenotype,mysex);
