@@ -139,6 +139,7 @@ public class QtCommandLineParser {
         SimulationMode simMode = CommandLineParseHelp.parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
+		logger.info("Starting qt simulations: a quantitative trait with truncating selection");
 		GlobalResourceManager.setGlobalResources(logger,haplotypeFile,recombinationFile,populationSizeFile,chromosomeDefinition,sexInfoFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,simMode,replicateRuns);
         QtSimulationFramework mimframe= new QtSimulationFramework(effectSizeFile,ve,heritability,selectionRegimFile);
         

@@ -49,14 +49,14 @@ public class Specimen {
 	 * The gamete is a haploid and recombined product of the diploid genome
 	 * @return
 	 */
-	public HaploidGenome getGamete(RecombinationGenerator recGen, IMutator mutator, Random random)
+	public BitArrayBuilder getGamete(RecombinationGenerator recGen, IMutator mutator, Random random)
 	{
 
-		SNPCollection snpCollection=this.genome.getHaplotypeA().getSNPCollection();
+		SNPCollection snpCollection=genome.getHaplotypeA().getSNPCollection();
 		RecombinationEvent recEv=recGen.getRecombinationEvent(this.getSex(),random);
 		BitArrayBuilder pristineGamete=recEv.getGamete(this.genome);
-		BitArrayBuilder mutatedGameted=mutator.introduceMutations(pristineGamete,snpCollection,random);
-		return new HaploidGenome(mutatedGameted.getBitArray(),snpCollection);
+		BitArrayBuilder mutatedGamete=mutator.introduceMutations(pristineGamete,snpCollection,random);
+		return mutatedGamete;
 	}
 	
 	public double quantGenotype()

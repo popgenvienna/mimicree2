@@ -30,7 +30,7 @@ public class Test_MigrationRegimeReader {
 
 
 		BufferedReader br=new BufferedReader(new StringReader(input));
-		return new MigrationRegimeReader("fakefile",br, SharedFactory.getNullLogger(), GenomicDataFactory.getMinimalGenomes());
+		return new MigrationRegimeReader("fakefile",br, SharedFactory.getNullLogger());
 
 	}
 	

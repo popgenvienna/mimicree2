@@ -57,7 +57,7 @@ public class QtSimulationFramework {
 	
 	public void run()
 	{
-		this.logger.info("Starting qt simulations: a quantitative trait with truncating selection");
+
 
 
 

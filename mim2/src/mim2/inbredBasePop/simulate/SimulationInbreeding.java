@@ -65,7 +65,8 @@ public class SimulationInbreeding {
 		return toret;
 	}
 
-	
+
+	/*
 	public ArrayList<DiploidGenome> run()
 	{
 		ArrayList<DiploidGenome> dipGenomes=  new ArrayList<DiploidGenome>();
@@ -80,4 +81,5 @@ public class SimulationInbreeding {
 		if(dipGenomes.size()!=this.sizeBasePop) throw new IllegalStateException("Something went wrong..");
 		return dipGenomes;
 	}
+	*/
 }

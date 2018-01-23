@@ -2,7 +2,8 @@ package junit_mimcore.io;
 
 import junit_mimcore.factories.SharedFactory;
 import mimcore.data.PopulationSizeContainer;
-import mimcore.data.sex.SexAssigner;
+import mimcore.data.sex.ISexAssigner;
+import mimcore.data.sex.SexAssignerFraction;
 import mimcore.data.sex.SexInfo;
 import mimcore.io.PopulationSizeReader;
 import mimcore.io.SexReader;
@@ -38,7 +39,7 @@ public class Test_SexReader {
 	@Test
 	public void male_female_herma_ratio() {
 		SexInfo si = getSexinfo();
-		SexAssigner sa=si.getSexAssigner();
+		SexAssignerFraction sa=(SexAssignerFraction)si.getSexAssigner();
 		assertEquals(sa.getMaleFraction(),0.5,0.0000001);
 		assertEquals(sa.getFemaleFraction(),0.4,0.0000001);
 		assertEquals(sa.getHermaphroditeFraction(),0.1,0.0000001);

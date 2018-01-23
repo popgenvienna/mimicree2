@@ -40,6 +40,7 @@ public class GlobalResourceManager {
     private static Logger logger;
     private static int replicateRunss;
     private static SimulationMode simulationModes;
+    private static ResultRecorder rr;
 
 
 
@@ -52,6 +53,7 @@ public class GlobalResourceManager {
         setOutput(outputSync,outputGPF,outputDir);
         setSexRecGenomes(haplotypeFile,recombinationFile,chromosomeDefinition,sexInfoFile);
         setPopMigMutModeReps(populationSizeFile,migrationRegimeFile,mutationRate,simMode,replicateRuns);
+        rr=null;
     }
 
     private static void setPopMigMutModeReps(String populationSizeFile, String migrationRegimeFile, double mutationRate, SimulationMode simMode, int replicateRuns)
@@ -127,4 +129,10 @@ public class GlobalResourceManager {
     public static Logger getLogger(){return logger;}
     public static int getReplicateRuns(){return replicateRunss;}
     public static SimulationMode getSimulationMode(){return simulationModes;}
+
+    public static ResultRecorder getResultRecorder()
+    {
+        if(rr==null)rr =new ResultRecorder(outputGPFs,outputSyncs,outputDirs,sexInfo,simulationModes,logger);
+        return rr;
+    }
 }

@@ -25,7 +25,7 @@ public class PopulationAlleleCountReader {
 		assert(this.haplotypeFiles.size()>0);
 		String firstFile=this.haplotypeFiles.get(0);
 		this.logger.info("Reading SNP information from file "+firstFile);
-		SNPCollection snpCol= new HaplotypeSNPReader(getBufferedReader(firstFile)).getSNPcollection();
+		SNPCollection snpCol= new HaplotypeSNPReader(getBufferedReader(firstFile)).getSNPCollection();
 		
 		
 		ArrayList<PopulationAlleleCount> pac=new ArrayList<PopulationAlleleCount>();

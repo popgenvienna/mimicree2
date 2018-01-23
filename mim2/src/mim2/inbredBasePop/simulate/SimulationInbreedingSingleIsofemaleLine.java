@@ -44,6 +44,7 @@ public class SimulationInbreedingSingleIsofemaleLine {
 		
 	}
 
+	/**
 	
 	public ArrayList<DiploidGenome> run()
 	{
@@ -90,5 +91,7 @@ public class SimulationInbreedingSingleIsofemaleLine {
 		}
 		return new Population(specs);
 	}
+
+	 */
 
 }

@@ -1,5 +1,6 @@
 package mim2.w;
 
+import mim2.shared.GlobalResourceManager;
 import mim2.shared.SimulationMode;
 import mimcore.data.DiploidGenome;
 import mimcore.data.Mutator.IMutator;
@@ -28,128 +29,52 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class WSimulationFramework {
-	private final String haplotypeFile;
-	private final String populationSizeFile;
-	private final String recombinationFile;
-	private final String chromosomeDefinition;
+
 	private final String fitnessFile;
 	private final String epistasisFile;
-	private final String migrationRegimeFile;
-	private final String outputSync;
-	private final String outputGPF;
-	private final String sexInfoFile;
-	private final String outputDir;
-	private final SimulationMode simMode;
-	private final int replicateRuns;
-	private final double mutationRate;
-
-
-
 
 	private final java.util.logging.Logger logger;
 	//(haplotypeFile,recombinationFile,chromosomeDefinition,fitnessFile,epistasisFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
 
-	public WSimulationFramework(String haplotypeFile, String populationSizeFile, String recombinationFile, String chromosomeDefinition, String sexInfoFile,
-                                String fitnessFile, String epistasisFile, String migrationRegimeFile, double mutationRate, String outputSync, String outputGPF, String outputDir, SimulationMode simMode, int replicateRuns, java.util.logging.Logger logger)
+	public WSimulationFramework(String fitnessFile, String epistasisFile)
 	{
-		// 'File' represents files and directories
-		// Test if input files exist
-		if(! new File(haplotypeFile).exists()) throw new IllegalArgumentException("Haplotype file does not exist "+haplotypeFile);
+
+		logger= GlobalResourceManager.getLogger();
 
 
-
-		if(! new File(recombinationFile).exists()) throw new IllegalArgumentException("Recombination file does not exist " + recombinationFile);
-		if((populationSizeFile != null) && (!new File(populationSizeFile).exists())) throw new IllegalArgumentException("Population size file does not exist; "+populationSizeFile);
 		if((fitnessFile != null) && (!new File(fitnessFile).exists())) throw new IllegalArgumentException("Fitness file does not exist; "+fitnessFile);
 		if((epistasisFile != null) && (!new File(epistasisFile).exists())) throw new IllegalArgumentException("Epistasis file does not exist; "+epistasisFile);
-		if((sexInfoFile != null) && (!new File(sexInfoFile).exists())) throw new IllegalArgumentException("Sex defintion file does not exist; "+sexInfoFile);
-
 
 		if(fitnessFile==null) logger.info("No fitness file found; commencing simulations without selected SNPs");
 		if(epistasisFile==null) logger.info("No epistasis file found; commencing simulations without pairs of interacting SNPs");
 
-		// migration regime
-		if(migrationRegimeFile == null)logger.info("No migration regime file found; Proceeding without migration");
-		else if (! new File(migrationRegimeFile).exists()) throw new IllegalArgumentException("Migration regime file does not exist; "+ migrationRegimeFile);
-
-		if(outputGPF == null) logger.info("No output genotype/phenotype/fitness file provided; will not record GPF");
-		else try {new File(outputGPF).createNewFile();} catch(IOException e) {throw new IllegalArgumentException("Can not create GPF output file "+outputGPF);}
-
-		if((outputDir == null) && (outputSync==null)) throw new IllegalArgumentException("No output was provided; Provide either an output directory or an output sync file or both");
-
-		if(outputDir== null) logger.info("No output director found; Will not record haplotypes");
-		else if(! new File(outputDir).exists()) throw new IllegalArgumentException("The provided output directory does not exist "+outputDir);
-
-		if(outputSync == null) logger.info("No output sync file was provided; Will not record allele frequencies");
-		else try {new File(outputSync).createNewFile();} catch(IOException e) {throw new IllegalArgumentException("Can not create output sync file "+outputSync);}
-
-		if(mutationRate<0.0 || mutationRate>1.0)throw new IllegalArgumentException("Mutation rate must be between 0.0 and 1.0");
-
-
-		if(!(replicateRuns>0)) throw new IllegalArgumentException("At least one replicate run should be provided; Provided by the user "+replicateRuns);
-
-		this.outputGPF=outputGPF;
-		this.outputSync=outputSync;
-		this.outputDir=outputDir;
 		this.fitnessFile=fitnessFile;
-		this.haplotypeFile=haplotypeFile;
-		this.populationSizeFile=populationSizeFile;
-		this.recombinationFile=recombinationFile;
-		this.chromosomeDefinition=chromosomeDefinition;
 		this.epistasisFile=epistasisFile;
-		this.migrationRegimeFile=migrationRegimeFile;
-		this.simMode=simMode;
-		this.mutationRate=mutationRate;
-		this.replicateRuns=replicateRuns;
-		this.logger=logger;
-		this.sexInfoFile=sexInfoFile;
 	}
 
 
 	public void run()
 	{
-		this.logger.info("Starting simulations with directly provided fitness effects of SNPs (w)");
 
-		SexInfo si=SexInfo.getDefaultSexInfo();
-		if(sexInfoFile!=null) si=new SexReader(this.sexInfoFile,this.logger).readSexInfo();
 
-		// Load the data
-		RecombinationGenerator recGenerator = new RecombinationGenerator(new RecombinationRateReader(this.recombinationFile,this.logger).getRecombinationRate(),
-				new ChromosomeDefinitionReader(this.chromosomeDefinition).getRandomAssortmentGenerator());
 
-		ArrayList<DiploidGenome> dipGenomes=new DiploidGenomeReader(this.haplotypeFile,this.logger).readGenomes();
-		if(!recGenerator.isValid(dipGenomes)) throw new IllegalArgumentException("Recombination rate file is not valid; an entry needs to be provided for each chromosome of the base population");
 
 		// genotype and phenotype are set to 1.0 (this is ignored)
 		IGenotypeCalculator genotypeCalculator=new GenotypeCalculatorAllEqual();
 		IPhenotypeCalculator phenotypeCalculator=new PhenotypeCalculatorAllEqual();
 
-		// Load population size computer
-		PopulationSizeContainer popcont=new PopulationSizeContainer(dipGenomes.size());
-		if(this.populationSizeFile!=null) popcont=new PopulationSizeReader(this.populationSizeFile,this.logger).readPopulationSizes();
-
 		// Load fitness computers (snps and
 		IFitnessCalculator snpFitness=new FitnessCalculatorAllEqual();
 		if(this.fitnessFile!=null) snpFitness=new SNPFitnessReader(this.fitnessFile,logger).getSNPFitness();
-
 		IFitnessCalculator epistasisFitness =new FitnessCalculatorAllEqual();
 		if(this.epistasisFile!=null)  epistasisFitness=new EpistasisFitnessReader(this.epistasisFile,this.logger).readEpistaticPairs();
-
 		IFitnessCalculator snpAndEpistasisFitness=new FitnessCalculator_SNPandEpistasis(snpFitness,epistasisFitness);
 
 		// Survival function; no selective deaths; all surviveISurvivalFunction survivalFunction= new SurvivalRegimeAllSurvive();
 		ISurvivalFunction survivalFunction=new SurvivalRegimeAllSurvive();
 
-		// Mutation
-		IMutator mutator= new MutatorGenomeWideRate(this.mutationRate);
 
-
-		// Migration regime; If none specified no migration
-		IMigrationRegime migrationRegime=new MigrationRegimeNoMigration();
-		if(migrationRegimeFile != null) migrationRegime=new MigrationRegimeReader(this.migrationRegimeFile,this.logger,dipGenomes).readMigrationRegime();
-
-		MultiSimulationW ws=new MultiSimulationW(si, dipGenomes,popcont,genotypeCalculator,phenotypeCalculator,snpAndEpistasisFitness,survivalFunction, migrationRegime,mutator, this.outputSync, this.outputGPF,this.outputDir,
-			recGenerator,simMode.getTimestamps(),this.replicateRuns,this.logger);
+		MultiSimulationW ws=new MultiSimulationW(genotypeCalculator,phenotypeCalculator,snpAndEpistasisFitness,survivalFunction);
 		ws.run();
 
 		this.logger.info("Finished simulations");

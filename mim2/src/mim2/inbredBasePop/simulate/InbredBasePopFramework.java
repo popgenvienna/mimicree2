@@ -61,7 +61,7 @@ public class InbredBasePopFramework {
 		this.logger=logger;
 	}
 	
-	
+	/**
 	public void run()
 	{
 		this.logger.info("Starting inbredbasepop");
@@ -83,6 +83,7 @@ public class InbredBasePopFramework {
 		dgw.write(basepopulation);
 		this.logger.info("Finished simulations");
 	}
+	 */
 
 
 

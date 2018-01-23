@@ -3,6 +3,7 @@ package mim2.qs;
 
 import mim2.CommandFormater;
 import mim2.shared.CommandLineParseHelp;
+import mim2.shared.GlobalResourceManager;
 import mim2.shared.SimulationMode;
 import mimcore.misc.MimicreeLogFactory;
 import mimcore.misc.MimicreeThreadPool;
@@ -138,8 +139,10 @@ public class QsCommandLineParser {
         SimulationMode simMode = CommandLineParseHelp.parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
-        QsSimulationFramework mimframe= new QsSimulationFramework(haplotypeFile,populationSizeFile,recombinationFile,chromosomeDefinition,sexInfoFile,
-				effectSizeFile,ve,heritability,fitnessFunctionFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
+		logger.info("Starting qff simulations: selection for a quantitative trait mapping to fitness using a fitness function");
+		GlobalResourceManager.setGlobalResources(logger,haplotypeFile,recombinationFile,populationSizeFile,chromosomeDefinition,sexInfoFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,simMode,replicateRuns);
+
+		QsSimulationFramework mimframe= new QsSimulationFramework(effectSizeFile,ve,heritability,fitnessFunctionFile);
         
         mimframe.run();
 	}

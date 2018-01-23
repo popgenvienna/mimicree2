@@ -63,7 +63,7 @@ public class MigrationRegimeReader_Deprecated {
 		if(a.length==2)
 		{
 			this.logger.info("Migration regime file has 2 columns; Reading default migration regime (migration applies to all replicates equally)");
-			return new MigrationRegimeReader(this.migrationRegimeFile,this.logger,null).readMigrationRegime();
+			//return new MigrationRegimeReader(this.migrationRegimeFile,this.logger,null).readMigrationRegime();
 		}
 		else if(a.length == 3)
 		{
@@ -71,6 +71,8 @@ public class MigrationRegimeReader_Deprecated {
 
 		}
 		else throw new IllegalArgumentException("Migration regime file must either have 2 or 3 columns; Found "+a.length+ " columns");
+
+		return null;
 	}
 
 }

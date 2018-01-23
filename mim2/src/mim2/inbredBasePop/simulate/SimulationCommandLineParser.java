@@ -111,7 +111,7 @@ public class SimulationCommandLineParser {
         InbredBasePopFramework mimframe= new InbredBasePopFramework(haplotypeFile,recombinationFile,outputFile,
 				isofemalelines,sizeBasePop,sizeisofemaleLine,geninbreeding,logger);
         
-        mimframe.run();
+       // mimframe.run();
 		logger.info("Thank you for using inbreBasePop MimicrEE");
 		System.exit(0);
 	}

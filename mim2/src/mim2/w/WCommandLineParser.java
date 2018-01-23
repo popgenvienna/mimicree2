@@ -4,6 +4,7 @@ package mim2.w;
 import mim2.CommandFormater;
 import mim2.qs.QsSimulationFramework;
 import mim2.shared.CommandLineParseHelp;
+import mim2.shared.GlobalResourceManager;
 import mim2.shared.SimulationMode;
 import mimcore.misc.MimicreeLogFactory;
 import mimcore.misc.MimicreeThreadPool;
@@ -130,7 +131,9 @@ public class WCommandLineParser {
         SimulationMode simMode = CommandLineParseHelp.parseOutputGenerations(outputGenRaw);
 
 		MimicreeThreadPool.setThreads(threadCount);
-        WSimulationFramework mimframe= new WSimulationFramework(haplotypeFile,populationSizeFile,recombinationFile,chromosomeDefinition,sexInfoFile,fitnessFile,epistasisFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
+		logger.info("Starting simulations using fitness effects of SNPs (w)");
+		GlobalResourceManager.setGlobalResources(logger,haplotypeFile,recombinationFile,populationSizeFile,chromosomeDefinition,sexInfoFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,simMode,replicateRuns);
+		WSimulationFramework mimframe= new WSimulationFramework(fitnessFile,epistasisFile);
         
         mimframe.run();
 	}

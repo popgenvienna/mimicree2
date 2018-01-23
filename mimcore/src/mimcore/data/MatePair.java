@@ -5,6 +5,8 @@ import mimcore.data.Mutator.IMutator;
 import mimcore.data.haplotypes.HaploidGenome;
 import mimcore.data.haplotypes.SNPCollection;
 import mimcore.data.recombination.RecombinationGenerator;
+import mimcore.data.sex.SexInfo;
+
 import java.util.Random;
 
 /**
@@ -20,11 +22,14 @@ public class MatePair {
 		this.s2=s2;
 	}
 
-	public DiploidGenome getChild(RecombinationGenerator recGenerator, IMutator mutator, Random random)
+	public DiploidGenome getChild(RecombinationGenerator recGenerator, IMutator mutator, SexInfo si, Random random)
 	{
+		SNPCollection snpCollection=s1.getGenome().getHaplotypeA().getSNPCollection();
+		BitArrayBuilder babsemen=s1.getGamete(recGenerator, mutator, random);
+		BitArrayBuilder babegg	=s2.getGamete(recGenerator, mutator, random);
 
-		HaploidGenome semen	=s1.getGamete(recGenerator, mutator, random);
-		HaploidGenome egg	=s2.getGamete(recGenerator, mutator, random);
+		HaploidGenome semen	=new HaploidGenome(babsemen.getBitArray(),snpCollection);
+		HaploidGenome egg	=new HaploidGenome(babegg.getBitArray(),snpCollection);
 		DiploidGenome fertilizedEgg=new DiploidGenome(semen,egg);
 		return fertilizedEgg;
 	}

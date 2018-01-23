@@ -19,6 +19,16 @@ public enum SimulationMode {
 		return new ArrayList<Integer>(this.timestamps);
 	}
 
+	public int getMaximumGenerations()
+	{
+		int max=0;
+		for(int i:this.timestamps)
+		{
+			if(i>max) max=i;
+		}
+		return max;
+	}
+
 
 
 }

@@ -2,6 +2,8 @@ package mim2.qt;
 
 
 import mim2.shared.GlobalResourceManager;
+import mim2.shared.ResultRecorder;
+import mim2.shared.SimulationMode;
 import mimcore.data.Mutator.IMutator;
 import mimcore.data.PopulationSizeContainer;
 import mimcore.data.SexedDiploids;
@@ -49,10 +51,6 @@ public class MultiSimulationQT {
 	private Logger logger;
 
 
-	// internal variables
-	private final HashSet<Integer> outputGenerations;
-	private ArrayList<PopulationAlleleCount> pacs;
-	private ArrayList<GPFCollection> gpfs;
 
 	public MultiSimulationQT( IGenotypeCalculator gc, PhenotypeCalculator pc, IFitnessCalculator fc, ISurvivalFunction sf)
 	{
@@ -63,17 +61,10 @@ public class MultiSimulationQT {
 		this.sf=sf;
 		this.fc=fc;
 		this.si=GlobalResourceManager.getSexInfo();
-		
-		int max=0;
-		HashSet<Integer> toOutput=new HashSet<Integer>();
-		for(Integer i : GlobalResourceManager.getSimulationMode().getTimestamps())
-		{
-			toOutput.add(i);
-			if(i > max ) max=i;
-		}
-		this.maxGeneration=max;
+
+
+		this.maxGeneration=GlobalResourceManager.getSimulationMode().getMaximumGenerations();
 		this.migrationRegime=GlobalResourceManager.getMigrationRegime();
-		this.outputGenerations=toOutput;
 		this.logger=GlobalResourceManager.getLogger();
 		this.recGenerator=GlobalResourceManager.getRecombinationGenerator();
 		this.replicateRuns=GlobalResourceManager.getReplicateRuns();
@@ -82,11 +73,6 @@ public class MultiSimulationQT {
 		this.outputDir=GlobalResourceManager.getOutputDir();
 		this.outputGPF=GlobalResourceManager.getOutputGPF();
 		this.outputSync=GlobalResourceManager.getOutputSync();
-
-
-		// internal variables
-		this.pacs=new ArrayList<PopulationAlleleCount>();
-		this.gpfs=new ArrayList<GPFCollection>();
 		
 	}
 
@@ -95,6 +81,7 @@ public class MultiSimulationQT {
 	{
 
 		IMatingFunction mf= new MatingFunctionRandomMating(si.getSelfingRate());
+		ResultRecorder rr=GlobalResourceManager.getResultRecorder();
 
 		for(int k =0; k < this.replicateRuns; k++)
 		{
@@ -109,9 +96,7 @@ public class MultiSimulationQT {
 			this.logger.info("Average genotype of starting population "+basePopulation.getAverageGenotype()+"; average phenotype of starting population "+basePopulation.getAveragePhenotype());
 
 			// record stuff
-			recordPAC(basePopulation,0,simulationNumber);
-			recordGPF(basePopulation, 0, simulationNumber);
-			recordHap(basePopulation, 0, simulationNumber);
+			rr.record(0,simulationNumber,basePopulation);
 
 			Population nextPopulation =basePopulation;
 			// For the number of requested simulations get the next generation, and write it to file if requested
@@ -121,7 +106,7 @@ public class MultiSimulationQT {
 				this.logger.info("Processing generation "+i+ " of replicate run "+simulationNumber+ " with N="+popsize);
 				Population phenTail=sf.getSurvivors(nextPopulation, i, simulationNumber);
 				this.logger.info("Selection intensity " +sf.getSurvivorFraction(i, simulationNumber) +"; Selected "+phenTail.size()+ " for next generation; average genotype "+phenTail.getAverageGenotype() +"; average phenotype "+phenTail.getAveragePhenotype());
-				nextPopulation=phenTail.getNextGeneration(si.getSexAssigner(),gc,pc,fc,mf,this.recGenerator,mutator, popsize);
+				nextPopulation=phenTail.getNextGeneration(si,gc,pc,fc,mf,this.recGenerator,mutator, popsize);
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype());
 
 				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>
@@ -134,53 +119,17 @@ public class MultiSimulationQT {
 					this.logger.info("Average genotype of new population "+nextPopulation.getAverageGenotype()+"; average phenotype of new population "+nextPopulation.getAveragePhenotype()+ "; N="+nextPopulation.size());
 				}
 
-				// record stuff only in the requested generations
-				if(outputGenerations.contains(i))
-				{
-					recordGPF(nextPopulation, i, simulationNumber);
-					recordPAC(nextPopulation, i, simulationNumber);
-					recordHap(nextPopulation, i, simulationNumber);
-				}
+				// record stuff
+				rr.record(i,simulationNumber,nextPopulation);
 			}
 		}
 
-		// Finally write as yet unwritten results
-		if(this.outputSync!=null) {
-			ISummaryWriter sw = new SyncWriter(this.outputSync, this.logger);
-			sw.write(this.pacs);
-		}
-		if(this.outputGPF!=null){
-			GPFWriter gw=new GPFWriter(this.outputGPF,this.logger);
-			gw.write(gpfs);
-		}
+		rr.finishWriting();
 
 	}
 
 
-	private void recordPAC(Population toRecord,int generation, int replicate)
-	{
-		// No output file no action
-		if(this.outputSync==null) return;
-		this.logger.info("Recording allele frequences at generation "+generation+" of replicate "+replicate);
-		pacs.add(new PACReducer(toRecord).reduce());
-	}
 
-	private void recordGPF(Population toRecord, int generation, int replicate)
-	{
-		// No output file no action
-		if(this.outputGPF==null) return;
-		this.logger.info("Recording genotype/phenotype/fitness at generation "+generation+" of replicate "+replicate);
-		gpfs.add(new GPFReducer(toRecord,replicate,generation).reduce());
-	}
-
-
-	private void recordHap(Population toRecord, int generation, int replicate)
-	{
-		// No output file no action
-		if(this.outputDir==null) return;
-		this.logger.info("Recording haplotypes at generation "+generation+" of replicate "+replicate);
-		new HaplotypeMultiWriter(toRecord, this.outputDir,generation, replicate, this.logger).write();
-	}
 
 
 }
