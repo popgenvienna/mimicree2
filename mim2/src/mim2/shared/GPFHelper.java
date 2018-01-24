@@ -23,7 +23,7 @@ public class GPFHelper {
 
 
         ArrayList<DiploidGenome> dipGenomes=GlobalResourceManager.getBasePopulation().getDiploids();
-        ArrayList<Sex> sexes=GlobalResourceManager.getBasePopulation().getSexAssigner().getSexes(dipGenomes.size(),new Random());
+        ArrayList<Sex> sexes=GlobalResourceManager.getBasePopulation().getSexAssigner();
         Logger logger=GlobalResourceManager.getLogger();
         // if environmental variance exists than use it directly
         if(ve!=null) {

@@ -12,6 +12,7 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -32,7 +33,7 @@ public class Test_MigrationRegimeReader {
 
 
 		BufferedReader br=new BufferedReader(new StringReader(input));
-		SexedDiploids sd= new SexedDiploids(GenomicDataFactory.getMinimalGenomes(), SexInfo.getDefaultSexInfo().getSexAssigner());
+		SexedDiploids sd= new SexedDiploids(GenomicDataFactory.getMinimalGenomes(), SexInfo.getDefaultSexInfo().getSexAssigner().getSexes(GenomicDataFactory.getMinimalGenomes().size(), new Random()));
 		return new MigrationRegimeReader("fakefile",br, SharedFactory.getNullLogger(),sd);
 
 	}

@@ -795,6 +795,37 @@ public class Test_BitArrayBuilder {
 	}
 
 
+	@Test
+	public void bitarray_constructor() {
+		BitArrayBuilder bt=new BitArrayBuilder(80);
+		bt.setBit(76);
+		bt.setBit(0);
+		bt.setBit(10);
+		bt.setBit(20);
+		bt.setBit(30);
+		BitArrayBuilder b=bt.getBitArray().getBitArrayBuilder();
+		assertFalse(b.hasBit(72));
+		assertFalse(b.hasBit(73));
+		assertFalse(b.hasBit(74));
+		assertFalse(b.hasBit(75));
+		assertTrue(b.hasBit(76));
+		assertFalse(b.hasBit(77));
+		assertFalse(b.hasBit(78));
+		assertFalse(b.hasBit(79));
+		assertTrue(b.hasBit(0));
+		assertTrue(b.hasBit(10));
+		assertTrue(b.hasBit(20));
+		assertTrue(b.hasBit(30));
+		assertFalse(b.hasBit(1));
+		assertFalse(b.hasBit(9));
+		assertFalse(b.hasBit(11));
+		assertFalse(b.hasBit(19));
+		assertFalse(b.hasBit(21));
+		assertFalse(b.hasBit(29));
+		assertFalse(b.hasBit(31));
+	}
+
+
 
 
 

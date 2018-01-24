@@ -8,6 +8,8 @@ import mimcore.data.sex.SexAssignerDirect;
 import mimcore.io.haplotypes.HaplotypeReader;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Logger;
 
 public class DiploidGenomeReader implements IDiploidGenomeReader {
@@ -38,12 +40,15 @@ public class DiploidGenomeReader implements IDiploidGenomeReader {
 			dipGenomes.add(new DiploidGenome(hapGenomes.get(i),hapGenomes.get(i+1)));
 		}
 		SexedDiploids sexedDips;
+
+		int popsize=dipGenomes.size();
+		Random r= ThreadLocalRandom.current();
 		if(sa!=null)
 		{
 			if(sa.size()!=dipGenomes.size()) throw new IllegalArgumentException("Invalid haplotype file; Number of provided sexes does not fit number of diploid genomes "+sa.size()+" vs "+dipGenomes.size());
-			sexedDips=new SexedDiploids(dipGenomes,sa);
+			sexedDips=new SexedDiploids(dipGenomes,sa.getSexes(popsize,r));
 		}
-		else sexedDips=new SexedDiploids(dipGenomes,defaultSexAssigner);
+		else sexedDips=new SexedDiploids(dipGenomes,defaultSexAssigner.getSexes(popsize,r));
 
 
 		this.logger.info("Finished creating diploid genomes");

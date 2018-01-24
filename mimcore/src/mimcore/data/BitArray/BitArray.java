@@ -47,5 +47,11 @@ public class BitArray
 	{
 		return this.size;
 	}
+
+	public BitArrayBuilder getBitArrayBuilder()
+	{
+
+		return new BitArrayBuilder(this.bitar.clone(),this.size());
+	}
 	
 }

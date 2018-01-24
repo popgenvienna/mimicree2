@@ -125,5 +125,11 @@ public class HaploidGenome {
 		
 		return new HaploidGenome(bitBuilder.getBitArray(),new SNPCollection(filteredSNPs));
 	}
+
+
+	public BitArray getRawGenome()
+	{
+		return this.haplotype;
+	}
 	
 }

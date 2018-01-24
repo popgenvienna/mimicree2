@@ -110,7 +110,7 @@ public class MultiSimulationQT {
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype());
 
 				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>
-				SexedDiploids migrants=this.migrationRegime.getMigrants(i,simulationNumber);
+				SexedDiploids migrants=this.migrationRegime.getMigrants(i,simulationNumber).updateSexChromosome(this.si,logger);
 				if(migrants.size()>0) {
 					this.logger.info("Adding "+migrants.size()+ " migrants to the evolved population (randomly removing an equivalent number of evolved individuals)");
 					Population migrantPop=Population.loadPopulation(migrants,gc,pc,fc, new Random(),false);

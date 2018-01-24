@@ -112,11 +112,14 @@ public class GlobalResourceManager {
                 new ChromosomeDefinitionReader(chromosomeDefinition).getRandomAssortmentGenerator());
 
        DiploidGenomeReader dgr =new DiploidGenomeReader(haplotypeFile,sexInfo.getSexAssigner(),logger);
-       basePopulation=dgr.readGenomes();
-       if(!recombinationGenerator.isValid(basePopulation.getDiploids())) throw new IllegalArgumentException("Recombination rate file is not valid; an entry needs to be provided for each chromosome of the base population");
+        SexedDiploids sd=dgr.readGenomes();
 
         // set the sites of hemizygous chromosomes
-       sexInfo.setHemizygousSite(basePopulation.getDiploids().get(0).getHaplotypeA().getSNPCollection());
+        sexInfo.setHemizygousSite(sd.getDiploids().get(0).getHaplotypeA().getSNPCollection());
+       basePopulation=sd.updateSexChromosome(sexInfo,logger);
+       if(!recombinationGenerator.isValid(basePopulation.getDiploids())) throw new IllegalArgumentException("Recombination rate file is not valid; an entry needs to be provided for each chromosome of the base population");
+
+
     }
 
     public static SexInfo getSexInfo(){return sexInfo;}

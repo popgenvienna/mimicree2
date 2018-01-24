@@ -5,6 +5,7 @@ import mimcore.data.SexedDiploids;
 import mimcore.data.haplotypes.SNP;
 import mimcore.data.haplotypes.SNPCollection;
 import mimcore.data.sex.ISexAssigner;
+import mimcore.data.sex.Sex;
 import mimcore.data.sex.SexInfo;
 
 import java.io.File;
@@ -38,7 +39,7 @@ public class MigrationRegime implements IMigrationRegime {
 		sr = new HashMap<Integer,MigrationEntry>(input);
 		this.logger=logger;
 		defaultSexAssigner= SexInfo.getDefaultSexInfo().getSexAssigner();
-		this.defaultSourcePopulation=new SexedDiploids(new ArrayList<DiploidGenome>(),defaultSexAssigner);
+		this.defaultSourcePopulation=new SexedDiploids(new ArrayList<DiploidGenome>(),new ArrayList<Sex>());
 		this.controlCollection=controlCollection;
 
 	}

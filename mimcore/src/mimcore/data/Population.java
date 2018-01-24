@@ -121,11 +121,13 @@ public class Population {
 	public static Population loadPopulation(SexedDiploids sexed, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, Random random,boolean checkValid)
 	{
 		ArrayList<Specimen> specimens=new ArrayList<Specimen>();
-		ArrayList<Double> genotypes=new ArrayList<Double>();
-		LinkedList<Sex> sexes=new LinkedList<Sex>(sexed.getSexAssigner().getSexes(sexed.size(),random));
-		for(DiploidGenome genome: sexed.getDiploids())
+
+		ArrayList<DiploidGenome> genomes=sexed.getDiploids();
+		ArrayList<Sex> sexes=sexed.getSexAssigner();
+		for(int i=0; i<sexed.size(); i++)
 		{
-			Sex mysex=sexes.remove(0);
+			DiploidGenome genome=genomes.get(i);
+			Sex mysex=sexes.get(i);
 			double genotype=gc.getGenotype(genome,mysex);
 			double phenotype=pc.getPhenotype(mysex,genotype,random);
 			double fitness=fc.getFitness(genome,phenotype,mysex);

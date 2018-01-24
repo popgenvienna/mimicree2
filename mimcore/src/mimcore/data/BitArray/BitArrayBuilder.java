@@ -24,6 +24,13 @@ public class BitArrayBuilder {
 			bitar =new byte[realsize];
 		}
 
+		public BitArrayBuilder(byte[] bitar, int size)
+		{
+
+			this.bitar=bitar;
+			this.size=size;
+		}
+
 		/**
 		 * flip the bit at a given position
 		 * @param position
