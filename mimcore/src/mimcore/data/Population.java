@@ -18,6 +18,7 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Logger;
 
 
@@ -257,6 +258,7 @@ class SpecimenGenerator
 		ExecutorService executor= MimicreeThreadPool.getExector();
 		ArrayList<Callable<Object>> call=new ArrayList<Callable<Object>>();
 		LinkedList<Sex> sexes=new LinkedList<Sex>(sa.getSexes(this.populationSize,new Random()));
+		List<Future<Object>> future=null;
 
 		for(int i=0; i<this.populationSize; i++)
 		{
@@ -266,7 +268,7 @@ class SpecimenGenerator
 		try
 		{
 			// Run them all!
-			executor.invokeAll(call);
+			future=executor.invokeAll(call);
 		}
 		catch(InterruptedException e)
 		{
@@ -275,7 +277,16 @@ class SpecimenGenerator
 		}
 		ArrayList<Specimen> specs=col.getSpecimen();
 
-		if(specs.size()!=populationSize) throw new IllegalArgumentException("Fatal error; obtained population size smaller than the target size; Please contact author");
+
+		if(specs.size()!=populationSize) {
+			for(Future<Object>f: future)
+			{
+				try{
+				f.get();}catch(Exception e){throw new IllegalArgumentException(e.getMessage());}
+			}
+			throw new IllegalArgumentException("Fatal error during mating: obtained population size smaller than the target size; Please contact author");
+
+		}
 		return specs;
 	}
 
