@@ -116,7 +116,8 @@ public class GlobalResourceManager {
 
         // set the sites of hemizygous chromosomes
         sexInfo.setHemizygousSite(sd.getDiploids().get(0).getHaplotypeA().getSNPCollection());
-       basePopulation=sd.updateSexChromosome(sexInfo,logger);
+        logger.info("Updating sex chromosomes of base population (i.e. hemizygous chromosomes)");
+       basePopulation=sd.updateSexChromosome(sexInfo);
        if(!recombinationGenerator.isValid(basePopulation.getDiploids())) throw new IllegalArgumentException("Recombination rate file is not valid; an entry needs to be provided for each chromosome of the base population");
 
 

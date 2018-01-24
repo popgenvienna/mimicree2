@@ -108,8 +108,10 @@ public class MultiSimulationW {
 				this.logger.info("Average fitness of offspring "+nextPopulation.getAverageFitness());
 
 				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>
-				SexedDiploids migrants=this.migrationRegime.getMigrants(i,simulationNumber).updateSexChromosome(this.si,logger);
+				SexedDiploids migrants=this.migrationRegime.getMigrants(i,simulationNumber);
 				if(migrants.size()>0) {
+					this.logger.info("Updating sex chromosomes of migrants");
+					migrants=migrants.updateSexChromosome(si);
 					this.logger.info("Adding "+migrants.size()+ " migrants to the evolved population (randomly removing an equivalent number of evolved individuals)");
 					Population migrantPop=Population.loadPopulation(migrants,gc,pc,fc, new Random(),false);
 					this.logger.info("Average fitness of migrants "+migrantPop.getAverageFitness());

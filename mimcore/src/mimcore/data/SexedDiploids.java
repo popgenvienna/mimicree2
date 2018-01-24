@@ -64,10 +64,9 @@ public class SexedDiploids {
         return new SexedDiploids(new ArrayList<DiploidGenome>(toretGens),toretSexes);
     }
 
-    public SexedDiploids updateSexChromosome(SexInfo si, Logger logger)
+    public SexedDiploids updateSexChromosome(SexInfo si)
     {
         ArrayList<DiploidGenome> toret=new ArrayList<DiploidGenome>();
-        logger.info("Updating sex chromosomes");
         for(int i=0; i<this.diploids.size(); i++)
         {
             DiploidGenome dg=this.diploids.get(i);
