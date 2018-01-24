@@ -65,6 +65,16 @@ class HaplotypeHaplotypeReader {
 			e.printStackTrace();
 			System.exit(0);
 		}
+
+		try
+		{
+			bf.close();
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+			System.exit(0);
+		}
 		
 		// Convert the BitArrayBuilder into a BitArray
 		ArrayList<BitArray> toret=new ArrayList<BitArray>();
