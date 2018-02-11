@@ -43,12 +43,12 @@ public class FastaCollectionBuilder {
     }
 
 
-    public ArrayList<FastaRecord> getRecords(String headerAddendum)
+    public ArrayList<FastaRecord> getRecords()
     {
         ArrayList<FastaRecord> records=new ArrayList<FastaRecord>();
         for(FastaRecordBuilder fab: this.builder.values())
         {
-            records.add(fab.getFastaRecord(headerAddendum));
+            records.add(fab.getFastaRecord());
         }
         return records;
     }
