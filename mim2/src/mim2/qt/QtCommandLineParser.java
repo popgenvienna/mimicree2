@@ -4,11 +4,10 @@ package mim2.qt;
 import mim2.CommandFormater;
 import mim2.shared.CommandLineParseHelp;
 import mim2.shared.GlobalResourceManager;
-import mim2.shared.SimulationMode;
+import mim2.shared.SnapshotManager;
 import mimcore.misc.MimicreeLogFactory;
 import mimcore.misc.MimicreeThreadPool;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
@@ -29,7 +28,10 @@ public class QtCommandLineParser {
 		String outputSync=null;
 		String outputGPF=null;
 		String outputDir=null;
-		String outputGenRaw="";
+		String snapshots=null;
+		String snapshotsdir=null;
+		String snapshotssync=null;
+		String snapshotsgpf=null;
 		String selectionRegimFile=null;         //
 		String populationSizeFile=null;
 		String migrationRegimeFile=null;
@@ -97,10 +99,22 @@ public class QtCommandLineParser {
             {
             	chromosomeDefinition=args.remove(0);
             }
-            else if(cu.equals("--snapshots"))
-            {
-            	outputGenRaw=args.remove(0);
-            }
+			else if(cu.equals("--snapshots"))
+			{
+				snapshots=args.remove(0);
+			}
+			else if(cu.equals("--snapshots-dir"))
+			{
+				snapshotsdir=args.remove(0);
+			}
+			else if(cu.equals("--snapshots-sync"))
+			{
+				snapshotssync=args.remove(0);
+			}
+			else if(cu.equals("--snapshots-gpf"))
+			{
+				snapshotsgpf=args.remove(0);
+			}
 			else if(cu.equals("--population-size"))
 			{
 				populationSizeFile=args.remove(0);
@@ -136,11 +150,11 @@ public class QtCommandLineParser {
 
     
         // Parse the string with the generations
-        SimulationMode simMode = CommandLineParseHelp.parseOutputGenerations(outputGenRaw);
+        SnapshotManager snapman= SnapshotManager.getSnapshotManager(snapshots,snapshotssync,snapshotsdir,snapshotsgpf);
 
 		MimicreeThreadPool.setThreads(threadCount);
 		logger.info("Starting qt simulations: a quantitative trait with truncating selection");
-		GlobalResourceManager.setGlobalResources(logger,haplotypeFile,recombinationFile,populationSizeFile,chromosomeDefinition,sexInfoFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,simMode,replicateRuns);
+		GlobalResourceManager.setGlobalResources(logger,haplotypeFile,recombinationFile,populationSizeFile,chromosomeDefinition,sexInfoFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,snapman,replicateRuns);
         QtSimulationFramework mimframe= new QtSimulationFramework(effectSizeFile,ve,heritability,selectionRegimFile);
         
         mimframe.run();
@@ -160,6 +174,9 @@ public class QtCommandLineParser {
 		sb.append(CommandFormater.format("--chromosome-definition","which chromosomes parts constitute a chromosome",null));
 		sb.append(CommandFormater.format("--sex","a file specifying the sex ratios",null));
 		sb.append(CommandFormater.format("--snapshots","a coma separated list of generations to output",null));
+		sb.append(CommandFormater.format("--snapshots-sync","use a distinct list of output generations for --output-sync",null));
+		sb.append(CommandFormater.format("--snapshots-dir","use a distinct list of output generations for --output-dir",null));
+		sb.append(CommandFormater.format("--snapshots-gpf","use a distinct list of output generations for --output-gpf",null));
 		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));
 		sb.append(CommandFormater.format("--output-sync","the output file (sync); --output-dir or --output-sync or both may be provided",null));
 		sb.append(CommandFormater.format("--output-dir","the output directory for the haplotypes; --output-dir or --output-sync or both may be provided",null));

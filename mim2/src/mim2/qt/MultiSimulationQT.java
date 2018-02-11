@@ -3,7 +3,6 @@ package mim2.qt;
 
 import mim2.shared.GlobalResourceManager;
 import mim2.shared.ResultRecorder;
-import mim2.shared.SimulationMode;
 import mimcore.data.Mutator.IMutator;
 import mimcore.data.PopulationSizeContainer;
 import mimcore.data.SexedDiploids;
@@ -15,19 +14,8 @@ import mimcore.data.gpf.survival.ISurvivalFunction;
 import mimcore.data.migration.IMigrationRegime;
 import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.data.sex.SexInfo;
-import mimcore.data.statistic.PACReducer;
-import mimcore.data.statistic.GPFCollection;
-import mimcore.data.statistic.PopulationAlleleCount;
-import mimcore.data.DiploidGenome;
 import mimcore.data.Population;
-import mimcore.io.HaplotypeMultiWriter;
-import mimcore.io.misc.GPFWriter;
-import mimcore.io.misc.ISummaryWriter;
-import mimcore.io.misc.SyncWriter;
-import mimcore.data.statistic.GPFReducer;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -63,7 +51,7 @@ public class MultiSimulationQT {
 		this.si=GlobalResourceManager.getSexInfo();
 
 
-		this.maxGeneration=GlobalResourceManager.getSimulationMode().getMaximumGenerations();
+		this.maxGeneration=GlobalResourceManager.getSnapshotManager().getMaximumGeneration();
 		this.migrationRegime=GlobalResourceManager.getMigrationRegime();
 		this.logger=GlobalResourceManager.getLogger();
 		this.recGenerator=GlobalResourceManager.getRecombinationGenerator();

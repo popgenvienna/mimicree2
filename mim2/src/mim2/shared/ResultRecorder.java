@@ -25,23 +25,17 @@ public class ResultRecorder {
     private final String outputDir;
     private ArrayList<PopulationAlleleCount> pacs;
     private ArrayList<GPFCollection> gpfs;
-    private final HashSet<Integer> outputGenerations;
+    private final SnapshotManager snapman;
     private final Logger logger;
     private final SexInfo sexInfo;
-    public ResultRecorder(String outputGPF, String outputSync, String outputDir, SexInfo sexInfo, SimulationMode simulationMode, Logger logger)
+    public ResultRecorder(String outputGPF, String outputSync, String outputDir, SexInfo sexInfo, SnapshotManager snapman, Logger logger)
     {
         this.outputDir=outputDir;
         this.outputGPF=outputGPF;
         this.outputSync=outputSync;
         this.pacs=new ArrayList<PopulationAlleleCount>();
         this.gpfs=new ArrayList<GPFCollection>();
-        HashSet<Integer> toOutput=new HashSet<Integer>();
-        toOutput.add(0); // always record base population!
-        for(Integer i : GlobalResourceManager.getSimulationMode().getTimestamps())
-        {
-            toOutput.add(i);
-        }
-        outputGenerations=toOutput;
+        this.snapman=snapman;
         this.logger=logger;
         this.sexInfo=sexInfo;
     }
@@ -49,7 +43,6 @@ public class ResultRecorder {
 
     public void record(int generation, int replicate, Population population)
     {
-        if(!this.outputGenerations.contains(generation))return;
         recordPAC(population,generation,replicate);
         recordGPF(population,generation,replicate);
         recordHap(population,generation,replicate);
@@ -59,6 +52,8 @@ public class ResultRecorder {
 
     private void recordPAC(Population toRecord,int generation, int replicate)
     {
+        // no recording generation no action
+        if(!snapman.recordSync(generation)) return;
         // No output file no action
         if(this.outputSync==null) return;
         this.logger.info("Recording allele frequences at generation "+generation+" of replicate "+replicate);
@@ -67,6 +62,8 @@ public class ResultRecorder {
 
     private void recordGPF(Population toRecord, int generation, int replicate)
     {
+        // no recording generation no action
+        if(!snapman.recordGPF(generation))return;
         // No output file no action
         if(this.outputGPF==null) return;
         this.logger.info("Recording genotype/phenotype/fitness at generation "+generation+" of replicate "+replicate);
@@ -76,6 +73,8 @@ public class ResultRecorder {
 
     private void recordHap(Population toRecord, int generation, int replicate)
     {
+        // no recording generation no action
+        if(!snapman.recordHaplotype(generation))return;
         // No output file no action
         if(this.outputDir==null) return;
         this.logger.info("Recording haplotypes at generation "+generation+" of replicate "+replicate);

@@ -2,10 +2,9 @@ package mim2.w;
 
 
 import mim2.CommandFormater;
-import mim2.qs.QsSimulationFramework;
 import mim2.shared.CommandLineParseHelp;
 import mim2.shared.GlobalResourceManager;
-import mim2.shared.SimulationMode;
+import mim2.shared.SnapshotManager;
 import mimcore.misc.MimicreeLogFactory;
 import mimcore.misc.MimicreeThreadPool;
 
@@ -28,7 +27,10 @@ public class WCommandLineParser {
 		String outputSync=null;
 		String outputGPF=null;
 		String outputDir=null;
-		String outputGenRaw="";
+		String snapshots=null;
+		String snapshotsdir=null;
+		String snapshotssync=null;
+		String snapshotsgpf=null;
 		String fitnessFile=null;            //
 		String epistasisFile=null;            //
 		String migrationRegimeFile=null;
@@ -85,10 +87,22 @@ public class WCommandLineParser {
             {
             	chromosomeDefinition=args.remove(0);
             }
-            else if(cu.equals("--snapshots"))
-            {
-            	outputGenRaw=args.remove(0);
-            }
+			else if(cu.equals("--snapshots"))
+			{
+				snapshots=args.remove(0);
+			}
+			else if(cu.equals("--snapshots-dir"))
+			{
+				snapshotsdir=args.remove(0);
+			}
+			else if(cu.equals("--snapshots-sync"))
+			{
+				snapshotssync=args.remove(0);
+			}
+			else if(cu.equals("--snapshots-gpf"))
+			{
+				snapshotsgpf=args.remove(0);
+			}
 			else if(cu.equals("--population-size"))
 			{
 				populationSizeFile=args.remove(0);
@@ -128,11 +142,11 @@ public class WCommandLineParser {
 
     
         // Parse the string with the generations
-        SimulationMode simMode = CommandLineParseHelp.parseOutputGenerations(outputGenRaw);
+        SnapshotManager snapman  = SnapshotManager.getSnapshotManager(snapshots,snapshotssync,snapshotsdir,snapshotsgpf);
 
 		MimicreeThreadPool.setThreads(threadCount);
 		logger.info("Starting simulations using fitness effects of SNPs (w)");
-		GlobalResourceManager.setGlobalResources(logger,haplotypeFile,recombinationFile,populationSizeFile,chromosomeDefinition,sexInfoFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,simMode,replicateRuns);
+		GlobalResourceManager.setGlobalResources(logger,haplotypeFile,recombinationFile,populationSizeFile,chromosomeDefinition,sexInfoFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,snapman,replicateRuns);
 		WSimulationFramework mimframe= new WSimulationFramework(fitnessFile,epistasisFile);
         
         mimframe.run();
@@ -149,6 +163,9 @@ public class WCommandLineParser {
 		sb.append(CommandFormater.format("--chromosome-definition","which chromosomes parts constitute a chromosome",null));
 		sb.append(CommandFormater.format("--sex","a file specifying the sex ratios",null));
 		sb.append(CommandFormater.format("--snapshots","a coma separated list of generations to output",null));
+		sb.append(CommandFormater.format("--snapshots-sync","use a distinct list of output generations for --output-sync",null));
+		sb.append(CommandFormater.format("--snapshots-dir","use a distinct list of output generations for --output-dir",null));
+		sb.append(CommandFormater.format("--snapshots-gpf","use a distinct list of output generations for --output-gpf",null));
 		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));
 		sb.append(CommandFormater.format("--output-sync","the output file (sync); --output-dir or --output-sync or both may be provided",null));
 		sb.append(CommandFormater.format("--output-dir","the output directory for the haplotypes; --output-dir or --output-sync or both may be provided",null));

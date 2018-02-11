@@ -50,7 +50,7 @@ public class MultiSimulationQS {
 		this.si=GlobalResourceManager.getSexInfo();
 
 
-		this.maxGeneration=GlobalResourceManager.getSimulationMode().getMaximumGenerations();
+		this.maxGeneration=GlobalResourceManager.getSnapshotManager().getMaximumGeneration();
 		this.migrationRegime=GlobalResourceManager.getMigrationRegime();
 		this.logger=GlobalResourceManager.getLogger();
 		this.recGenerator=GlobalResourceManager.getRecombinationGenerator();

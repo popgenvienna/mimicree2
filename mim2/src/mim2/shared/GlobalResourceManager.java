@@ -39,7 +39,7 @@ public class GlobalResourceManager {
     private static String outputDirs;
     private static Logger logger;
     private static int replicateRunss;
-    private static SimulationMode simulationModes;
+    private static SnapshotManager snapshotManager;
     private static ResultRecorder rr;
 
 
@@ -47,16 +47,16 @@ public class GlobalResourceManager {
     //  java.util.logging.Logger logger
 
     public static void setGlobalResources(Logger mylogger, String haplotypeFile,  String recombinationFile,String populationSizeFile,
-                                          String chromosomeDefinition, String sexInfoFile,String migrationRegimeFile, double mutationRate, String outputSync, String outputGPF, String outputDir, SimulationMode simMode, int replicateRuns)
+                                          String chromosomeDefinition, String sexInfoFile,String migrationRegimeFile, double mutationRate, String outputSync, String outputGPF, String outputDir, SnapshotManager snapman, int replicateRuns)
     {
         logger=mylogger;
         setOutput(outputSync,outputGPF,outputDir);
         setSexRecGenomes(haplotypeFile,recombinationFile,chromosomeDefinition,sexInfoFile);
-        setPopMigMutModeReps(populationSizeFile,migrationRegimeFile,mutationRate,simMode,replicateRuns);
+        setPopMigMutModeReps(populationSizeFile,migrationRegimeFile,mutationRate,snapman,replicateRuns);
         rr=null;
     }
 
-    private static void setPopMigMutModeReps(String populationSizeFile, String migrationRegimeFile, double mutationRate, SimulationMode simMode, int replicateRuns)
+    private static void setPopMigMutModeReps(String populationSizeFile, String migrationRegimeFile, double mutationRate, SnapshotManager snapman, int replicateRuns)
     {
         // migration regime
         if(migrationRegimeFile == null)logger.info("No migration regime file found; Proceeding without migration");
@@ -73,7 +73,7 @@ public class GlobalResourceManager {
         if(populationSizeFile!=null) populationSizeContainer=new PopulationSizeReader(populationSizeFile,logger).readPopulationSizes();
         mutator=new MutatorGenomeWideRate(mutationRate);
 
-        simulationModes=simMode;
+        snapshotManager=snapman;
         replicateRunss=replicateRuns;
 
 
@@ -134,11 +134,11 @@ public class GlobalResourceManager {
     public static String getOutputDir(){return outputDirs;}
     public static Logger getLogger(){return logger;}
     public static int getReplicateRuns(){return replicateRunss;}
-    public static SimulationMode getSimulationMode(){return simulationModes;}
+    public static SnapshotManager getSnapshotManager(){return snapshotManager;}
 
     public static ResultRecorder getResultRecorder()
     {
-        if(rr==null)rr =new ResultRecorder(outputGPFs,outputSyncs,outputDirs,sexInfo,simulationModes,logger);
+        if(rr==null)rr =new ResultRecorder(outputGPFs,outputSyncs,outputDirs,sexInfo,snapshotManager,logger);
         return rr;
     }
 }

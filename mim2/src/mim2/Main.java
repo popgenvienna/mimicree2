@@ -90,7 +90,7 @@ public class Main {
 
 		public static String getVersionNumber()
 		{
-			return "v0.19.4";
+			return "v0.19.6";
 		}
 
 

@@ -2,9 +2,6 @@ package mim2.mimhap2fasta;
 
 
 import mim2.CommandFormater;
-import mim2.shared.CommandLineParseHelp;
-import mim2.shared.SimulationMode;
-import mim2.w.WSimulationFramework;
 import mimcore.misc.MimicreeLogFactory;
 import mimcore.misc.MimicreeThreadPool;
 

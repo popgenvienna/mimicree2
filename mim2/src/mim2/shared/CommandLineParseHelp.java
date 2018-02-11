@@ -7,29 +7,5 @@ import java.util.ArrayList;
  */
 public class CommandLineParseHelp {
 
-    public static SimulationMode parseOutputGenerations(String outputGenerationsRaw)
-    {
-        if(outputGenerationsRaw.equals("")) throw new IllegalArgumentException("Please provide a valid --snapshots parameter");
-        // Parse a String consistent of a comma-separated list of numbers, to a array of integers
-        SimulationMode simMode;
-        String [] tmp;
-        if(outputGenerationsRaw.contains(","))
-        {
-            tmp=outputGenerationsRaw.split(",");
-        }
-        else
-        {
-            tmp=new String[1];
-            tmp[0]=outputGenerationsRaw;
-        }
-        // Convert everything to int
-        ArrayList<Integer> ti=new ArrayList<Integer>();
-        for(String s :tmp)
-        {
-            ti.add(Integer.parseInt(s));
-        }
-        simMode=SimulationMode.Timestamp;
-        simMode.setTimestamps(ti);
-        return simMode;
-    }
+
 }

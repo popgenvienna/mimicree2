@@ -1,32 +1,14 @@
 package mim2.w;
 
 import mim2.shared.GlobalResourceManager;
-import mim2.shared.SimulationMode;
-import mimcore.data.DiploidGenome;
-import mimcore.data.Mutator.IMutator;
-import mimcore.data.Mutator.MutatorGenomeWideRate;
-import mimcore.data.PopulationSizeContainer;
 import mimcore.data.gpf.fitness.*;
 import mimcore.data.gpf.quantitative.*;
 import mimcore.data.gpf.survival.SurvivalRegimeAllSurvive;
-import mimcore.data.migration.IMigrationRegime;
-import mimcore.data.migration.MigrationRegimeNoMigration;
-import mimcore.data.recombination.CrossoverGenerator;
-import mimcore.data.recombination.RecombinationGenerator;
-import mimcore.data.sex.SexInfo;
-import mimcore.io.ChromosomeDefinitionReader;
-import mimcore.io.DiploidGenomeReader;
-import mimcore.io.PopulationSizeReader;
-import mimcore.io.SexReader;
-import mimcore.io.recombination.RecombinationRateReader;
-import mimcore.io.migrationRegime.MigrationRegimeReader;
 import mimcore.data.gpf.survival.ISurvivalFunction;
 import mimcore.io.w.EpistasisFitnessReader;
 import mimcore.io.w.SNPFitnessReader;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class WSimulationFramework {
 

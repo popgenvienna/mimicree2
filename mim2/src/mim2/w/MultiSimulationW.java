@@ -58,7 +58,7 @@ public class MultiSimulationW {
 		this.sf=sf;
 		this.fc=fc;
 
-		this.maxGeneration=GlobalResourceManager.getSimulationMode().getMaximumGenerations();
+		this.maxGeneration=GlobalResourceManager.getSnapshotManager().getMaximumGeneration();
 		this.migrationRegime=GlobalResourceManager.getMigrationRegime();
 
 		this.logger=GlobalResourceManager.getLogger();

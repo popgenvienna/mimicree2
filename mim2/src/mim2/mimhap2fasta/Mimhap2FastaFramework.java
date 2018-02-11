@@ -1,35 +1,10 @@
 package mim2.mimhap2fasta;
 
-import mim2.shared.SimulationMode;
-import mim2.w.MultiSimulationW;
-import mimcore.data.DiploidGenome;
-import mimcore.data.Mutator.IMutator;
-import mimcore.data.Mutator.MutatorGenomeWideRate;
-import mimcore.data.PopulationSizeContainer;
 import mimcore.data.fasta.FastaCollectionBuilder;
 import mimcore.data.fasta.FastaRecord;
-import mimcore.data.gpf.fitness.FitnessCalculatorAllEqual;
-import mimcore.data.gpf.fitness.FitnessCalculator_SNPandEpistasis;
-import mimcore.data.gpf.fitness.IFitnessCalculator;
-import mimcore.data.gpf.quantitative.GenotypeCalculatorAllEqual;
-import mimcore.data.gpf.quantitative.IGenotypeCalculator;
-import mimcore.data.gpf.quantitative.IPhenotypeCalculator;
-import mimcore.data.gpf.quantitative.PhenotypeCalculatorAllEqual;
-import mimcore.data.gpf.survival.ISurvivalFunction;
-import mimcore.data.gpf.survival.SurvivalRegimeAllSurvive;
 import mimcore.data.haplotypes.HaploidGenome;
-import mimcore.data.migration.IMigrationRegime;
-import mimcore.data.migration.MigrationRegimeNoMigration;
-import mimcore.data.recombination.RecombinationGenerator;
-import mimcore.io.ChromosomeDefinitionReader;
-import mimcore.io.DiploidGenomeReader;
-import mimcore.io.PopulationSizeReader;
 import mimcore.io.fasta.*;
 import mimcore.io.haplotypes.HaplotypeReader;
-import mimcore.io.migrationRegime.MigrationRegimeReader;
-import mimcore.io.recombination.RecombinationRateReader;
-import mimcore.io.w.EpistasisFitnessReader;
-import mimcore.io.w.SNPFitnessReader;
 
 import java.io.File;
 import java.io.IOException;

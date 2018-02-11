@@ -2,30 +2,16 @@ package mim2.qt;
 
 import mim2.shared.GPFHelper;
 import mim2.shared.GlobalResourceManager;
-import mim2.shared.SimulationMode;
-import mimcore.data.*;
-import mimcore.data.Mutator.IMutator;
-import mimcore.data.Mutator.MutatorGenomeWideRate;
 import mimcore.data.gpf.fitness.FitnessCalculatorAllEqual;
 import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.gpf.quantitative.GenotypeCalculatorAllEqual;
 import mimcore.data.gpf.quantitative.IGenotypeCalculator;
 import mimcore.data.gpf.quantitative.PhenotypeCalculator;
-import mimcore.data.gpf.quantitative.GenotypeCalculator;
 import mimcore.data.gpf.survival.*;
-import mimcore.data.migration.IMigrationRegime;
-import mimcore.data.migration.MigrationRegimeNoMigration;
-import mimcore.data.recombination.*;
-import mimcore.data.sex.SexInfo;
 import mimcore.io.*;
-import mimcore.io.migrationRegime.MigrationRegimeReader;
-import mimcore.io.recombination.RecombinationRateReader;
 import mimcore.io.selectionregime.*;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
 
 public class QtSimulationFramework {
 	private final String effectSizeFile;
