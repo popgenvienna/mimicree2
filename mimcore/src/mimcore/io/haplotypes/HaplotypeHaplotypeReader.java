@@ -129,7 +129,7 @@ class HaplotypeHaplotypeReader {
 			{
 				snplist.add(Character.toUpperCase(s.charAt(0))); snplist.add(Character.toUpperCase(s.charAt(0)));
 			}
-			else throw new IllegalArgumentException("Invalid size of genotype");
+			else throw new IllegalArgumentException("Invalid size of genotype "+s+" in line "+line);
 		}
 		assert(gp!=null);
 		return new HapFileContainer(gp,snplist);
