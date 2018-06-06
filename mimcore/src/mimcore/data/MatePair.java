@@ -25,6 +25,26 @@ public class MatePair {
 		this.s2=s2;
 	}
 
+
+	public DiploidGenome getChildHaploid(RecombinationGenerator recGenerator, Sex sex, IMutator mutator, SexInfo si, Random random)
+	{
+		// Mating of haploids,
+		// first make a novel fake Diploid, continaing the first haplotype of each individual
+		DiploidGenome chimera=new DiploidGenome(s1.getGenome().getHaplotypeA(),s2.getGenome().getHaplotypeA());
+		Specimen chimeraSpec=new Specimen(Sex.Hermaphrodite,0.0,0.0,0.0,chimera);
+
+		// than get a gamete allowing the two haplotypes to recombine (if desired)
+		SNPCollection snpCollection= chimera.getHaplotypeA().getSNPCollection();
+		BitArrayBuilder haploid=chimeraSpec.getGamete(recGenerator,mutator,random);
+
+		// generate the new genome, just take the single haplotype twice, allowing to continue to operate with diploids despite haploids being simulated
+		HaploidGenome novelGenome=new HaploidGenome(haploid.getBitArray(),snpCollection);
+		DiploidGenome toret =new DiploidGenome(novelGenome,novelGenome);
+
+		return toret;
+	}
+
+
 	public DiploidGenome getChild(RecombinationGenerator recGenerator, Sex sex, IMutator mutator, SexInfo si, Random random)
 	{
 		SNPCollection snpCollection=s1.getGenome().getHaplotypeA().getSNPCollection();

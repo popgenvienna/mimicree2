@@ -41,22 +41,25 @@ public class GlobalResourceManager {
     private static int replicateRunss;
     private static SnapshotManager snapshotManager;
     private static ResultRecorder rr;
+    private static boolean haploidss;
 
 
 
     //  java.util.logging.Logger logger
 
     public static void setGlobalResources(Logger mylogger, String haplotypeFile,  String recombinationFile,String populationSizeFile,
-                                          String chromosomeDefinition, String sexInfoFile,String migrationRegimeFile, double mutationRate, String outputSync, String outputGPF, String outputDir, SnapshotManager snapman, int replicateRuns)
+                                          String chromosomeDefinition, String sexInfoFile,String migrationRegimeFile, double mutationRate, String outputSync,
+                                          String outputGPF, String outputDir, SnapshotManager snapman, int replicateRuns,boolean haploids)
     {
         logger=mylogger;
+        haploidss=haploids;
         setOutput(outputSync,outputGPF,outputDir);
-        setSexRecGenomes(haplotypeFile,recombinationFile,chromosomeDefinition,sexInfoFile);
-        setPopMigMutModeReps(populationSizeFile,migrationRegimeFile,mutationRate,snapman,replicateRuns);
+        setSexRecGenomes(haplotypeFile,recombinationFile,chromosomeDefinition,sexInfoFile,haploids);
+        setPopMigMutModeReps(populationSizeFile,migrationRegimeFile,mutationRate,snapman,replicateRuns,haploids);
         rr=null;
     }
 
-    private static void setPopMigMutModeReps(String populationSizeFile, String migrationRegimeFile, double mutationRate, SnapshotManager snapman, int replicateRuns)
+    private static void setPopMigMutModeReps(String populationSizeFile, String migrationRegimeFile, double mutationRate, SnapshotManager snapman, int replicateRuns,boolean haploids)
     {
         // migration regime
         if(migrationRegimeFile == null)logger.info("No migration regime file found; Proceeding without migration");
@@ -97,7 +100,7 @@ public class GlobalResourceManager {
         outputGPFs=outputGPF;
     }
 
-    private static void setSexRecGenomes(String haplotypeFile, String recombinationFile, String chromosomeDefinition, String sexInfoFile)
+    private static void setSexRecGenomes(String haplotypeFile, String recombinationFile, String chromosomeDefinition, String sexInfoFile,boolean haploids)
     {
         if(! new File(haplotypeFile).exists()) throw new IllegalArgumentException("Haplotype file does not exist "+haplotypeFile);
         if(! new File(recombinationFile).exists()) throw new IllegalArgumentException("Recombination file does not exist " + recombinationFile);

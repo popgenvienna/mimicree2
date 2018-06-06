@@ -344,7 +344,9 @@ class SingleSpecimenGenerator implements Runnable
 	private final Random random;
 	private final RecombinationGenerator recGenerator;
 	private final SexInfo si;
-	public SingleSpecimenGenerator(Sex mysex, SexInfo si, IMatingFunction mf, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, RecombinationGenerator recGen, SpecimenCollector collector, IMutator mutator, Random random)
+	private final boolean haploid;
+	public SingleSpecimenGenerator(Sex mysex, SexInfo si, IMatingFunction mf, IGenotypeCalculator gc, IPhenotypeCalculator pc,
+								   IFitnessCalculator fc, RecombinationGenerator recGen, SpecimenCollector collector, IMutator mutator, Random random, boolean haploid)
 	{
 		this.mf=mf;
 		this.pc=pc;
@@ -356,12 +358,18 @@ class SingleSpecimenGenerator implements Runnable
 		this.mutator=mutator;
 		this.mysex=mysex;
 		this.si=si;
+		this.haploid=haploid;
 	}
 	
 	public void run()
 	{
 		MatePair mp=mf.getCouple(this.random);
-		DiploidGenome fertilizedEgg=mp.getChild(recGenerator,mysex, mutator,si,this.random);
+		DiploidGenome fertilizedEgg=null;
+
+		// haploids and diploids mate and recombine differentially
+		if(haploid) fertilizedEgg=mp.getChildHaploid(recGenerator,mysex, mutator,si,this.random);
+		else fertilizedEgg=mp.getChild(recGenerator,mysex, mutator,si,this.random);
+
 		double genotype=gc.getGenotype(fertilizedEgg,mysex);
 		double phenotype=pc.getPhenotype(mysex,genotype,random);
 		double fitness=fc.getFitness(fertilizedEgg,phenotype,mysex);

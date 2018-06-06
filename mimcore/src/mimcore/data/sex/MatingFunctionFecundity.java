@@ -30,7 +30,9 @@ public class MatingFunctionFecundity implements IMatingFunction {
 		if(selfingRate<0.0 ||selfingRate>1.0) throw new IllegalArgumentException("Selfing rate must be between 0.0 and 1.0");
 		this.selfingRate=selfingRate;
 		ArrayList<Specimen> popSpecimen=pop.getSpecimen();
-		if(popSpecimen.size()<=2)throw new IllegalArgumentException("Population size must be larger than two; Selection strength to high?");
+
+		// Two individuals are enough to mate diploids;
+		if(popSpecimen.size()<2)throw new IllegalArgumentException("Population size must be larger than or equal to two; Selection strength to high?");
 
 		ArrayList<Specimen> afh=new ArrayList<Specimen>();
 		ArrayList<Specimen> amh=new ArrayList<Specimen>();
@@ -118,10 +120,12 @@ public class MatingFunctionFecundity implements IMatingFunction {
 
 		if(s1.specimen.getSex()==Sex.Male)
 		{
+			if(this.fh.size()<1) throw new IllegalArgumentException("No sex partner found for male; population died out");
 			s2=getSpecimenForRandomNumber(random.nextDouble(), this.fh);
 		}
 		else if(s1.specimen.getSex()==Sex.Female)
 		{
+			if(this.mh.size()<1) throw new IllegalArgumentException("No sex partner found for female; population died out");
 			s2=getSpecimenForRandomNumber(random.nextDouble(), this.mh);
 		}
 		else if(s1.specimen.getSex()==Sex.Hermaphrodite)
@@ -132,6 +136,7 @@ public class MatingFunctionFecundity implements IMatingFunction {
 			else
 			{
 				// no selfing; ensure no selfing, not even randomly. thus s1==s2
+				if(this.fmh.size()<2) throw new IllegalArgumentException("No sex partner found for hermaphrodite; population died out");
 				s2=getSpecimenForRandomNumber(random.nextDouble(),this.fmh);
 				while(s1.specimen==s2.specimen) s2=getSpecimenForRandomNumber(random.nextDouble(),this.fmh);
 			}

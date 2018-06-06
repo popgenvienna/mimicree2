@@ -42,6 +42,7 @@ public class WCommandLineParser {
 		boolean detailedLog=false;
 		int threadCount=1;
 		double mutationRate=0.0;
+		boolean haploids=false;
 
 
 
@@ -131,6 +132,10 @@ public class WCommandLineParser {
 			{
 				outputGPF=args.remove(0);
 			}
+			else if(cu.equals("--haploids"))
+			{
+				haploids=true;
+			}
             else
             {
                 throw new IllegalArgumentException("Do not recognize command line option "+cu);
@@ -146,7 +151,7 @@ public class WCommandLineParser {
 
 		MimicreeThreadPool.setThreads(threadCount);
 		logger.info("Starting simulations using fitness effects of SNPs (w)");
-		GlobalResourceManager.setGlobalResources(logger,haplotypeFile,recombinationFile,populationSizeFile,chromosomeDefinition,sexInfoFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,snapman,replicateRuns);
+		GlobalResourceManager.setGlobalResources(logger,haplotypeFile,recombinationFile,populationSizeFile,chromosomeDefinition,sexInfoFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,snapman,replicateRuns,haploids);
 		WSimulationFramework mimframe= new WSimulationFramework(fitnessFile,epistasisFile);
         
         mimframe.run();
