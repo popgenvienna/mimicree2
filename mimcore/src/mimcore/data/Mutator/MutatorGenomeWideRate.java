@@ -25,6 +25,10 @@ public class MutatorGenomeWideRate implements IMutator {
         int snpCount=snpCollection.size();
         double mutationLambda=snpCount*mutationRate;
         int targetMutations= Poisson.getPoisson(mutationLambda,random);
+
+        // Shortcut: Zero mutations
+        if(targetMutations==0) return toMutate;
+
         if(targetMutations>snpCount) targetMutations=snpCount;
 
 

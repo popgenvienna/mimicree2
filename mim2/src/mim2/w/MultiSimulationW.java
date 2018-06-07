@@ -45,6 +45,8 @@ public class MultiSimulationW {
 
 	private final int maxGeneration;
 	private final int replicateRuns;
+	private final boolean haploid;
+	private final boolean clonal;
 	private Logger logger;
 
 
@@ -67,6 +69,8 @@ public class MultiSimulationW {
 		this.popcont=GlobalResourceManager.getPopulationSizeContainer();
 		this.mutator=GlobalResourceManager.getMutator();
 		this.si=GlobalResourceManager.getSexInfo();
+		this.haploid=GlobalResourceManager.getHaploid();
+		this.clonal=GlobalResourceManager.getClonal();
 		
 	}
 
@@ -104,14 +108,18 @@ public class MultiSimulationW {
 				// Survival would go here if considered....(no survival needed for stabilizing selection);
 
 
-				nextPopulation=nextPopulation.getNextGeneration(si,gc,pc,fc,mf,this.recGenerator,mutator, popsize);
+				nextPopulation=nextPopulation.getNextGeneration(si,gc,pc,fc,mf,this.recGenerator,mutator, popsize,haploid,clonal);
 				this.logger.info("Average fitness of offspring "+nextPopulation.getAverageFitness());
 
 				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>
 				SexedDiploids migrants=this.migrationRegime.getMigrants(i,simulationNumber);
 				if(migrants.size()>0) {
-					this.logger.info("Updating sex chromosomes of migrants");
-					migrants=migrants.updateSexChromosome(si);
+
+					// update sex chromosomes only for not haploids and not clonal
+					if((!haploid) && (!clonal)){
+						this.logger.info("Updating sex chromosomes of migrants");
+						migrants = migrants.updateSexChromosome(si);
+					}
 					this.logger.info("Adding "+migrants.size()+ " migrants to the evolved population (randomly removing an equivalent number of evolved individuals)");
 					Population migrantPop=Population.loadPopulation(migrants,gc,pc,fc, new Random(),false);
 					this.logger.info("Average fitness of migrants "+migrantPop.getAverageFitness());

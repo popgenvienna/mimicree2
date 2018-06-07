@@ -151,11 +151,11 @@ public class Population {
 	 * @return
 	 */
 	public Population getNextGeneration(SexInfo si, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, IMatingFunction matingfunction,
-										RecombinationGenerator recGenerator, IMutator mutator, int targetN)
+										RecombinationGenerator recGenerator, IMutator mutator, int targetN, boolean haploid, boolean clonal)
 	{
 		// the selected ones: go and mate ..populate the earth
 		IMatingFunction mf=matingfunction.factory(this);
-		SpecimenGenerator specGen=new SpecimenGenerator(si, mf,gc,pc,fc,recGenerator,mutator, targetN);
+		SpecimenGenerator specGen=new SpecimenGenerator(si, mf,gc,pc,fc,recGenerator,mutator, targetN,haploid,clonal);
 		ArrayList<Specimen> spec=specGen.getSpecimen();
 		return new Population(spec);
 	}
@@ -233,9 +233,11 @@ class SpecimenGenerator
 	private final RecombinationGenerator recGen;
 	private final IMutator mutator;
 	private final SexInfo si;
+	private final boolean haploid;
+	private final boolean clonal;
 
 	
-	public SpecimenGenerator(SexInfo si, IMatingFunction mf, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, RecombinationGenerator recGen, IMutator mutator, int populationSize )
+	public SpecimenGenerator(SexInfo si, IMatingFunction mf, IGenotypeCalculator gc, IPhenotypeCalculator pc, IFitnessCalculator fc, RecombinationGenerator recGen, IMutator mutator, int populationSize,boolean haploid, boolean clonal )
 	{
 		//	 * (mf,gc,pc,recGenerator,this.size());
 
@@ -248,6 +250,8 @@ class SpecimenGenerator
 		this.mutator=mutator;
 		this.sa=si.getSexAssigner();
 		this.si=si;
+		this.haploid=haploid;
+		this.clonal=clonal;
 
 
 	}
@@ -262,7 +266,7 @@ class SpecimenGenerator
 
 		for(int i=0; i<this.populationSize; i++)
 		{
-			call.add(Executors.callable(new SingleSpecimenGenerator(sexes.remove(0),this.si,this.mf,this.gc,this.pc,this.fc,this.recGen,col,mutator,MimicreeThreadPool.getRandomForThread(i))));
+			call.add(Executors.callable(new SingleSpecimenGenerator(sexes.remove(0),this.si,this.mf,this.gc,this.pc,this.fc,this.recGen,col,mutator,MimicreeThreadPool.getRandomForThread(i),haploid,clonal)));
 		}
 
 		try
@@ -345,8 +349,9 @@ class SingleSpecimenGenerator implements Runnable
 	private final RecombinationGenerator recGenerator;
 	private final SexInfo si;
 	private final boolean haploid;
+	private final boolean clonal;
 	public SingleSpecimenGenerator(Sex mysex, SexInfo si, IMatingFunction mf, IGenotypeCalculator gc, IPhenotypeCalculator pc,
-								   IFitnessCalculator fc, RecombinationGenerator recGen, SpecimenCollector collector, IMutator mutator, Random random, boolean haploid)
+								   IFitnessCalculator fc, RecombinationGenerator recGen, SpecimenCollector collector, IMutator mutator, Random random, boolean haploid,boolean clonal)
 	{
 		this.mf=mf;
 		this.pc=pc;
@@ -359,15 +364,18 @@ class SingleSpecimenGenerator implements Runnable
 		this.mysex=mysex;
 		this.si=si;
 		this.haploid=haploid;
+		this.clonal=clonal;
 	}
 	
 	public void run()
 	{
 		MatePair mp=mf.getCouple(this.random);
+
 		DiploidGenome fertilizedEgg=null;
 
-		// haploids and diploids mate and recombine differentially
-		if(haploid) fertilizedEgg=mp.getChildHaploid(recGenerator,mysex, mutator,si,this.random);
+		// haploids and diploids mate and recombine differently
+		if(clonal) fertilizedEgg=mp.getChildClonal(recGenerator,mutator,haploid,this.random);
+		else if(haploid) fertilizedEgg=mp.getChildHaploid(recGenerator,mysex, mutator,si,this.random);
 		else fertilizedEgg=mp.getChild(recGenerator,mysex, mutator,si,this.random);
 
 		double genotype=gc.getGenotype(fertilizedEgg,mysex);

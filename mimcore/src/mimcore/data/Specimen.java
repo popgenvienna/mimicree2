@@ -58,6 +58,25 @@ public class Specimen {
 		BitArrayBuilder mutatedGamete=mutator.introduceMutations(pristineGamete,snpCollection,random);
 		return mutatedGamete;
 	}
+	public BitArrayBuilder[] getClonalGametes(IMutator mutator, Random random, boolean haploid)
+	{
+
+		SNPCollection snpCollection=genome.getHaplotypeA().getSNPCollection();
+		BitArrayBuilder hap1=this.genome.getHaplotypeA().getRawGenome().getBitArrayBuilder();
+		BitArrayBuilder hap2=this.genome.getHaplotypeB().getRawGenome().getBitArrayBuilder();
+
+		hap1=mutator.introduceMutations(hap1,snpCollection,random);
+
+		// if haploid just mutate once
+		if(haploid) hap2=hap1;
+		else hap2 =mutator.introduceMutations(hap2,snpCollection,random);
+
+		BitArrayBuilder[] toret=new BitArrayBuilder[2];
+		toret[0]=hap1;
+		toret[1]=hap2;
+		return toret;
+	}
+
 	
 	public double quantGenotype()
 	{

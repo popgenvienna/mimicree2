@@ -26,6 +26,19 @@ public class MatePair {
 	}
 
 
+	public DiploidGenome getChildClonal(RecombinationGenerator recGenerator, IMutator mutator, boolean haploid, Random random)
+	{
+
+		BitArrayBuilder[] bits=s1.getClonalGametes(mutator,random,haploid);
+
+		SNPCollection snpCollection= s1.getGenome().getHaplotypeA().getSNPCollection();
+		HaploidGenome hap1=new HaploidGenome(bits[0].getBitArray(),snpCollection);
+		HaploidGenome hap2=new HaploidGenome(bits[1].getBitArray(),snpCollection);
+		DiploidGenome dipgen=new DiploidGenome(hap1,hap2);
+		return dipgen;
+
+	}
+
 	public DiploidGenome getChildHaploid(RecombinationGenerator recGenerator, Sex sex, IMutator mutator, SexInfo si, Random random)
 	{
 		// Mating of haploids,

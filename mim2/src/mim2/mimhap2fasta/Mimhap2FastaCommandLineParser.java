@@ -26,6 +26,7 @@ public class Mimhap2FastaCommandLineParser {
 		boolean extremeSplit=false;
 		boolean stringent=false;
 		boolean detailedLog=false;
+		boolean haploid=false;
 
 
 
@@ -63,7 +64,10 @@ public class Mimhap2FastaCommandLineParser {
             {
 				stringent=true;
             }
-
+            else if (cu.equals("--haploid"))
+			{
+				haploid=true;
+			}
             else
             {
                 throw new IllegalArgumentException("Do not recognize command line option "+cu);
@@ -76,7 +80,7 @@ public class Mimhap2FastaCommandLineParser {
 
 
 		MimicreeThreadPool.setThreads(1);
-        Mimhap2FastaFramework mimframe= new Mimhap2FastaFramework(referenceFile,mimhapFile,outputFasta,outputDir,extremeSplit,stringent,logger);
+        Mimhap2FastaFramework mimframe= new Mimhap2FastaFramework(referenceFile,mimhapFile,outputFasta,outputDir,extremeSplit,haploid,stringent,logger);
         
         mimframe.run();
 	}
@@ -92,6 +96,7 @@ public class Mimhap2FastaCommandLineParser {
 		sb.append(CommandFormater.format("--output-dir","the output directory; save fasta entries in separate files; either --output-fasta or --output-dir needs to be provided",null));
 		sb.append(CommandFormater.format("--split-chromosomes","flag; only valid with --output-dir; in addition to haploid genomes save each chromosome in a separate file",null));
 		sb.append(CommandFormater.format("--stringent","report an error if reference characters do not match (fasta vs haplotype file)",null));
+		sb.append(CommandFormater.format("--haploid","haploid genomes have been simulated",null));
 		sb.append(CommandFormater.format("--help","print the help",null));
 		System.out.print(sb.toString());
 		System.exit(1);

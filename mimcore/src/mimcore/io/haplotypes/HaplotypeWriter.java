@@ -1,7 +1,9 @@
 package mimcore.io.haplotypes;
 
+import mimcore.data.Chromosome;
 import mimcore.data.haplotypes.*;
 import mimcore.data.sex.Sex;
+import mimcore.data.sex.SexInfo;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
@@ -15,7 +17,9 @@ public class HaplotypeWriter {
 	private BufferedWriter bf; 
 	private final String outputFile;
 	private Logger logger;
-	public HaplotypeWriter(String outputFile, Logger logger)
+	private final boolean haploid;
+	private final SexInfo sexInfo;
+	public HaplotypeWriter(String outputFile, boolean haploid, SexInfo sexInfo, Logger logger)
 	{
 		// The extension will be decided at the level which output encoding should be used.
 		// Output encoding will be decided at this level, thus extension also here.
@@ -31,6 +35,8 @@ public class HaplotypeWriter {
 			System.exit(0);
 		}
 		this.outputFile=outputFile;
+		this.haploid=haploid;
+		this.sexInfo=sexInfo;
 	}
 	
 	
@@ -65,7 +71,7 @@ public class HaplotypeWriter {
 				}
 			}
 			
-			String toWrite=formatOutput(activeSNP,chars);
+			String toWrite=formatOutput(activeSNP,chars,sexes);
 			try
 			{
 				bf.write(toWrite+"\n");
@@ -90,7 +96,7 @@ public class HaplotypeWriter {
 		this.logger.info("Finished writing "+haplotypes.size() +" haplotypes");
 	}
 	
-	private String formatOutput(SNP snp,ArrayList<Character> chars)
+	private String formatOutput(SNP snp,ArrayList<Character> chars,ArrayList<Sex> sexes)
 	{
 		StringBuilder sb=new StringBuilder();
 		//2L      861026    T      A/T    TT AT AA AA TT
@@ -104,7 +110,7 @@ public class HaplotypeWriter {
 		sb.append("/");
 		sb.append(snp.derivedAllele());
 		sb.append("\t");
-		sb.append(formatHaplotypes(chars));
+		sb.append(formatHaplotypes(chars,snp.genomicPosition().chromosome(),sexes));
 		return sb.toString();
 		
 	}
@@ -132,22 +138,26 @@ public class HaplotypeWriter {
 		}
 	}
 	
-	private String formatHaplotypes(ArrayList<Character> chars)
+	private String formatHaplotypes(ArrayList<Character> chars, Chromosome chr, ArrayList<Sex> sexes)
 	{
 		StringBuilder sb=new StringBuilder();
 		sb.append(chars.get(0));
-		sb.append(chars.get(1));
+		if(writeSecondHaplotype(chr,sexes.get(0))) sb.append(chars.get(1));
+
 		for(int i=2; i<chars.size(); i+=2)
 		{
 			sb.append(" ");
 			sb.append(chars.get(i));
-			sb.append(chars.get(i+1));
+			if(writeSecondHaplotype(chr,sexes.get(i/2))) sb.append(chars.get(i+1)); // write only first genotype for haploids and hemizygous sex chromosomes
+
 		}
 		return sb.toString();
-		
 	}
-	
-	
-	
-	
+
+	private boolean writeSecondHaplotype(Chromosome chr, Sex sex)
+	{
+		if(haploid) return false;
+		if(sexInfo.isHemizygous(sex,chr)) return false;
+		return true;
+	}
 }

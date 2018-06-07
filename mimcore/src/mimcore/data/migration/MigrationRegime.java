@@ -23,22 +23,28 @@ public class MigrationRegime implements IMigrationRegime {
 	private final ISexAssigner defaultSexAssigner;
 	private final SNPCollection controlCollection; // all SNPs of the migration file must match this collection!
 	private final Logger logger;
+	private final boolean haploid;
+	private final boolean clonal;
 
 
 
-	public MigrationRegime(HashMap<Integer, MigrationEntry> input, SexedDiploids defaultSourcePopulation, ISexAssigner defaultSexAssigner, Logger logger) {
+	public MigrationRegime(HashMap<Integer, MigrationEntry> input, SexedDiploids defaultSourcePopulation, ISexAssigner defaultSexAssigner, boolean haploid, boolean clonal, Logger logger) {
 		sr = new HashMap<Integer,MigrationEntry>(input);
 		this.logger=logger;
 		this.defaultSourcePopulation=defaultSourcePopulation;
 		if(defaultSourcePopulation.size()<1) throw new IllegalArgumentException("Size of default source population must be larger than zero");
 		this.controlCollection=defaultSourcePopulation.getDiploids().get(0).getHaplotypeA().getSNPCollection();
+		this.haploid=haploid;
+		this.clonal=clonal;
 		this.defaultSexAssigner=defaultSexAssigner;
 	}
 
-	public MigrationRegime(HashMap<Integer, MigrationEntry> input, SNPCollection controlCollection, Logger logger) {
+	public MigrationRegime(HashMap<Integer, MigrationEntry> input, SNPCollection controlCollection,  boolean haploid, boolean clonal,  Logger logger) {
 		sr = new HashMap<Integer,MigrationEntry>(input);
 		this.logger=logger;
 		defaultSexAssigner= SexInfo.getDefaultSexInfo().getSexAssigner();
+		this.haploid=haploid;
+		this.clonal=clonal;
 		this.defaultSourcePopulation=new SexedDiploids(new ArrayList<DiploidGenome>(),new ArrayList<Sex>());
 		this.controlCollection=controlCollection;
 
@@ -83,10 +89,14 @@ public class MigrationRegime implements IMigrationRegime {
 		this.logger.info("Loading potential migrants from file "+path);
 		if(! new File(path).exists()) throw new IllegalArgumentException("Haplotype file does not exist "+path);
 
-		SexedDiploids dipGenomes=new mimcore.io.DiploidGenomeReader(path,this.defaultSexAssigner,this.logger).readGenomes();
+		SexedDiploids dipGenomes=new mimcore.io.DiploidGenomeReader(path,this.defaultSexAssigner,haploid,this.logger).readGenomes();
 		if(dipGenomes.size()<1) throw new IllegalArgumentException("Invalid input of migrant population; Number of diploid genomes must be larger than zero; file="+path);
 		this.logger.info("Successfully loaded "+dipGenomes.size()+ " potential migrants");
+
+		// validate
 		validateDiploidGenomes(dipGenomes.getDiploids());
+		if(clonal && dipGenomes.countFemales()>0) throw new IllegalArgumentException("No females allowed for simulations of clonal evolution; solely hermaphrodites or no-sex");
+		if(clonal && dipGenomes.countMales()>0) throw new IllegalArgumentException("No males allowed for simulations of clonal evolution; solely hermaphrodites or no-sex");
 		return dipGenomes;
 	}
 

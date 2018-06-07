@@ -25,6 +25,17 @@ public class SexInfo {
         return new SexInfo(new SexAssignerFraction(0.0,0.0,1.0,1),0.0,new HashMap<Sex,HashSet<Chromosome>>());
     }
 
+
+    public static SexInfo getClonalEvolutionSexInfo()
+    {
+        // Default:
+        // 100% hermaphrodites;
+        // min count=1;
+        // selfing rate =1.0
+        // NO sex chromosomes
+        return new SexInfo(new SexAssignerFraction(0.0,0.0,1.0,1),1.0,new HashMap<Sex,HashSet<Chromosome>>());
+    }
+
     public SexInfo(ISexAssigner sexAssigner, double selfingRate, HashMap<Sex,HashSet<Chromosome>> hemizygousChromosomes)
     {
 
@@ -65,5 +76,27 @@ public class SexInfo {
         if(this.sexchrsites==null) throw new IllegalArgumentException("Sex chromosome sites have not been set; set before usage");
         return new ArrayList<Integer>(this.sexchrsites.get(sex));
     }
+
+    /**
+     * Check if the given combination of sex and chromosome is hemizygous
+      */
+    public boolean isHemizygous(Sex sex, Chromosome chromosome)
+    {
+        if(!this.hemizygousChromosomes.containsKey(sex)) return false;
+        if(!this.hemizygousChromosomes.get(sex).contains(chromosome)) return false;
+        else return true;
+    }
+
+    /**
+     * Check if the user provided sex info is valid for haploid simulations
+     * @return
+     */
+    public boolean isValidHaploid()
+    {
+        if(this.hemizygousChromosomes.size()>0) return false;
+        else return true;
+    }
+
+
 
 }

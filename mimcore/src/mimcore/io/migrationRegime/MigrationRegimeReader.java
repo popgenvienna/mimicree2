@@ -25,20 +25,24 @@ public class MigrationRegimeReader {
 	private Logger logger;
 	private SexedDiploids defaultSourcePopulation;
 	private ISexAssigner defaultSexAssigner;
+	private boolean haploid;
+	private boolean clonal;
 
 
 
-	public MigrationRegimeReader(String migrationRegimeFile, BufferedReader br, Logger logger, SexedDiploids defaultSourcePopulation)
+	public MigrationRegimeReader(String migrationRegimeFile, BufferedReader br, Logger logger, SexedDiploids defaultSourcePopulation, boolean haploid, boolean clonal)
 	{
 		this.migrationRegimeFile=migrationRegimeFile;
 		this.bf=br;
 		this.logger=logger;
 		this.defaultSourcePopulation=defaultSourcePopulation;
 		this.defaultSexAssigner=new SexAssignerDirect(new ArrayList<Sex>());
+		this.haploid=haploid;
+		this.clonal=clonal;
 	}
 
 
-	public MigrationRegimeReader(String migrationRegimeFile, Logger logger, SexedDiploids defaultSourcePopulation, ISexAssigner defaultSexAssigner) {
+	public MigrationRegimeReader(String migrationRegimeFile, Logger logger, SexedDiploids defaultSourcePopulation, ISexAssigner defaultSexAssigner, boolean haploid, boolean clonal) {
 		this.migrationRegimeFile = migrationRegimeFile;
 		try {
 			bf = new BufferedReader(new FileReader(migrationRegimeFile));
@@ -49,6 +53,8 @@ public class MigrationRegimeReader {
 		this.logger = logger;
 		this.defaultSourcePopulation = defaultSourcePopulation;
 		this.defaultSexAssigner=defaultSexAssigner;
+		this.haploid=haploid;
+		this.clonal=clonal;
 	}
 	
 	/**
@@ -97,7 +103,7 @@ public class MigrationRegimeReader {
 		}
 
 		this.logger.info("Finished reading the migration regime");
-		return new MigrationRegime(res,this.defaultSourcePopulation,this.defaultSexAssigner,this.logger);
+		return new MigrationRegime(res,this.defaultSourcePopulation,this.defaultSexAssigner,haploid,clonal,this.logger);
 	}
 
 }

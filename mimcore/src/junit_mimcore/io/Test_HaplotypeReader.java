@@ -29,7 +29,7 @@ public class Test_HaplotypeReader {
 				"X\t50\tT\tT/C\tCC TC CC TT CT\n";
 
 		;
-		h=new HaplotypeReader(input,  GenomicDataFactory.getNullLogger(),true).getHaplotypes();
+		h=new HaplotypeReader(input,  false,GenomicDataFactory.getNullLogger(),true).getHaplotypes();
 	}
 
 	public static HaplotypeReader getSexedHaplotypeReader()
@@ -44,7 +44,7 @@ public class Test_HaplotypeReader {
 						"X\t50\tT\tT/C\tCC TC CC TT CT\n";
 
 		;
-		return new HaplotypeReader(input,  GenomicDataFactory.getNullLogger(),true);
+		return new HaplotypeReader(input, false, GenomicDataFactory.getNullLogger(),true);
 	}
 	
 	@Test

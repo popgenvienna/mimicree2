@@ -23,7 +23,7 @@ public class QtCommandLineParser {
 	{
 
 		String haplotypeFile="";
-		String recombinationFile="";
+		String recombinationFile=null;
 		String effectSizeFile="";            //
 		String outputSync=null;
 		String outputGPF=null;
@@ -44,6 +44,8 @@ public class QtCommandLineParser {
 		boolean detailedLog=false;
 		int threadCount=1;
 		double mutationRate=0.0;
+		boolean haploids=false;
+		boolean clonal=false;
 
 
 		// print help if not enough arguments
@@ -139,6 +141,14 @@ public class QtCommandLineParser {
 			{
 				outputGPF=args.remove(0);
 			}
+			else if(cu.equals("--haploid"))
+			{
+				haploids=true;
+			}
+			else if(cu.equals("--clonal"))
+			{
+				clonal=true;
+			}
             else
             {
                 throw new IllegalArgumentException("Do not recognize command line option "+cu);
@@ -154,7 +164,8 @@ public class QtCommandLineParser {
 
 		MimicreeThreadPool.setThreads(threadCount);
 		logger.info("Starting qt simulations: a quantitative trait with truncating selection");
-		GlobalResourceManager.setGlobalResources(logger,haplotypeFile,recombinationFile,populationSizeFile,chromosomeDefinition,sexInfoFile,migrationRegimeFile,mutationRate,outputSync,outputGPF,outputDir,snapman,replicateRuns);
+		GlobalResourceManager.setGlobalResources(logger,haplotypeFile,recombinationFile,populationSizeFile,chromosomeDefinition,sexInfoFile,migrationRegimeFile,
+				mutationRate,outputSync,outputGPF,outputDir,snapman,replicateRuns,haploids,clonal);
         QtSimulationFramework mimframe= new QtSimulationFramework(effectSizeFile,ve,heritability,selectionRegimFile);
         
         mimframe.run();
@@ -166,11 +177,11 @@ public class QtCommandLineParser {
 		StringBuilder sb=new StringBuilder();
 		sb.append("qt: Simulate truncating selection for a quantitative trait\n");
 		sb.append(CommandFormater.format("--haplotypes-g0","the haplotype file",null));
-		sb.append(CommandFormater.format("--recombination-rate","a file with the recombination rate for windows of fixed size",null));
 		sb.append(CommandFormater.format("--population-size","a file with the population size during the simulations",null));
 		sb.append(CommandFormater.format("--effect-size","the causative SNPs and their effect sizes",null));
 		sb.append(CommandFormater.format( "--ve", "environmental variance; either --ve or --heritability needs to be provided", null));
 		sb.append(CommandFormater.format( "--heritability", "heritability; either --ve or --heritability needs to be provided", null));
+		sb.append(CommandFormater.format("--recombination-rate","a file with the recombination rate for windows of fixed size; optional",null));
 		sb.append(CommandFormater.format("--chromosome-definition","which chromosomes parts constitute a chromosome",null));
 		sb.append(CommandFormater.format("--sex","a file specifying the sex ratios",null));
 		sb.append(CommandFormater.format("--snapshots","a coma separated list of generations to output",null));
@@ -184,6 +195,8 @@ public class QtCommandLineParser {
 		sb.append(CommandFormater.format("--selection-regime","the truncating selection regime",null));
 		sb.append(CommandFormater.format("--migration-regime","the migration regime; migration from the base population to the evolved populations",null));
 		sb.append(CommandFormater.format("--mutation-rate","the mutation rate per site","0.0"));
+		sb.append(CommandFormater.format("--haploid","perform haploid simulations; precludes specifying hemizygous sex chromosomes",null));
+		sb.append(CommandFormater.format("--clonal","simulate clonal evolution; precludes specifying --recombination rate and --sex; may be performed for diploids and haploids",null));
 		sb.append(CommandFormater.format("--detailed-log","print detailed log messages",null));
 		sb.append(CommandFormater.format("--threads","the number of threads to use",null));
 		sb.append(CommandFormater.format("--help","print the help",null));

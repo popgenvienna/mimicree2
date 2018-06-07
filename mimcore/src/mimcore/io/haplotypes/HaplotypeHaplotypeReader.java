@@ -28,11 +28,14 @@ class HaplotypeHaplotypeReader {
 	
 	private BufferedReader bf;
 	private SNPCollection snpcol;
+	private boolean haploid;
 	
-	public HaplotypeHaplotypeReader(BufferedReader bf,SNPCollection snpcol)
+	public HaplotypeHaplotypeReader(BufferedReader bf, SNPCollection snpcol,boolean haploid)
 	{
 		this.bf=bf;
 		this.snpcol=snpcol;
+		this.haploid=haploid;
+
 	}
 	
 	public ArrayList<BitArray> getHaplotypes()
@@ -114,19 +117,22 @@ class HaplotypeHaplotypeReader {
 	private HapFileContainer parseLine(String line)
 	{
 		//3L	13283707	T	G/T	GT GG GG GG
-		String[] a = line.split("\t");
+		String[] a = line.split("\\s+"); // allow spliting at any character
 		GenomicPosition gp=new GenomicPosition(Chromosome.getChromosome(a[0]),Integer.parseInt(a[1]));
-		String[] temp=a[4].split(" ");
-		
-		ArrayList<Character> snplist=new ArrayList<Character>(2*temp.length);
-		for(String s: temp)
+
+		int charcount=a.length-4;
+		ArrayList<Character> snplist=new ArrayList<Character>(2*charcount);
+		for(int i=4; i< a.length; i++)
 		{
+			String s=a[i];
 			if(s.length()==2) {
+				if(haploid) throw new IllegalArgumentException("Not allowed to provide two alleles for haploid simulations");
 				snplist.add(Character.toUpperCase(s.charAt(0)));
 				snplist.add(Character.toUpperCase(s.charAt(1)));
 			}
 			else if(s.length()==1)
 			{
+
 				snplist.add(Character.toUpperCase(s.charAt(0))); snplist.add(Character.toUpperCase(s.charAt(0)));
 			}
 			else throw new IllegalArgumentException("Invalid size of genotype "+s+" in line "+line);

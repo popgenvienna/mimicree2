@@ -22,20 +22,24 @@ public class HaplotypeReader {
 	private boolean inputIsStringStream;
 	private SNPCollection snpCollection;
 	private SexAssignerDirect sexAssigner;
+	private boolean haploid;
 
-	public HaplotypeReader(String haplotypeFile, java.util.logging.Logger logger)
+	public HaplotypeReader(String haplotypeFile, boolean haploid, java.util.logging.Logger logger)
 	{
 		this.logger=logger;
 		this.input=haplotypeFile;
 		this.inputIsStringStream=false;
+		this.haploid=haploid;
 		readBasicInfo();
+
 	}
 
-	public HaplotypeReader(String inputStringStream, java.util.logging.Logger logger, boolean inputIsStringStream)
+	public HaplotypeReader(String inputStringStream, boolean haploid, java.util.logging.Logger logger, boolean inputIsStringStream)
 	{
 		this.input=inputStringStream;
 		this.logger=logger;
 		this.inputIsStringStream=true;
+		this.haploid=haploid;
 		readBasicInfo();
 	}
 
@@ -59,7 +63,7 @@ public class HaplotypeReader {
 	{
 
 		this.logger.fine("Start reading haplotype information");
-		ArrayList<BitArray> haps=new HaplotypeHaplotypeReader(getBufferedReader(),snpCollection).getHaplotypes();
+		ArrayList<BitArray> haps=new HaplotypeHaplotypeReader(getBufferedReader(),snpCollection,haploid).getHaplotypes();
 		this.logger.fine("Finished reading haplotype information; Haplotypes read " + haps.size());
 
 		ArrayList<HaploidGenome> haplotypes=new ArrayList<HaploidGenome>();

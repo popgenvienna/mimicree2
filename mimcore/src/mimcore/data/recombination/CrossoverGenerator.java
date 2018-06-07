@@ -9,7 +9,11 @@ import java.util.ArrayList;
 public class CrossoverGenerator {
 	private final ArrayList<IRecombinationWindow> windows;
 
-
+	public static CrossoverGenerator getDefault()
+	{
+		ArrayList<IRecombinationWindow> empty=new ArrayList<IRecombinationWindow>();
+		return new CrossoverGenerator(empty);
+	}
 	
 	public CrossoverGenerator(ArrayList<IRecombinationWindow> windows)
 	{

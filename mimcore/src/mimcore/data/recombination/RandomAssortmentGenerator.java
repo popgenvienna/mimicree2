@@ -31,6 +31,23 @@ public class RandomAssortmentGenerator {
 		}
 		this.chroms=toret;
 	}
+
+
+	public RandomAssortmentGenerator(ArrayList<Chromosome> chromosomes,boolean temp)
+	{
+
+		// in order to have the thing immutable  create a deep copy;
+		ArrayList<ArrayList<Chromosome>> toret=new ArrayList<ArrayList<Chromosome>>();
+		chrset=new HashSet<Chromosome>();
+		for(Chromosome chromo:chromosomes)
+		{
+			ArrayList<Chromosome> tmp=new ArrayList<Chromosome>();
+			tmp.add(chromo);
+			toret.add(tmp);
+			 chrset.add(chromo);
+		}
+		this.chroms=toret;
+	}
 	
 	/**
 	 * Create a random assortment of chromosomes;

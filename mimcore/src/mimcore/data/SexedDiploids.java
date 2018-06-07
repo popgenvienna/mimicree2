@@ -86,4 +86,25 @@ public class SexedDiploids {
         }
         return new SexedDiploids(toret,sexes);
     }
+
+    public int countMales()
+    {
+        int count=0;
+        for(Sex s: this.sexes) if(s==Sex.Male)count++;
+        return count;
+    }
+
+    public int countFemales()
+    {
+        int count=0;
+        for(Sex s: this.sexes) if(s==Sex.Female)count++;
+        return count;
+    }
+
+    public int countHermaphrodites()
+    {
+        int count=0;
+        for(Sex s: this.sexes) if(s==Sex.Hermaphrodite)count++;
+        return count;
+    }
 }

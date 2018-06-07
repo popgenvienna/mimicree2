@@ -126,7 +126,7 @@ class HaplotypeSNPReader {
 	private SNP parseSNP(String line)
 	{
 		//3L	13283707	T	G/T	GT GG GG GG
-		String[] a =line.split("\t");
+		String[] a =line.split("\\s+");
 		char ref=a[2].charAt(0);
 		char anc=a[3].charAt(0);    // ancestral allele
 		char der=a[3].charAt(2);    // derived allele

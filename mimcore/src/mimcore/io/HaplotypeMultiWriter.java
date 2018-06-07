@@ -4,6 +4,7 @@ import mimcore.data.Population;
 import mimcore.data.Specimen;
 import mimcore.data.haplotypes.HaploidGenome;
 import mimcore.data.sex.Sex;
+import mimcore.data.sex.SexInfo;
 import mimcore.io.haplotypes.HaplotypeWriter;
 
 
@@ -19,13 +20,18 @@ public class HaplotypeMultiWriter {
 	private final int generation;
 	private final int simulationNumber;
 	private final Logger logger;
-	public HaplotypeMultiWriter(Population population, String outputDir, int  generation, int simulationNumber, Logger logger)
+	private final boolean haploid;
+	private final SexInfo sexInfo;
+
+	public HaplotypeMultiWriter(Population population, String outputDir, int  generation, int simulationNumber, boolean haploid, SexInfo sexInfo, Logger logger)
 	{
 		this.population=population;
 		this.outputDir=outputDir;
 		this.generation=generation;
 		this.simulationNumber=simulationNumber;
 		this.logger=logger;
+		this.sexInfo=sexInfo;
+		this.haploid=haploid;
 	}
 	
 	
@@ -63,7 +69,7 @@ public class HaplotypeMultiWriter {
 			System.exit(0);
 		}
 		*/
-		new HaplotypeWriter(haplotypeOFile,this.logger).write(haplotypes,sexes);
+		new HaplotypeWriter(haplotypeOFile,haploid,sexInfo,this.logger).write(haplotypes,sexes);
 
 	}
 	

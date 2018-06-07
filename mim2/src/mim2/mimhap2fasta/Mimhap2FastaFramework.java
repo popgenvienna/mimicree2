@@ -18,7 +18,7 @@ public class Mimhap2FastaFramework {
 	private final String outputDir;
 	private final boolean extremeSplit;
 	private final boolean stringent;
-
+	private final boolean haploid;
 
 
 
@@ -26,7 +26,7 @@ public class Mimhap2FastaFramework {
 	private final java.util.logging.Logger logger;
 	//(haplotypeFile,recombinationFile,chromosomeDefinition,fitnessFile,epistasisFile,migrationRegimeFile,outputSync,outputGPF,outputDir,simMode,replicateRuns,logger);
 
-	public Mimhap2FastaFramework(String referenceFile, String mimhapFile, String outputFasta, String outputDir, boolean extremeSplit, boolean stringent, Logger logger)
+	public Mimhap2FastaFramework(String referenceFile, String mimhapFile, String outputFasta, String outputDir, boolean extremeSplit, boolean haploid, boolean stringent, Logger logger)
                         	{
 		// 'File' represents files and directories
 		// Test if input files exist
@@ -47,6 +47,7 @@ public class Mimhap2FastaFramework {
 		this.outputDir=outputDir;
 		this.extremeSplit=extremeSplit;
 		this.stringent=stringent;
+		this.haploid=haploid;
 		this.logger=logger;
 	}
 
@@ -58,7 +59,7 @@ public class Mimhap2FastaFramework {
 
 		ArrayList<FastaRecord> refGenome= FastaReader.readAll(this.referenceFile,this.logger);
 
-		ArrayList<HaploidGenome> genomes= new HaplotypeReader(this.mimhapFile,this.logger).getHaplotypes();
+		ArrayList<HaploidGenome> genomes= new HaplotypeReader(this.mimhapFile,haploid,this.logger).getHaplotypes();
 
 		IFastaMultiWriter writer=null;
 		if(outputFasta!=null) {
@@ -74,8 +75,10 @@ public class Mimhap2FastaFramework {
 
 
 		// now do the actual work; introduce SNPs into the sequences and save the output
-		for(HaploidGenome haploidGenome: genomes)
+		for(int i=0; i<genomes.size();i++)
 		{
+			if(haploid && i%2==1)continue; // for haploids ignore every second genome
+			HaploidGenome haploidGenome= genomes.get(i);
 			FastaCollectionBuilder fcb=new FastaCollectionBuilder(refGenome,this.stringent);
 			fcb.introduceChanges(haploidGenome);
 			ArrayList<FastaRecord> records=fcb.getRecords();

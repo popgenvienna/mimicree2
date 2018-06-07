@@ -16,12 +16,14 @@ public class DiploidGenomeReader implements IDiploidGenomeReader {
 	private final String haplotypeFile;
 	private Logger logger;
 	private final ISexAssigner defaultSexAssigner;
+	private final boolean haploid;
 
-	public DiploidGenomeReader(String haplotypeFile, ISexAssigner defaultSexAssigner, Logger logger)
+	public DiploidGenomeReader(String haplotypeFile, ISexAssigner defaultSexAssigner, boolean haploid, Logger logger)
 	{
 		this.haplotypeFile=haplotypeFile;
 		this.logger=logger;
 		this.defaultSexAssigner=defaultSexAssigner;
+		this.haploid=haploid;
 	}
 	
 	/**
@@ -31,7 +33,7 @@ public class DiploidGenomeReader implements IDiploidGenomeReader {
 	public SexedDiploids readGenomes()
 	{
 
-		HaplotypeReader hr=new HaplotypeReader(this.haplotypeFile,this.logger);
+		HaplotypeReader hr=new HaplotypeReader(this.haplotypeFile,haploid,this.logger);
 		ArrayList<HaploidGenome> hapGenomes=hr.getHaplotypes();
 		SexAssignerDirect sa=hr.getSexAssigner();
 		ArrayList<DiploidGenome> dipGenomes=new ArrayList<DiploidGenome>();

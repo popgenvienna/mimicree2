@@ -28,7 +28,8 @@ public class ResultRecorder {
     private final SnapshotManager snapman;
     private final Logger logger;
     private final SexInfo sexInfo;
-    public ResultRecorder(String outputGPF, String outputSync, String outputDir, SexInfo sexInfo, SnapshotManager snapman, Logger logger)
+    private final boolean haploid;
+    public ResultRecorder(String outputGPF, String outputSync, String outputDir, SexInfo sexInfo, SnapshotManager snapman, boolean haploid, Logger logger)
     {
         this.outputDir=outputDir;
         this.outputGPF=outputGPF;
@@ -38,6 +39,7 @@ public class ResultRecorder {
         this.snapman=snapman;
         this.logger=logger;
         this.sexInfo=sexInfo;
+        this.haploid=haploid;
     }
 
 
@@ -78,7 +80,7 @@ public class ResultRecorder {
         // No output file no action
         if(this.outputDir==null) return;
         this.logger.info("Recording haplotypes at generation "+generation+" of replicate "+replicate);
-        new HaplotypeMultiWriter(toRecord, this.outputDir,generation, replicate, this.logger).write();
+        new HaplotypeMultiWriter(toRecord, this.outputDir,generation, replicate,haploid,sexInfo, this.logger).write();
     }
 
     public void finishWriting()

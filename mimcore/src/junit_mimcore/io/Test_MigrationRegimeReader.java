@@ -34,7 +34,7 @@ public class Test_MigrationRegimeReader {
 
 		BufferedReader br=new BufferedReader(new StringReader(input));
 		SexedDiploids sd= new SexedDiploids(GenomicDataFactory.getMinimalGenomes(), SexInfo.getDefaultSexInfo().getSexAssigner().getSexes(GenomicDataFactory.getMinimalGenomes().size(), new Random()));
-		return new MigrationRegimeReader("fakefile",br, SharedFactory.getNullLogger(),sd);
+		return new MigrationRegimeReader("fakefile",br, SharedFactory.getNullLogger(),sd,false,false);
 
 	}
 	

@@ -1,5 +1,6 @@
 package mim2.shared;
 
+import mimcore.data.Chromosome;
 import mimcore.data.DiploidGenome;
 import mimcore.data.Mutator.IMutator;
 import mimcore.data.Mutator.MutatorGenomeWideRate;
@@ -8,6 +9,8 @@ import mimcore.data.SexedDiploids;
 import mimcore.data.migration.IMigrationRegime;
 import mimcore.data.migration.MigrationRegime;
 import mimcore.data.migration.MigrationRegimeNoMigration;
+import mimcore.data.recombination.CrossoverGenerator;
+import mimcore.data.recombination.RandomAssortmentGenerator;
 import mimcore.data.recombination.RecombinationGenerator;
 import mimcore.data.sex.ISexAssigner;
 import mimcore.data.sex.SexAssignerDirect;
@@ -42,6 +45,7 @@ public class GlobalResourceManager {
     private static SnapshotManager snapshotManager;
     private static ResultRecorder rr;
     private static boolean haploidss;
+    private static boolean clonals;
 
 
 
@@ -49,17 +53,24 @@ public class GlobalResourceManager {
 
     public static void setGlobalResources(Logger mylogger, String haplotypeFile,  String recombinationFile,String populationSizeFile,
                                           String chromosomeDefinition, String sexInfoFile,String migrationRegimeFile, double mutationRate, String outputSync,
-                                          String outputGPF, String outputDir, SnapshotManager snapman, int replicateRuns,boolean haploids)
+                                          String outputGPF, String outputDir, SnapshotManager snapman, int replicateRuns,boolean haploids, boolean clonal)
     {
         logger=mylogger;
         haploidss=haploids;
+        clonals=clonal;
+        // Set the output
         setOutput(outputSync,outputGPF,outputDir);
-        setSexRecGenomes(haplotypeFile,recombinationFile,chromosomeDefinition,sexInfoFile,haploids);
-        setPopMigMutModeReps(populationSizeFile,migrationRegimeFile,mutationRate,snapman,replicateRuns,haploids);
+
+        // Set sex, recombination, and load base population
+        if(clonal) setClonalSexRecGenomes(haplotypeFile,recombinationFile,chromosomeDefinition,sexInfoFile,haploids);
+        else setSexRecGenomes(haplotypeFile,recombinationFile,chromosomeDefinition,sexInfoFile,haploids);
+
+        // set population size, migration, mutation,
+        setPopMigMutModeReps(populationSizeFile,migrationRegimeFile,mutationRate,snapman,replicateRuns,haploids,clonal);
         rr=null;
     }
 
-    private static void setPopMigMutModeReps(String populationSizeFile, String migrationRegimeFile, double mutationRate, SnapshotManager snapman, int replicateRuns,boolean haploids)
+    private static void setPopMigMutModeReps(String populationSizeFile, String migrationRegimeFile, double mutationRate, SnapshotManager snapman, int replicateRuns,boolean haploids,boolean clonal)
     {
         // migration regime
         if(migrationRegimeFile == null)logger.info("No migration regime file found; Proceeding without migration");
@@ -70,7 +81,7 @@ public class GlobalResourceManager {
 
         // Migration regime; If none specified no migration
         migrationRegime=new MigrationRegimeNoMigration();
-        if(migrationRegimeFile != null) migrationRegime=new MigrationRegimeReader(migrationRegimeFile,logger,basePopulation,sexInfo.getSexAssigner()).readMigrationRegime();
+        if(migrationRegimeFile != null) migrationRegime=new MigrationRegimeReader(migrationRegimeFile,logger,basePopulation,sexInfo.getSexAssigner(),haploids,clonal).readMigrationRegime();
 
         populationSizeContainer=new PopulationSizeContainer(basePopulation.size());
         if(populationSizeFile!=null) populationSizeContainer=new PopulationSizeReader(populationSizeFile,logger).readPopulationSizes();
@@ -100,30 +111,65 @@ public class GlobalResourceManager {
         outputGPFs=outputGPF;
     }
 
+
+    /**
+     * Simulations of clonal evolution requires an entirely different setup
+     * no recombination rate must be provided
+     * no sex chromosomes must be provided
+     */
+    private static void setClonalSexRecGenomes(String haplotypeFile, String recombinationFile, String chromosomeDefinition, String sexInfoFile, boolean haploids)
+    {
+        if(! new File(haplotypeFile).exists()) throw new IllegalArgumentException("Haplotype file does not exist "+haplotypeFile);
+        if(recombinationFile!=null) throw new IllegalArgumentException("It is not allowed to provide a recombination file for simulation of clonal evolution" + recombinationFile);
+        if(sexInfoFile != null) throw new IllegalArgumentException("It is not allowed to provide a sex info file for simulations of clonal evolution "+sexInfoFile);
+
+        sexInfo=SexInfo.getClonalEvolutionSexInfo();
+
+        DiploidGenomeReader dgr =new DiploidGenomeReader(haplotypeFile,sexInfo.getSexAssigner(),haploids,logger);
+        SexedDiploids sd=dgr.readGenomes();
+        if(sd.countMales()>0) throw new IllegalArgumentException("It is not allowed to specify male-haplotypes for clonal evolution, solely hermaphrodites or no sex is allowed");
+        if(sd.countFemales()>0) throw new IllegalArgumentException("It is not allowed to specify female-haplotypes for clonal evolution, solely hermaphrodites or no sex is allowed");
+
+        ArrayList<Chromosome> chromosomes=sd.getDiploids().get(0).getHaplotypeA().getSNPCollection().getChromosomes();
+        recombinationGenerator = new RecombinationGenerator(CrossoverGenerator.getDefault(), new RandomAssortmentGenerator(chromosomes,true));
+
+        basePopulation=sd.updateSexChromosome(sexInfo);
+
+    }
+
+
+
+
+
     private static void setSexRecGenomes(String haplotypeFile, String recombinationFile, String chromosomeDefinition, String sexInfoFile,boolean haploids)
     {
         if(! new File(haplotypeFile).exists()) throw new IllegalArgumentException("Haplotype file does not exist "+haplotypeFile);
-        if(! new File(recombinationFile).exists()) throw new IllegalArgumentException("Recombination file does not exist " + recombinationFile);
+        if(recombinationFile!=null && (!new File(recombinationFile).exists())) throw new IllegalArgumentException("The provided recombination file does not exist " + recombinationFile);
         if((sexInfoFile != null) && (!new File(sexInfoFile).exists())) throw new IllegalArgumentException("Sex defintion file does not exist; "+sexInfoFile);
 
 
         sexInfo=SexInfo.getDefaultSexInfo();
         if(sexInfoFile!=null) sexInfo=new SexReader(sexInfoFile,logger).readSexInfo();
+        if(haploids && (!sexInfo.isValidHaploid())) throw new IllegalArgumentException("Sex definition file invalid for haploid simulations, eg. hemizygous sex chromsomes make no sense for haploids");
 
-        // Load the data
-       recombinationGenerator = new RecombinationGenerator(new RecombinationRateReader(recombinationFile,logger).getRecombinationRate(),
-                new ChromosomeDefinitionReader(chromosomeDefinition).getRandomAssortmentGenerator());
-
-       DiploidGenomeReader dgr =new DiploidGenomeReader(haplotypeFile,sexInfo.getSexAssigner(),logger);
+        DiploidGenomeReader dgr =new DiploidGenomeReader(haplotypeFile,sexInfo.getSexAssigner(),haploids,logger);
         SexedDiploids sd=dgr.readGenomes();
+
+        // Load the recombination rate
+        if(recombinationFile!=null) recombinationGenerator = new RecombinationGenerator(new RecombinationRateReader(recombinationFile,logger).getRecombinationRate(),
+                new ChromosomeDefinitionReader(chromosomeDefinition).getRandomAssortmentGenerator());
+        else {
+            logger.info("No file with recombination rate provided; will use default recombination rate of 0.0");
+            ArrayList<Chromosome> chromosomes=sd.getDiploids().get(0).getHaplotypeA().getSNPCollection().getChromosomes();
+            recombinationGenerator = new RecombinationGenerator(CrossoverGenerator.getDefault(), new RandomAssortmentGenerator(chromosomes,true));
+
+        }
 
         // set the sites of hemizygous chromosomes
         sexInfo.setHemizygousSite(sd.getDiploids().get(0).getHaplotypeA().getSNPCollection());
         logger.info("Updating sex chromosomes of base population (i.e. hemizygous chromosomes)");
        basePopulation=sd.updateSexChromosome(sexInfo);
        if(!recombinationGenerator.isValid(basePopulation.getDiploids())) throw new IllegalArgumentException("Recombination rate file is not valid; an entry needs to be provided for each chromosome of the base population");
-
-
     }
 
     public static SexInfo getSexInfo(){return sexInfo;}
@@ -141,7 +187,10 @@ public class GlobalResourceManager {
 
     public static ResultRecorder getResultRecorder()
     {
-        if(rr==null)rr =new ResultRecorder(outputGPFs,outputSyncs,outputDirs,sexInfo,snapshotManager,logger);
+        if(rr==null)rr =new ResultRecorder(outputGPFs,outputSyncs,outputDirs,sexInfo,snapshotManager,haploidss,logger);
         return rr;
     }
+
+    public static boolean getHaploid(){return haploidss;}
+    public static boolean getClonal(){return clonals;}
 }

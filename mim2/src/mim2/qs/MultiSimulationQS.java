@@ -36,6 +36,8 @@ public class MultiSimulationQS {
 	private final int maxGeneration;
 	private final int replicateRuns;
 	private Logger logger;
+	private final boolean haploid;
+	private final boolean clonal;
 
 
 	public MultiSimulationQS(IGenotypeCalculator gc, PhenotypeCalculator pc, FitnessFunctionContainer ffc, ISurvivalFunction sf)
@@ -56,6 +58,8 @@ public class MultiSimulationQS {
 		this.recGenerator=GlobalResourceManager.getRecombinationGenerator();
 		this.mutator=GlobalResourceManager.getMutator();
 		this.replicateRuns=GlobalResourceManager.getReplicateRuns();
+		this.haploid=GlobalResourceManager.getHaploid();
+		this.clonal=GlobalResourceManager.getClonal();
 	}
 
 	
@@ -91,14 +95,16 @@ public class MultiSimulationQS {
 
 				// Survival would go here if considered....(no survival needed for stabilizing selection);
 
-				nextPopulation=nextPopulation.getNextGeneration(si,gc,pc,fc,mf,this.recGenerator,mutator,popsize);
+				nextPopulation=nextPopulation.getNextGeneration(si,gc,pc,fc,mf,this.recGenerator,mutator,popsize,haploid,clonal);
 				this.logger.info("Average genotype of offspring "+nextPopulation.getAverageGenotype()+"; average phenotype of offspring "+nextPopulation.getAveragePhenotype()+"; average fitness of offspring "+nextPopulation.getAverageFitness());
 
 				// Use migration, if wanted ; replace with an ArrayList<DiploidGenomes>
 				SexedDiploids migrants=this.migrationRegime.getMigrants(i,simulationNumber);
 				if(migrants.size()>0) {
-					this.logger.info("Updating sex chromosomes of migrants");
-					migrants=migrants.updateSexChromosome(si);
+					if((!haploid) && (!clonal)) {
+						this.logger.info("Updating sex chromosomes of migrants");
+						migrants = migrants.updateSexChromosome(si);
+					}
 					this.logger.info("Adding "+migrants.size()+ " migrants to the evolved population (randomly removing an equivalent number of evolved individuals)");
 					Population migrantPop=Population.loadPopulation(migrants,gc,pc,fc, new Random(),false);
 					this.logger.info("Average genotype of migrants "+migrantPop.getAverageGenotype()+"; average phenotype of migrants "+migrantPop.getAveragePhenotype()+"; average fitness of migrants "+migrantPop.getAverageFitness());
