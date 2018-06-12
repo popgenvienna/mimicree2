@@ -1,5 +1,6 @@
 package mim2;
 
+import mim2.fsc2mimhap.Fcs2HapParser;
 import mim2.mimhap2fasta.Mimhap2FastaCommandLineParser;
 import mim2.mimhap2fasta.Mimhap2FastaFramework;
 import mim2.qs.QsCommandLineParser;
@@ -45,6 +46,10 @@ public class Main {
 			{
 				TestMain.testMain();
 			}
+			else if(subtask.toLowerCase().equals("arp2mimhap"))
+			{
+				Fcs2HapParser.parseCommandline(rawarguments);
+			}
 			else if(subtask.toLowerCase().equals("unit-tests"))
 			{
 				JunitMimcore.runTests();
@@ -76,6 +81,7 @@ public class Main {
 
 			sb.append("\n== Secondary tasks ==\n");
 			sb.append(CommandFormater.format("mimhap2fasta","convert the MimcrEE2 haplotypes into fasta",null));
+			sb.append(CommandFormater.format("arp2mimhap","convert the arp format (Arlequin, Fastsimcoal) to MimicrEE2 haplotypes",null));
 			sb.append(CommandFormater.format("unit-tests","run the unit-tests; unit-tests validate proper behaviour of MimicrEE2 components",null));
 
 
@@ -90,7 +96,7 @@ public class Main {
 
 		public static String getVersionNumber()
 		{
-			return "v0.20.1";
+			return "v0.20.2";
 		}
 
 

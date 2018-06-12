@@ -1,17 +1,25 @@
 package mim2.fsc2mimhap;
 
+import mim2.CommandFormater;
+import mimcore.misc.MimicreeLogFactory;
+import mimcore.misc.MimicreeThreadPool;
+
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
 
 public class Fcs2HapParser {
 
-    public static void parseCommandline(Logger logger, LinkedList<String> args)
+    public static void parseCommandline(LinkedList<String> args)
     {
         String inputFile="";
         String outputFile="";
-        String chromosome="";
-        int haplotypeCount=0;
+        String chrname="";
+        boolean haploid=false;
+
+        // print help if not enough arguments
+        if(args.size()<1) printHelpMessage();
+        for(String s: args){if(s.equals("--help")) printHelpMessage();}
 
         while(args.size()>0)
         {
@@ -25,13 +33,13 @@ public class Fcs2HapParser {
             {
                 outputFile=args.remove(0);
             }
-            else if(cu.equals("--chromosome"))
+            else if(cu.equals("--chrname"))
             {
-                chromosome=args.remove(0);
+                chrname=args.remove(0);
             }
-            else if(cu.equals("--help"))
+            else if(cu.equals("--haploid"))
             {
-                printHelp();
+                haploid=true;
             }
             else
             {
@@ -39,23 +47,23 @@ public class Fcs2HapParser {
             }
         }
 
+        Logger logger= MimicreeLogFactory.getLogger(false);
+        MimicreeThreadPool.setThreads(1);
 
-        Fcs2HapFramework fc2h=new Fcs2HapFramework(inputFile,outputFile,chromosome,logger);
+        Fcs2HapFramework fc2h=new Fcs2HapFramework(inputFile,outputFile,chrname,haploid,logger);
         fc2h.run();
     }
 
-    public static void printHelp()
+    public static void printHelpMessage()
     {
         StringBuilder sb=new StringBuilder();
-        sb.append("mode fcs2hap: convert fastcoalsim outpout to MimicrEEToolShed haplotypes\n");
-        sb.append("--input					    the fastsimcoal file\n");
-        sb.append("--chromosome                 the chromosome\n");
-        sb.append("--output					the output file (sync)\n");
-		sb.append("--mode					the analysis mode of operation; see manual for supported modes\n");
-		sb.append("--version					the analysis mode of operation; see manual for supported modes\n");
-		sb.append("--detailed-log				print detailed log messages\n");
-		sb.append("--help					print the help\n");
-		System.out.print(sb.toString());
+        sb.append("arp2mimhap: convert Arlequin input data into MimicrEE2 haplotypes\n");
+        sb.append(CommandFormater.format("--input","an arp file; haplotypes in Arlequin format",null));
+        sb.append(CommandFormater.format("--output","the output file: MimimcrEE2 haplotypes",null));
+        sb.append(CommandFormater.format("--chrname","chromosome name to be used in the MimicrEE2 haplotype file",null));
+        sb.append(CommandFormater.format("--haploid","generate haploid genomes instead of diploid ones; optional",null));
+        sb.append(CommandFormater.format("--help","print the help",null));
+        System.out.print(sb.toString());
         System.exit(1);
     }
 }

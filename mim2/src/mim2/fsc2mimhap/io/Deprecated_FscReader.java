@@ -1,4 +1,4 @@
-package mim2.fsc2mimhap;
+package mim2.fsc2mimhap.io;
 
 
 import mimcore.data.BitArray.BitArray;
@@ -18,8 +18,8 @@ import java.util.logging.Logger;
 
 /**
  *    Reading the output of fastsimcoal
- */
-public class FscReader {
+
+public class Deprecated_FscReader {
     private final String inputFile;
     private final String chromosomeName;
     private Logger logger;
@@ -27,7 +27,7 @@ public class FscReader {
     private final char refChar='A';
     private final char derivedChar='C';
 
-    public FscReader(String inputFile, String chromosomeName, Logger logger)
+    public Deprecated_FscReader(String inputFile, String chromosomeName, Logger logger)
     {
         this.chromosomeName=chromosomeName;
         this.inputFile=inputFile;
@@ -45,10 +45,7 @@ public class FscReader {
     }
 
 
-	/**
-	 * Read Haplotypes from a fastsimcoal file
-	 * @return a collection of haplotypes read from a fastsimcoalfile
-	 */
+
     public ArrayList<Haplotype> getHaplotypes()
     {
 
@@ -94,13 +91,7 @@ public class FscReader {
     }
 
 
-	/**
-	 * Convert the SNP positions and the bitarrays to haplotypes
-	 * @param positions
-	 * @param haplotypes
-	 * @param chromosome
-	 * @return
-	 */
+
     private ArrayList<Haplotype> processHaplotypes(ArrayList<Integer> positions, ArrayList<BitArray> haplotypes, Chromosome chromosome)
     {
 
@@ -174,6 +165,7 @@ public class FscReader {
 
 }
 
+*/
 
 
 

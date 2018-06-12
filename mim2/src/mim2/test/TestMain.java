@@ -18,8 +18,19 @@ public class TestMain {
 
     public static void testMain()
     {
-        mim2.test.fastaPlayground.fastaPlay.play();
+        testContains();
     }
+
+    public static void testContains()
+    {
+
+        String s="hello";
+        if(s.contains("lo")) System.out.print("Contains lo");
+        if(s.contains("ol")) System.out.print("Contains ol");
+        if(s.contains("l")) System.out.print("Contains l");
+        int bla=0;
+    }
+
     public static void codeToTest()
     {
         ArrayList<ArbitraryLandscapeEntry> entries=new ArrayList<ArbitraryLandscapeEntry>();
