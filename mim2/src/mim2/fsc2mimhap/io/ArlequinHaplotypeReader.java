@@ -58,7 +58,7 @@ class ArlequinHaplotypeReader {
 					}
 					haplotypeCollection.add(bab);
 					if(haploid) haplotypeCollection.add(bab);  // nice trick if haploid just add twice
-					
+
 				}
 
 

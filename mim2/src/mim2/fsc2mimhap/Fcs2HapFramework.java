@@ -5,9 +5,11 @@ import mimcore.data.Chromosome;
 import mimcore.data.DiploidGenome;
 import mimcore.data.haplotypes.HaploidGenome;
 import mimcore.io.DiploidGenomeReader;
+import mimcore.io.haplotypes.DiploidGenomeWriter;
 import mimcore.io.haplotypes.HaplotypeWriter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
 /**
@@ -36,8 +38,17 @@ public class Fcs2HapFramework {
 
     public void run()
     {
-        ArrayList<HaploidGenome> haploidGenomes=new ArlequinReader(inputFile,haploid,chrom,logger).getHaplotypes();
+        LinkedList<HaploidGenome> haploidGenomes=new LinkedList<>(new ArlequinReader(inputFile,haploid,chrom,logger).getHaplotypes());
+        ArrayList<DiploidGenome> dipGenomes=new ArrayList<DiploidGenome>();
+        while(haploidGenomes.size()>0)
+        {
+            HaploidGenome hap1=haploidGenomes.removeFirst();
+            HaploidGenome hap2=haploidGenomes.removeFirst();
+            dipGenomes.add(new DiploidGenome(hap1,hap2));
+        }
 
+        DiploidGenomeWriter dw=new DiploidGenomeWriter(outputFile,haploid,logger);
+        dw.write(dipGenomes);
     }
 
 

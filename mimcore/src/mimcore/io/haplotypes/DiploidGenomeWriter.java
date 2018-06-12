@@ -16,12 +16,14 @@ public class DiploidGenomeWriter {
 	private BufferedWriter bf;
 	private final String outputFile;
 	private Logger logger;
-	public DiploidGenomeWriter(String outputFile, Logger logger)
+	private boolean haploid;
+	public DiploidGenomeWriter(String outputFile, boolean haploid, Logger logger)
 	{
 		// The extension will be decided at the level which output encoding should be used.
 		// Output encoding will be decided at this level, thus extension also here.
 		String gzipOutput=outputFile+".gz";
 		this.logger=logger;
+		this.haploid=haploid;
 		try
 		{
 			bf=new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(gzipOutput))));
@@ -33,15 +35,31 @@ public class DiploidGenomeWriter {
 		}
 		this.outputFile=gzipOutput;
 	}
+
+	public void write(ArrayList<DiploidGenome> genomes, ArrayList<Sex> sexes)
+	{
+		this.logger.info("Writing genomes to file " + this.outputFile);
+		if(!(genomes.size()>0)) throw new IllegalArgumentException("Invalid number of genomes for output, must be larger than zero");
+		writeSex(sexes);
+		writeHaplotypes(genomes);
+		this.logger.info("Finished writing "+genomes.size() +" genomes");
+	}
+
+	public void write(ArrayList<DiploidGenome> genomes)
+	{
+		this.logger.info("Writing genomes to file " + this.outputFile);
+		if(!(genomes.size()>0)) throw new IllegalArgumentException("Invalid number of genomes for output, must be larger than zero");
+		writeHaplotypes(genomes);
+		this.logger.info("Finished writing "+genomes.size() +" genomes");
+	}
 	
 
 	
-	public void write(ArrayList<DiploidGenome> genomes, ArrayList<Sex> sexes)
+	private void writeHaplotypes(ArrayList<DiploidGenome> genomes)
 	{
-		this.logger.info("Writing diploid genomes to file " + this.outputFile);
-		if(!(genomes.size()>0)) throw new IllegalArgumentException("Invalid number of genomes for output, must be larger than zero");
+
 		ArrayList<HaploidGenome> haploids=this.getHaploids(genomes);
-		if(sexes!=null)	writeSex(sexes);
+
 	
 		SNPCollection scol=haploids.get(0).getSNPCollection();
 		for(int i=0; i<scol.size(); i++)
@@ -83,12 +101,12 @@ public class DiploidGenomeWriter {
 			e.printStackTrace();
 			System.exit(0);
 		}
-		
-		this.logger.info("Finished writing "+genomes.size() +" diploid genomes");
+
 	}
 
 	private void writeSex(ArrayList<Sex> sexes)
 	{
+		if(sexes!=null)	return;
 		StringBuilder sb = new StringBuilder();
 		sb.append("#sex");
 		for(Sex s: sexes)
@@ -150,7 +168,7 @@ public class DiploidGenomeWriter {
 		{
 			sb.append(" ");
 			sb.append(chars.get(i));
-			sb.append(chars.get(i+1));
+			if(!haploid)sb.append(chars.get(i+1));
 		}
 		return sb.toString();
 		

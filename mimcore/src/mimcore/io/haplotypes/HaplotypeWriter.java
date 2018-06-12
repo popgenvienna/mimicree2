@@ -49,7 +49,7 @@ public class HaplotypeWriter {
 		if(sexes!=null)
 		{
 			int dipcount=haplotypes.size()/2;
-			if(dipcount!=sexes.size()) throw new IllegalArgumentException("Number of sexes does not match number of diploids");
+			if(dipcount!=sexes.size()) throw new IllegalArgumentException("Number of sexes does not match number of individuals");
 			writeSex(sexes);
 		}
 		SNPCollection scol=haplotypes.get(0).getSNPCollection();
