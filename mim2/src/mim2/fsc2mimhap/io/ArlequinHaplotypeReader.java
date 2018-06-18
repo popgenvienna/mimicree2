@@ -54,7 +54,7 @@ class ArlequinHaplotypeReader {
 					BitArrayBuilder bab=new BitArrayBuilder(snpcol.size());
 					for(int i=0; i<alleles.length;i++)
 					{
-						if(alleles[i]==snpcol.getSNPforIndex(i).derivedAllele()) bab.setBit(i);
+						if(alleles[i]==snpcol.getSNPforIndex(i).ancestralAllele()) bab.setBit(i);
 					}
 					haplotypeCollection.add(bab);
 					if(haploid) haplotypeCollection.add(bab);  // nice trick if haploid just add twice

@@ -31,8 +31,7 @@ public class MatingFunctionFecundity implements IMatingFunction {
 		this.selfingRate=selfingRate;
 		ArrayList<Specimen> popSpecimen=pop.getSpecimen();
 
-		// Two individuals are enough to mate diploids;
-		if(popSpecimen.size()<2)throw new IllegalArgumentException("Population size must be larger than or equal to two; Selection strength to high?");
+		if(popSpecimen.size()<1) throw new IllegalArgumentException("Population size to small; population died out");
 
 		ArrayList<Specimen> afh=new ArrayList<Specimen>();
 		ArrayList<Specimen> amh=new ArrayList<Specimen>();

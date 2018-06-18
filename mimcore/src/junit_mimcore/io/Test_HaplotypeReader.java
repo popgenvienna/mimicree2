@@ -4,6 +4,7 @@ import junit_mimcore.factories.GenomicDataFactory;
 import mimcore.data.haplotypes.HaploidGenome;
 import mimcore.data.haplotypes.SNPCollection;
 import mimcore.data.sex.Sex;
+import mimcore.data.sex.SexAssignerDirect;
 import mimcore.io.haplotypes.HaplotypeReader;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -45,6 +46,21 @@ public class Test_HaplotypeReader {
 
 		;
 		return new HaplotypeReader(input, false, GenomicDataFactory.getNullLogger(),true);
+	}
+
+	public static HaplotypeReader getHaploidHaplotypeReader()
+	{
+		String input=
+				"# comment\n"+
+						"#sex   	    F  M   F  M  H \n" +
+						"2R\t10\tG\tA/G\tA A A A G\n"+
+						"3L\t20\tG\tC/G\tG C G C G\n"+
+						"3R\t30\tA\tT/A\tT T A A T\n"+
+						"X\t40\tT\tG/T\tT G G T G\n"+
+						"X\t50\tT\tT/C\tC T C T C\n";
+
+		;
+		return new HaplotypeReader(input, true, GenomicDataFactory.getNullLogger(),true);
 	}
 	
 	@Test
@@ -184,6 +200,55 @@ public class Test_HaplotypeReader {
 		assertEquals(ha.getAllele(3),'G');
 		assertEquals(ha.getAllele(4),'T');
 	}
-	
+
+	@Test
+	public void haploidHaplotype_basic()
+	{
+		ArrayList<HaploidGenome> g=getHaploidHaplotypeReader().getHaplotypes();
+		assertEquals(g.size(),10);
+	}
+
+	@Test
+	public void haploidHaplotype_sex()
+	{
+		ArrayList<Sex> ss=getHaploidHaplotypeReader().getSexAssigner().getSexes(5,new Random());
+		assertEquals(ss.get(0),Sex.Female);
+		assertEquals(ss.get(1),Sex.Male);
+		assertEquals(ss.get(2),Sex.Female);
+		assertEquals(ss.get(3),Sex.Male);
+		assertEquals(ss.get(4),Sex.Hermaphrodite);
+	}
+
+	@Test
+	public void haploidHaplotype_alleles1()
+	{
+		ArrayList<HaploidGenome> g=getHaploidHaplotypeReader().getHaplotypes();
+		assertEquals(g.get(0).getAllele(0),'A');
+		assertEquals(g.get(1).getAllele(0),'A');
+		assertEquals(g.get(8).getAllele(0),'G');
+		assertEquals(g.get(9).getAllele(0),'G');
+	}
+	@Test
+	public void haploidHaplotype_alleles2()
+	{
+		ArrayList<HaploidGenome> g=getHaploidHaplotypeReader().getHaplotypes();
+		assertEquals(g.get(0).getAllele(1),'G');
+		assertEquals(g.get(1).getAllele(1),'G');
+		assertEquals(g.get(2).getAllele(1),'C');
+		assertEquals(g.get(3).getAllele(1),'C');
+		assertEquals(g.get(8).getAllele(1),'G');
+		assertEquals(g.get(9).getAllele(1),'G');
+	}
+
+	/**
+	 * 		String input=
+	 "# comment\n"+
+	 "#sex   	    F  M   F  M  H \n" +
+	 "2R\t10\tG\tA/G\tA A A A G\n"+
+	 "3L\t20\tG\tC/G\tG C G C G\n"+
+	 "3R\t30\tA\tT/A\tT T A A T\n"+
+	 "X\t40\tT\tG/T\tT G G T G\n"+
+	 "X\t50\tT\tT/C\tC T C T C\n";
+	 */
 
 }

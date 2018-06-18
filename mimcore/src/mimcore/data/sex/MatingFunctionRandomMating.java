@@ -30,7 +30,7 @@ public class MatingFunctionRandomMating implements IMatingFunction {
 		this.selfingRate=selfingRate;
 
 		this.fmh=new ArrayList<Specimen>(pop.getSpecimen());
-		if(this.fmh.size()<=2)throw new IllegalArgumentException("Population size must be larger than two; Selection strength to high?");
+		if(fmh.size()<1) throw new IllegalArgumentException("Population size to small; population died out");
 
 		ArrayList<Specimen> afh = new ArrayList<Specimen>();
 		ArrayList<Specimen> amh = new ArrayList<Specimen>();
@@ -81,10 +81,12 @@ public class MatingFunctionRandomMating implements IMatingFunction {
 
 		if(s1.getSex()==Sex.Male)
 		{
+			if(fh.size()<1) throw new IllegalArgumentException("No sex partner found for a male; population died out");
 			s2=this.fh.get(random.nextInt(fh.size()));
 		}
 		else if(s1.getSex()==Sex.Female)
 		{
+			if(mh.size()<1) throw new IllegalArgumentException("No sex partner found for a female; population died out");
 			s2=this.mh.get(random.nextInt(this.mh.size()));
 		}
 		else if(s1.getSex()==Sex.Hermaphrodite)
@@ -94,6 +96,7 @@ public class MatingFunctionRandomMating implements IMatingFunction {
 			if(random.nextDouble()<this.selfingRate) s2=s1;
 			else
 			{
+				if(this.fmh.size()<2) throw new IllegalArgumentException("No sex partner found for hermaphrodite; population died out");
 				// no selfing; ensure no selfing, not even randomly. thus s1==s2
 				s2=this.fmh.get(random.nextInt(this.fmh.size()));
 				while(s1==s2) s2=this.fmh.get(random.nextInt(this.fmh.size()));
