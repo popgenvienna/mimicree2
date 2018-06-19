@@ -18,8 +18,8 @@ def get_popline(popsize,frequency, haploids, hardy):
           omf=1.0-frequency
           cA=int(frequency*frequency*popsize)
           cB=int(omf*omf*popsize)
-          cAB=1.0-cA-cB
-          ar= ["GG"]*cA+["GA"]*cAB+["AA"]*cB
+          cAB=int(popsize-cA-cB)
+          ar= ["GG",]*cA+["GA",]*cAB+["AA",]*cB
           return " ".join(ar)
      else:
           countA=int(frequency*popsize)
