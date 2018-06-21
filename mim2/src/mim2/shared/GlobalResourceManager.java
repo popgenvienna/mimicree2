@@ -129,6 +129,7 @@ public class GlobalResourceManager {
         SexedDiploids sd=dgr.readGenomes();
         if(sd.countMales()>0) throw new IllegalArgumentException("It is not allowed to specify male-haplotypes for clonal evolution, solely hermaphrodites or no sex is allowed");
         if(sd.countFemales()>0) throw new IllegalArgumentException("It is not allowed to specify female-haplotypes for clonal evolution, solely hermaphrodites or no sex is allowed");
+        sexInfo.setHemizygousSite(sd.getDiploids().get(0).getHaplotypeA().getSNPCollection());
 
         ArrayList<Chromosome> chromosomes=sd.getDiploids().get(0).getHaplotypeA().getSNPCollection().getChromosomes();
         recombinationGenerator = new RecombinationGenerator(CrossoverGenerator.getDefault(), new RandomAssortmentGenerator(chromosomes,true));

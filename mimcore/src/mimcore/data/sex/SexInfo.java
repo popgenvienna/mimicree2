@@ -43,6 +43,7 @@ public class SexInfo {
         this.selfingRate=selfingRate;
         if(selfingRate<0.0) throw new IllegalArgumentException("Selfing rate must not be smaller than zero");
         if(selfingRate>1.0) throw new IllegalArgumentException("Selfing rate can not exceed 1.0");
+        if(hemizygousChromosomes==null) throw new IllegalArgumentException("Can not generate SexInfo; hemizygous sex chromosomes have not been initated properly");
         this.hemizygousChromosomes=hemizygousChromosomes;
         sexchrsites=null;
     }
