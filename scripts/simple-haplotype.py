@@ -12,19 +12,19 @@ def get_popline(popsize,frequency, haploids, hardy):
      if(haploids):
           countA=int(frequency*popsize)
           countB=popsize-countA
-          ar=["A",]*countA+["G",]*countB
+          ar=["G",]*countB+["A",]*countA
           return " ".join(ar)
      if(hardy):
           omf=1.0-frequency
           cA=int(frequency*frequency*popsize)
           cB=int(omf*omf*popsize)
           cAB=int(popsize-cA-cB)
-          ar= ["AA",]*cA+["GA",]*cAB+["GG",]*cB
+          ar= ["GG",]*cB+["GA",]*cAB+["AA",]*cA
           return " ".join(ar)
      else:
           countA=int(frequency*popsize)
           countB=popsize-countA
-          ar=["AA",]*countA+["GG",]*countB
+          ar=["GG",]*countB+["AA",]*countA
           return " ".join(ar)
 
 def sitepos(leng,sites):
