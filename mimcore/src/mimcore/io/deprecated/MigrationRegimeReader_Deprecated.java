@@ -1,4 +1,4 @@
-package mimcore.io.migrationRegime;
+package mimcore.io.deprecated;
 
 import mimcore.data.gpf.survival.ISelectionRegime;
 import mimcore.data.migration.IMigrationRegime;

@@ -68,7 +68,7 @@ public class SNPFitnessReaderS {
 		// 3R      23302904      G/C      1.0    0.8     0.9
 
 		//(GenomicPosition position, char achar, double a, double d)
-		String[] a=line.split("\t");
+		String[] a=line.split("\\s+");
 		GenomicPosition gp=new GenomicPosition(Chromosome.getChromosome(a[0]),Integer.parseInt(a[1]));
 		String alleles=a[2];
 		String[] tmp = alleles.split("/");

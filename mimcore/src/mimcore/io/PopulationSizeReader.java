@@ -53,7 +53,7 @@ public class PopulationSizeReader {
 			String line=null;
 			while((line=bf.readLine())!=null)
 			{
-				String[] a=line.split("\t");
+				String[] a=line.split("\\s+");
 				if(a.length!=2) throw new IllegalArgumentException("Invalid population size entry, must have 2 columns "+line);
 
 				int generation=Integer.parseInt(a[0]);

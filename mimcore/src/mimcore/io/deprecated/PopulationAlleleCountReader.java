@@ -1,7 +1,9 @@
-package mimcore.io.haplotypes;
+/**
+package mimcore.io.deprecated;
 
 import mimcore.data.haplotypes.*;
 import mimcore.data.statistic.*;
+import mimcore.io.haplotypes.HaplotypeSNPReader;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -74,3 +76,4 @@ public class PopulationAlleleCountReader {
 
 
 }
+ **/

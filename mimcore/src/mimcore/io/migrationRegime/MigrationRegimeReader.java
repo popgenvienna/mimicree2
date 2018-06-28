@@ -71,7 +71,8 @@ public class MigrationRegimeReader {
 		{
 			while((line=bf.readLine())!=null)
 			{
-				String[] a=line.split("\t");
+
+				String[] a=line.split("\\s+");
 				if(a.length>3 || a.length<2) throw new IllegalArgumentException("Invalid migration entry, must have 2 or 3 columns "+line);
 
 				int generation=Integer.parseInt(a[0]);

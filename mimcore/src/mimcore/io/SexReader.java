@@ -110,7 +110,7 @@ public class SexReader {
 	{
 		HashMap<Sex,HashSet<Chromosome>> toret=new HashMap<Sex,HashSet<Chromosome>>();
 		String[] a={val};
-		if(val.contains(" "))a=val.split(" ");
+		if(val.contains(" ")|| val.contains("\t"))a=val.split("\\s+");
 		for(String t:a)
 		{
 			String[] b=t.split(":");

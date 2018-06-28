@@ -101,9 +101,9 @@ public class EpistasisFitnessReader {
 		// chr2    pos2    b/B
 		// waabb   waabB    waaBB    waAbb    waAbB    waABB    wAAbb    wAAbB    wAABB
 
-		String[] a1=lines[0].split("\t");
-		String[] a2=lines[1].split("\t");
-		String[] a3=lines[2].split("\t");
+		String[] a1=lines[0].split("\\s+");
+		String[] a2=lines[1].split("\\s+");
+		String[] a3=lines[2].split("\\s+");
 		if(a1.length!=3) throw new IllegalArgumentException("Invalid entry for first SNP of epistatic pair; must have 3 columns "+ lines[0]);
 		if(a2.length!=3) throw new IllegalArgumentException("Invalid entry for second SNP of epistatic pair; must have 3 columns "+ lines[1]);
 		if(a3.length!=9) throw new IllegalArgumentException("Invalid entry for fitness effects of epistatic pair; must have 9 columns "+ lines[2]);

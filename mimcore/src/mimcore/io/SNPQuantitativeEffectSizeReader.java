@@ -86,7 +86,7 @@ public class SNPQuantitativeEffectSizeReader {
 		//  3R      23302904        A       a    d
 
 		//(GenomicPosition position, char achar, double a, double d)
-		String[] a=line.split("\t");
+		String[] a=line.split("\\s+");
 		GenomicPosition gp=new GenomicPosition(Chromosome.getChromosome(a[0]),Integer.parseInt(a[1]));
 		String[] tmp=a[2].split("/");
 		char achar=tmp[0].charAt(0);

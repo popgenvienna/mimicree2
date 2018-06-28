@@ -42,7 +42,7 @@ public class SelectionRegimeDefaultReader {
 		{
 			while((line=bf.readLine())!=null)
 			{
-				String[] a=line.split("\t");
+				String[] a=line.split("\\s+");
 				assert(a.length==2);
 				int generation=Integer.parseInt(a[0]);
 				double selectionIntensity=Double.parseDouble(a[1]);

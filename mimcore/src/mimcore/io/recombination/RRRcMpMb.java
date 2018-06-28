@@ -39,7 +39,7 @@ public class RRRcMpMb {
 		// 2L:200000..300000       0.1
 		// 2L:300000..400000       3.1
 		
-		String[] a=line.split("\t");
+		String[] a=line.split("\\s+");
 		String[] tmp1=a[0].split(":");
 		String[] tmp2=tmp1[1].split("\\.\\.");
 		

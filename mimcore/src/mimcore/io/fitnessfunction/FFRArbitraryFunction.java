@@ -32,7 +32,7 @@ public class FFRArbitraryFunction {
 		{
 			while((line=bf.readLine())!=null)
 			{
-				String[] a=line.split("\t");
+				String[] a=line.split("\\s+");
 				if(a.length!=3) throw new IllegalArgumentException("Every entry in the fitness function file must have exactly three columns (tab separated)");
 
 

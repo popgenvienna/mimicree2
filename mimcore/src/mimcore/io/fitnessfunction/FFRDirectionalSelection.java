@@ -30,7 +30,7 @@ public class FFRDirectionalSelection {
 		{
 			while((line=bf.readLine())!=null)
 			{
-				String[] a=line.split("\t");
+				String[] a=line.split("\\s+");
 				if(a.length!=6) throw new IllegalArgumentException("Every entry of the directional selection fitness function file must have exactly six columns (tab separated)");
 				int generation=Integer.parseInt(a[0]);
 				double minFitness=Double.parseDouble(a[1]);

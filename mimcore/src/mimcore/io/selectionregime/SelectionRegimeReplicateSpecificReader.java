@@ -52,7 +52,7 @@ public class SelectionRegimeReplicateSpecificReader {
 		{
 			while((line=bf.readLine())!=null)
 			{
-				String[] a=line.split("\t");
+				String[] a=line.split("\\s+");
 				assert(a.length==3);
 				SelEntry se=new SelEntry();
 				se.generation=Integer.parseInt(a[0]);

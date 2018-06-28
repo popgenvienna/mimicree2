@@ -71,4 +71,5 @@ public class RecombinationWindowSexSpecific implements IRecombinationWindow {
 	public double getMaleLambda(){return this.mlambda;}
 	public double getFemaleLambda(){return this.flambda;}
 	public double getHermaphroditeLambda(){return this.hlambda;}
+
 }

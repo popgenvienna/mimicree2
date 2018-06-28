@@ -1,4 +1,5 @@
-package mimcore.io.haplotypes;
+/**
+package mimcore.io.deprecated;
 
 import mimcore.data.Chromosome;
 import mimcore.data.GenomicPosition;
@@ -96,6 +97,7 @@ class SinglePopulationAlleleCountReader {
 		assert(gp!=null);
 		return new HapFileContainer(gp,snplist);
 	}
+
 	
 	
 	
@@ -103,3 +105,4 @@ class SinglePopulationAlleleCountReader {
 	
 
 }
+ **/

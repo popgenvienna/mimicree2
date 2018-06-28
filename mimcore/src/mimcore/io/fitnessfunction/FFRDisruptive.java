@@ -30,7 +30,7 @@ public class FFRDisruptive {
 		{
 			while((line=bf.readLine())!=null)
 			{
-				String[] a=line.split("\t");
+				String[] a=line.split("\\s+");
 				if(a.length!=5) throw new IllegalArgumentException("Every entry in the disruptive fitness function file must have exactly five columns (tab separated)");
 				int generation=Integer.parseInt(a[0]);
 				double minFitness=Double.parseDouble(a[1]);

@@ -60,5 +60,6 @@ public class RecombinationWindow implements IRecombinationWindow {
 	public int getEndPosition(){return this.endPosition;}
 	public double getLambda(){return this.lambda;}
 
+
 	
 }
