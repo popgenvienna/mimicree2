@@ -20,16 +20,17 @@ class SelCoefProviderDefault:
 		self.het=het
 		
 	def getSH(self):
-		return ((self.selcoef,self.h))
+		return ((self.selcoef,self.het))
 
 
 class SelCoefProviderFile:
 	def __init__(self,file):
 		scl=[]
 		for l in open(file):
-			a=l.rstrip("\t").split(" ")
+			l=l.rstrip()
+			a=re.split("\s+",l)
 			if(len(a)!=2):
-				raise Exception("Wrong format of selection coefficients; must have two columns; space separated")
+				raise Exception("Wrong format of selection coefficients; must have two columns; space separated"+a)
 			scl.append(a)
 		self.scl=scl
 	
@@ -82,22 +83,22 @@ Authors
 parser.add_argument("--mimhap", type=str, required=True, dest="mimhap", default=None, help="the name of the chromosomes")
 parser.add_argument("--effect-file", type=str, required=False, dest="effectfile", default=None, help="a file with effect sizes; optional")
 parser.add_argument("--n", type=int, required=True, dest="numsel", default=None, help="the number of SNPs to pick")
-parser.add_argument("--e", type=float, required=False, dest="het", default=None, help="the heterozygous effect of the SNPs")
+parser.add_argument("--e", type=float, required=False, dest="het", default=0.5, help="the heterozygous effect of the SNPs")
 parser.add_argument("--s", type=float, required=False, dest="selcoef", default=None, help="the heterozygous effect of the SNPs")
-parser.add_argument("--f", type=float, required=False, dest="minfreq", default=None, help="the heterozygous effect of the SNPs")
+parser.add_argument("--f", type=float, required=False, dest="minfreq", default=0.0, help="the heterozygous effect of the SNPs")
 
 
 args = parser.parse_args()
 
 provider=None
 if(args.effectfile is not None):
-	provider=SelCoefProviderDefault(args.effectfile)
+	provider=SelCoefProviderFile(args.effectfile)
 else:
+	if(args.selcoef is None):
+		parser.print_usage()
+		raise Exception("either a default selection coefficient --s or a file with selection coefficients --effect-file must be provided")
 	provider=SelCoefProviderDefault(args.selcoef,args.het)
 	
-
-h=float(args.het)
-s=float(args.selcoef)
 f=float(args.minfreq)
 
 mimhap=args.mimhap
@@ -108,7 +109,7 @@ else:
      fh=open(mimhap)
 cand=[]
 
-for line in open(fh):
+for line in fh:
 	line=line.rstrip()
 	(chr,pos,anc,der,minorfreq)=parse_line(line)
 	if(minorfreq<f):
