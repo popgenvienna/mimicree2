@@ -14,16 +14,16 @@ class SelectedCandidate:
 		self.der=der
 		
 
-class SelCoefProviderDefault:
-	def __init__(self,selcoef,het):
-		self.selcoef=selcoef
-		self.het=het
+class ProviderDefault:
+	def __init__(self,a,d):
+		self.a=a
+		self.d=d
 		
-	def getSH(self):
-		return ((self.selcoef,self.het))
+	def getAD(self):
+		return ((self.a,self.d))
 
 
-class SelCoefProviderFile:
+class ProviderFile:
 	def __init__(self,file):
 		scl=[]
 		for l in open(file):
@@ -34,7 +34,7 @@ class SelCoefProviderFile:
 			scl.append(a)
 		self.scl=scl
 	
-	def getSH(self):
+	def getAD(self):
 		# random choice is with replacment
 		return random.choice(self.scl)
 
@@ -69,7 +69,7 @@ def parse_line(line):
 parser = argparse.ArgumentParser(description="""           
 Description
 -----------
-    Generate haplotypes suitable for MimicrEE2""",formatter_class=argparse.RawDescriptionHelpFormatter,
+    Randomly pick QTLs  MimicrEE2""",formatter_class=argparse.RawDescriptionHelpFormatter,
 epilog="""
 Prerequisites
 -------------
@@ -83,8 +83,8 @@ Authors
 parser.add_argument("--mimhap", type=str, required=True, dest="mimhap", default=None, help="the name of the chromosomes")
 parser.add_argument("--effect-file", type=str, required=False, dest="effectfile", default=None, help="a file with effect sizes; optional")
 parser.add_argument("--n", type=int, required=True, dest="numsel", default=None, help="the number of SNPs to pick")
-parser.add_argument("--e", type=float, required=False, dest="het", default=0.5, help="the heterozygous effect of the SNPs")
-parser.add_argument("--s", type=float, required=False, dest="selcoef", default=None, help="the heterozygous effect of the SNPs")
+parser.add_argument("--d", type=float, required=False, dest="dom", default=0.0, help="dominance effect for a QTL")
+parser.add_argument("--a", type=float, required=False, dest="add", default=None, help="the additive effect of a QTL")
 parser.add_argument("--f", type=float, required=False, dest="minfreq", default=0.0, help="the heterozygous effect of the SNPs")
 
 
@@ -92,12 +92,12 @@ args = parser.parse_args()
 
 provider=None
 if(args.effectfile is not None):
-	provider=SelCoefProviderFile(args.effectfile)
+	provider=ProviderFile(args.effectfile)
 else:
-	if(args.selcoef is None):
+	if(args.add is None):
 		parser.print_usage()
 		raise Exception("either a default selection coefficient --s or a file with selection coefficients --effect-file must be provided")
-	provider=SelCoefProviderDefault(args.selcoef,args.het)
+	provider=ProviderDefault(args.add,args.dom)
 	
 f=float(args.minfreq)
 
@@ -123,7 +123,6 @@ if(len(cand)<args.numsel):
 selected=random.sample(cand,args.numsel)
 
 
-print("[s]")
 for t in selected:
 	o=[]
 	o.append(t.chr)
@@ -132,8 +131,8 @@ for t in selected:
 		o.append(t.anc+"/"+t.der)
 	else:
 		o.append(t.der+"/"+t.anc)
-	s,h=provider.getSH()
-	o.append(str(s))
-	o.append(str(h))
+	a,d=provider.getAD()
+	o.append(str(a))
+	o.append(str(d))
 	tmp="\t".join(o)
 	print tmp

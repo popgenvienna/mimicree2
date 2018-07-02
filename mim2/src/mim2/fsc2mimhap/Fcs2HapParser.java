@@ -57,11 +57,14 @@ public class Fcs2HapParser {
     public static void printHelpMessage()
     {
         StringBuilder sb=new StringBuilder();
-        sb.append("arp2mimhap: convert Arlequin input data into MimicrEE2 haplotypes\n");
+        sb.append("arp2mimhap - convert Arlequin input data into MimicrEE2 haplotypes\n");
+        sb.append("example usage:\njava -jar mim2.jar arp2mimhap --input input.arp --output output.mimhap.gz --chrname 2L \n\n");
+        sb.append("Mandatory parameters:\n");
         sb.append(CommandFormater.format("--input","an arp file; haplotypes in Arlequin format",null));
         sb.append(CommandFormater.format("--output","the output file: MimimcrEE2 haplotypes",null));
         sb.append(CommandFormater.format("--chrname","chromosome name to be used in the MimicrEE2 haplotype file",null));
-        sb.append(CommandFormater.format("--haploid","generate haploid genomes instead of diploid ones; optional",null));
+        sb.append("\nOptional parameters:\n");
+        sb.append(CommandFormater.format("--haploid","generate haploid genomes instead of diploid ones",null));
         sb.append(CommandFormater.format("--help","print the help",null));
         System.out.print(sb.toString());
         System.exit(1);

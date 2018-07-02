@@ -72,7 +72,7 @@ public class Main {
 		public static String getgeneralHelp()
 		{
 			StringBuilder sb=new StringBuilder();
-			sb.append("Usage: java -Xmx4g -jar mim2.jar [subtask] [parameters of subtask]\n\n");
+			sb.append("usage: java -Xmx4g -jar mim2.jar [subtask] [parameters of subtask]\n\n");
 			sb.append("== Main tasks ==\n");
 			sb.append(CommandFormater.format("w","simulate selection for loci having a given absolute fitness (w..fitness)",null));
 			sb.append(CommandFormater.format("qt","simulate truncating selection for a quantitative trait (qt..quantitative truncating)",null));
@@ -96,7 +96,7 @@ public class Main {
 
 		public static String getVersionNumber()
 		{
-			return "v0.20.5";
+			return "v0.20.6";
 		}
 
 

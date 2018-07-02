@@ -177,24 +177,33 @@ public class QsCommandLineParser {
 	public static void printHelpMessage()
 	{
 		StringBuilder sb=new StringBuilder();
-		sb.append("qff: Simulate selection for a quantitative trait mapping to fitness using a fitness function\n");
+		sb.append("qff - simulate selection for a quantitative trait mapping to fitness using a fitness function\n");
+		sb.append("example usage\n");
+		sb.append("java -jar mim2.jar qff --haplotypes-g0 basepop.mimhap.gz --effect-size mysnps.txt --snapshots 25,50,100 --fitness-function gaussian.txt --heritability 0.8 --output-sync simresults.sync\n\n");
+		sb.append("Mandatory parameters:\n");
 		sb.append(CommandFormater.format("--haplotypes-g0","the haplotype file",null));
-		sb.append(CommandFormater.format("--population-size","a file with the population size during the simulations",null));
-		sb.append(CommandFormater.format("--effect-size","the causative SNPs and their effect sizes",null));
-		sb.append(CommandFormater.format( "--ve", "environmental variance; either --ve or --heritability needs to be provided", null));
-		sb.append(CommandFormater.format("--heritability", "heritability; either --ve or --heritability needs to be provided", null));
-		sb.append(CommandFormater.format("--recombination-rate","a file with the recombination rate for windows of fixed size; optional",null));
-		sb.append(CommandFormater.format("--chromosome-definition","which chromosomes parts constitute a chromosome",null));
-		sb.append(CommandFormater.format("--sex","a file specifying the sex ratios",null));
-		sb.append(CommandFormater.format("--snapshots","a coma separated list of generations to output; applies to all outputs per default",null));
+		sb.append(CommandFormater.format("--fitness-function","a fitness function for mapping the phenotype to fitness",null));
+
+
+		sb.append("\nSemi-mandatory parameters:\n");
+		sb.append(CommandFormater.format("--snapshots","a comma separated list of generations to output; per default applies to all outputs; at least one of the four --snapshots* need to be provided",null));
 		sb.append(CommandFormater.format("--snapshots-sync","use a distinct list of output generations for --output-sync",null));
 		sb.append(CommandFormater.format("--snapshots-dir","use a distinct list of output generations for --output-dir",null));
 		sb.append(CommandFormater.format("--snapshots-gpf","use a distinct list of output generations for --output-gpf",null));
-		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated",null));
-		sb.append(CommandFormater.format("--output-sync","the output file (sync); --output-dir or --output-sync or both may be provided",null));
-		sb.append(CommandFormater.format("--output-dir","the output directory for the haplotypes; --output-dir or --output-sync or both may be provided",null));
-		sb.append(CommandFormater.format("--output-gpf","the output file for genotype/phenotype/fitness; optional",null));
-		sb.append(CommandFormater.format("--fitness-function","a fitness function for mapping the phenotype to fitness; either --fitness-function or --gauss-fitness-function may be provided",null));
+		sb.append(CommandFormater.format("--output-sync","the output file (sync); at least one of the three --output* must be provided",null));
+		sb.append(CommandFormater.format("--output-dir","the output directory for the haplotypes",null));
+		sb.append(CommandFormater.format("--output-gpf","the output file for genotype/phenotype/fitness",null));
+		sb.append(CommandFormater.format("--ve", "environmental variance; either --ve or --heritability needs to be provided", null));
+		sb.append(CommandFormater.format("--heritability", "heritability; either --ve or --heritability needs to be provided", null));
+
+
+		sb.append("\nOptional parameters:\n");
+		sb.append(CommandFormater.format("--effect-size","the causative SNPs and their effect sizes",null));
+		sb.append(CommandFormater.format("--replicate-runs","how often should the simulation be repeated","1"));
+		sb.append(CommandFormater.format("--sex","a file specifying the sex ratios",null));
+		sb.append(CommandFormater.format("--chromosome-definition"," define which chromosomes parts constitute a chromosome",null));
+		sb.append(CommandFormater.format("--population-size","a file with the population size during the simulations",null));
+		sb.append(CommandFormater.format("--recombination-rate","a file with the recombination rate for windows of fixed size",null));
 		sb.append(CommandFormater.format("--migration-regime","the migration regime; migration from the base population to the evolved populations",null));
 		sb.append(CommandFormater.format("--mutation-rate","the mutation rate per site","0.0"));
 		sb.append(CommandFormater.format("--haploid","perform haploid simulations; precludes specifying hemizygous sex chromosomes",null));

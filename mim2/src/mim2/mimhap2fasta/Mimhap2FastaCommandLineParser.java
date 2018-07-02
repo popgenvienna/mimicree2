@@ -89,14 +89,18 @@ public class Mimhap2FastaCommandLineParser {
 	public static void printHelpMessage()
 	{
 		StringBuilder sb=new StringBuilder();
-		sb.append("mimhap2fasta: convert MimicrEE2 haplotypes into fasta sequences\n");
+		sb.append("mimhap2fasta - convert MimicrEE2 haplotypes into fasta sequences\n");
+		sb.append("example usage:\njava -jar mim2.jar mimhap2fasta --mimhap input.mimhap.gz --reference refgenome.fasta --output-fasta converted.fasta \n\n");
+		sb.append("Mandatory parameters:\n");
 		sb.append(CommandFormater.format("--mimhap","the haplotype file",null));
 		sb.append(CommandFormater.format("--reference","the reference genome",null));
 		sb.append(CommandFormater.format("--output-fasta","the output file; save all fasta entries in one file; either --output-fasta or --output-dir needs to be provided",null));
 		sb.append(CommandFormater.format("--output-dir","the output directory; save fasta entries in separate files; either --output-fasta or --output-dir needs to be provided",null));
+
+		sb.append("\nOptional parameters:\n");
 		sb.append(CommandFormater.format("--split-chromosomes","flag; only valid with --output-dir; in addition to haploid genomes save each chromosome in a separate file",null));
-		sb.append(CommandFormater.format("--stringent","report an error if reference characters do not match (fasta vs haplotype file)",null));
-		sb.append(CommandFormater.format("--haploid","haploid genomes have been simulated",null));
+		sb.append(CommandFormater.format("--stringent","flag; report an error if reference characters do not match (--reference vs --mimhap)",null));
+		sb.append(CommandFormater.format("--haploid","haploid genomes have been simulated; default=diploid",null));
 		sb.append(CommandFormater.format("--help","print the help",null));
 		System.out.print(sb.toString());
 		System.exit(1);

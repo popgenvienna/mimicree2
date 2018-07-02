@@ -95,10 +95,11 @@ public class GlobalResourceManager {
 
     private static void setOutput(String outputSync, String outputGPF, String outputDir)
     {
+
+        if((outputDir == null) && (outputSync==null)&& (outputGPF==null)) throw new IllegalArgumentException("No output was provided; Provide either an output directory or an output sync file or an output GPF file");
+
         if(outputGPF == null) logger.info("No output genotype/phenotype/fitness file provided; will not record GPF");
         else try {new File(outputGPF).createNewFile();} catch(IOException e) {throw new IllegalArgumentException("Can not create GPF output file "+outputGPF);}
-
-        if((outputDir == null) && (outputSync==null)) throw new IllegalArgumentException("No output was provided; Provide either an output directory or an output sync file or both");
 
         if(outputDir== null) logger.info("No output director found; Will not record haplotypes");
         else if(! new File(outputDir).exists()) throw new IllegalArgumentException("The provided output directory does not exist "+outputDir);
