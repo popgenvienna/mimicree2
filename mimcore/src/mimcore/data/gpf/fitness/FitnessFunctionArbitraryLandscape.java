@@ -44,10 +44,47 @@ public class FitnessFunctionArbitraryLandscape implements IFitnessCalculator {
 		if(phenotype <= this.lowest.getPhenotypicValue()) return this.lowest.getFitness();
 		if(phenotype >= this.highest.getPhenotypicValue()) return this.highest.getFitness();
 
-		double fitness=binarySearchAndInterpolateFitness(phenotype);
+		double fitness=romod(phenotype);
 		return fitness;
 
 	}
+
+	private  double romod(double phenotypicValue)
+	{
+		// binary search to speed it up with many entries...
+		// lowest and highest index
+		int minBound = 0;
+		int maxBound = entries.size() - 1;
+
+		while(maxBound-minBound>1) {
+
+			int middleBound = (minBound + maxBound) / 2;
+			double middlePheno=entries.get(middleBound).getPhenotypicValue();
+
+
+			if(middlePheno == phenotypicValue) {
+				// Jackpot: we found the value; just return the fitness; not expected to happen often...
+				return entries.get(middleBound).getFitness();
+			}
+			else if(middlePheno < phenotypicValue) {
+				minBound = middleBound;
+			}
+			else if(middlePheno > phenotypicValue) {
+				maxBound = middleBound;
+			}
+			else throw new IllegalArgumentException("OK something went terribly wrong during binary search; 1");
+		}
+
+
+		// interpolate between the two values
+		if(entries.get(minBound).getPhenotypicValue()==phenotypicValue) return entries.get(minBound).getFitness(); // first check if identical
+		else if(entries.get(minBound).getPhenotypicValue()<phenotypicValue && entries.get(maxBound).getPhenotypicValue()>phenotypicValue) return interpolateFitness(minBound, maxBound, phenotypicValue);
+		else throw new IllegalArgumentException("Algorithm assumption violated; contact programmer; 3");
+
+	}
+
+	/**
+	 *
 
 	private  double binarySearchAndInterpolateFitness(double phenotypicValue)
 	{
@@ -59,22 +96,23 @@ public class FitnessFunctionArbitraryLandscape implements IFitnessCalculator {
 		while(high > low) {
 
 			int middle = (low + high) / 2;
+			double middlePheno=entries.get(middle).getPhenotypicValue();
 
 
-			if(entries.get(middle).getPhenotypicValue() == phenotypicValue) {
+			if(middlePheno == phenotypicValue) {
 				// Jackpot: we found the value; just return the fitness; not expected to happen often...
 				return entries.get(middle).getFitness();
 			}
-			else if(entries.get(middle).getPhenotypicValue() < phenotypicValue) {
+			else if(middlePheno < phenotypicValue) {
 				low = middle + 1;
 			}
-			else if(entries.get(middle).getPhenotypicValue() > phenotypicValue) {
+			else if(middlePheno > phenotypicValue) {
 				high = middle - 1;
 			}
 			else throw new IllegalArgumentException("OK something went terribly wrong during binary search; 1");
 		}
 
-		if(low!=high) throw new IllegalArgumentException("Algorithm assumption violated; contact programmer; 2");
+		if(low!=high) throw new IllegalArgumentException("Algorithm assumption violated; contact programmer; 2; low="+low+" high="+high);
 
 		// interpolate between the two values
 		if(entries.get(low).getPhenotypicValue()==phenotypicValue) return entries.get(low).getFitness(); // first check if identical
@@ -83,6 +121,7 @@ public class FitnessFunctionArbitraryLandscape implements IFitnessCalculator {
 		else throw new IllegalArgumentException("Algorithm assumption violated; contact programmer; 3");
 
 	}
+	 */
 
 	private double interpolateFitness(int lowIndex, int highIndex,double phenotype)
 	{

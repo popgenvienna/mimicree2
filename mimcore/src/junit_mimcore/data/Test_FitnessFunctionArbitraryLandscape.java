@@ -29,6 +29,36 @@ public class Test_FitnessFunctionArbitraryLandscape {
         assertEquals(ff.getFitness(null,1.0,m),1.0,0.0000000001);
     }
 
+    @Test
+    public void negative_landscape() {
+
+        FitnessFunctionArbitraryLandscape ff= QsDataFactory.getNegPos();
+
+        Sex m= Sex.Male;
+        assertEquals(ff.getFitness(null,-2,m),0.0,0.0000000001);
+        assertEquals(ff.getFitness(null,-1.5,m),0.25,0.0000000001);
+        assertEquals(ff.getFitness(null,-1,m),0.5,0.0000000001);
+        assertEquals(ff.getFitness(null,-0.5,m),0.75,0.0000000001);
+        assertEquals(ff.getFitness(null,0,m),1,0.0000000001);
+        assertEquals(ff.getFitness(null,1,m),0.5,0.0000000001);
+
+    }
+
+    @Test
+    public void negative_landscape_benjaminWoelfl() {
+
+        FitnessFunctionArbitraryLandscape ff= QsDataFactory.getErrorBenjamin();
+
+        Sex m= Sex.Male;
+        assertEquals(ff.getFitness(null,-0.005050505,m),0.988241199,0.000001);
+        assertEquals(ff.getFitness(null,0,m),0.9879937,0.000001);
+        assertEquals(ff.getFitness(null,0.4949495,m),0.9514924,0.000001);
+        assertEquals(ff.getFitness(null,-0.4949495,m),0.9999975,0.000001);
+
+
+
+    }
+
 
     @Test
     public void boundaries_of_linear_landscape() {
