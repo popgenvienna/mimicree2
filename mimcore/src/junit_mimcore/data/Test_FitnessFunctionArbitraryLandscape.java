@@ -54,7 +54,9 @@ public class Test_FitnessFunctionArbitraryLandscape {
         assertEquals(ff.getFitness(null,0,m),0.9879937,0.000001);
         assertEquals(ff.getFitness(null,0.4949495,m),0.9514924,0.000001);
         assertEquals(ff.getFitness(null,-0.4949495,m),0.9999975,0.000001);
-
+        assertEquals(ff.getFitness(null,-0.5,m),0.999995,0.000001);
+        assertEquals(ff.getFitness(null,0.5,m),0.950995,0.000001);
+        assertEquals(ff.getFitness(null,0.489898989898,m),0.9519898984,0.000001);
 
 
     }
