@@ -39,11 +39,41 @@ public class Test_FitnessFunctionReader {
 
 	}
 
+	public static FitnessFunctionReader getGaussSexSpecific()
+	{
+		String input=
+						"[stabilizing]\n"+
+						"1\t0.5\t1.2\t10\t3\t2.0\t2.3\t20\t22\t3.0\t3.3\t30\t33\n"+
+						"10\t0.5\t1.2\t20\t3\t2.0\t2.4\t40\t55\t3.0\t3.3\t60\t66\n"+
+						"20\t0.5\t1.2\t30\t3\n";
+
+
+
+		BufferedReader br=new BufferedReader(new StringReader(input));
+		return new FitnessFunctionReader("fakefile",br, SharedFactory.getNullLogger());
+
+	}
+
 	public static FitnessFunctionReader getDisruptive()
 	{
 		String input=
 				"[disruptive]\n"+
 						"1\t0.5\t1.2\t10\t3\n"+
+						"10\t0.5\t1.2\t20\t3\n"+
+						"20\t0.5\t1.2\t30\t3\n";
+
+
+
+		BufferedReader br=new BufferedReader(new StringReader(input));
+		return new FitnessFunctionReader("fakefile",br, SharedFactory.getNullLogger());
+
+	}
+
+	public static FitnessFunctionReader getDisruptiveSexSpecific()
+	{
+		String input=
+				"[disruptive]\n"+
+						"1\t0.5\t1.2\t10\t3\t2.0\t2.3\t20\t22\t3.0\t3.3\t30\t33\n"+
 						"10\t0.5\t1.2\t20\t3\n"+
 						"20\t0.5\t1.2\t30\t3\n";
 
@@ -131,6 +161,35 @@ public class Test_FitnessFunctionReader {
 		assertEquals(g.getMaxFitness(),1.2,0.000001);
 		assertEquals(g.getMean(),10,0.000001);
 		assertEquals(g.getStdev(),3,0.000001);
+	}
+
+	@Test
+	public void gauss_sex_specific()
+	{
+		FitnessFunctionContainer ffc=getGaussSexSpecific().readFitnessFunction();
+		//if (!(o instanceof SNP)) {
+		//"1\t0.5\t1.2\t10\t3     2.0\t2.3\t20\t22\t    3.0\t3.3\t30\t33\n"+
+		FitnessCalculatorSexSpecific fcss=(FitnessCalculatorSexSpecific)ffc.getFitnessCalculator(1,1);
+
+		FitnessFunctionQuantitativeGauss m=(FitnessFunctionQuantitativeGauss)fcss.getMale();
+		assertEquals(m.getMinFitness(),0.5,0.000001);
+		assertEquals(m.getMaxFitness(),1.2,0.000001);
+		assertEquals(m.getMean(),10,0.000001);
+		assertEquals(m.getStdev(),3,0.000001);
+
+
+		FitnessFunctionQuantitativeGauss f=(FitnessFunctionQuantitativeGauss)fcss.getFemale();
+		assertEquals(f.getMinFitness(),2.0,0.000001);
+		assertEquals(f.getMaxFitness(),2.3,0.000001);
+		assertEquals(f.getMean(),20,0.000001);
+		assertEquals(f.getStdev(),22,0.000001);
+
+		FitnessFunctionQuantitativeGauss h=(FitnessFunctionQuantitativeGauss)fcss.getHermaphrodite();
+		assertEquals(h.getMinFitness(),3.0,0.000001);
+		assertEquals(h.getMaxFitness(),3.3,0.000001);
+		assertEquals(h.getMean(),30,0.000001);
+		assertEquals(h.getStdev(),33,0.000001);
+
 	}
 
 	@Test
@@ -245,6 +304,36 @@ public class Test_FitnessFunctionReader {
 		assertEquals(g.getMaxFitness(),1.2,0.000001);
 		assertEquals(g.getMean(),10,0.000001);
 		assertEquals(g.getStdev(),3,0.000001);
+	}
+
+	@Test
+	public void disruptive_sex_specific()
+	{
+		FitnessFunctionContainer ffc=getDisruptiveSexSpecific().readFitnessFunction();
+		//if (!(o instanceof SNP)) {
+		//SNP tc = (SNP) o;
+		FitnessCalculatorSexSpecific ff=(FitnessCalculatorSexSpecific)ffc.getFitnessCalculator(1,1);
+		FitnessFunctionQuantitativeDisruptive m=(FitnessFunctionQuantitativeDisruptive)ff.getMale();
+		FitnessFunctionQuantitativeDisruptive f=(FitnessFunctionQuantitativeDisruptive)ff.getFemale();
+		FitnessFunctionQuantitativeDisruptive h=(FitnessFunctionQuantitativeDisruptive)ff.getHermaphrodite();
+
+
+// "1\t0.5\t1.2\t10\t3\   t2.0\t2.3\t20\t22\    t3.0\t3.3\t30\t33\n"+
+		assertEquals(m.getMinFitness(),0.5,0.000001);
+		assertEquals(m.getMaxFitness(),1.2,0.000001);
+		assertEquals(m.getMean(),10,0.000001);
+		assertEquals(m.getStdev(),3,0.000001);
+
+		assertEquals(f.getMinFitness(),2.0,0.000001);
+		assertEquals(f.getMaxFitness(),2.3,0.000001);
+		assertEquals(f.getMean(),20,0.000001);
+		assertEquals(f.getStdev(),22,0.000001);
+
+		assertEquals(h.getMinFitness(),3.0,0.000001);
+		assertEquals(h.getMaxFitness(),3.3,0.000001);
+		assertEquals(h.getMean(),30,0.000001);
+		assertEquals(h.getStdev(),33,0.000001);
+
 	}
 
 
