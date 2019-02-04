@@ -3,6 +3,7 @@ package junit_mimcore.data;
 import junit_mimcore.factories.QsDataFactory;
 import static org.junit.Assert.*;
 
+import mimcore.data.gpf.fitness.IFitnessCalculator;
 import mimcore.data.sex.Sex;
 import org.junit.Test;
 import mimcore.data.gpf.fitness.FitnessFunctionArbitraryLandscape;
@@ -47,7 +48,7 @@ public class Test_FitnessFunctionArbitraryLandscape {
     @Test
     public void negative_landscape_benjaminWoelfl() {
 
-        FitnessFunctionArbitraryLandscape ff= QsDataFactory.getErrorBenjamin();
+        IFitnessCalculator ff= QsDataFactory.getErrorBenjamin();
 
         Sex m= Sex.Male;
         assertEquals(ff.getFitness(null,-0.005050505,m),0.988241199,0.000001);

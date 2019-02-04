@@ -106,7 +106,7 @@ public class QsDataFactory {
 
     }
 
-    public static FitnessFunctionArbitraryLandscape getErrorBenjamin()
+    public static IFitnessCalculator getErrorBenjamin()
     {
         String benstring=
                 "[interpolate]\n"+
@@ -214,8 +214,8 @@ public class QsDataFactory {
         BufferedReader br=new BufferedReader(new StringReader(benstring));
 
         FitnessFunctionContainer cont= new FitnessFunctionReader("fakefile",br, SharedFactory.getNullLogger()).readFitnessFunction();
-        FitnessFunctionArbitraryLandscape ffal=(FitnessFunctionArbitraryLandscape)cont.getFitnessCalculator(1,1);
-        return ffal;
+        return cont.getFitnessCalculator(1,1);
+
     }
 
 

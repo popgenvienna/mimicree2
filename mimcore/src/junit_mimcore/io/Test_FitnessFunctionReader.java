@@ -165,6 +165,29 @@ public class Test_FitnessFunctionReader {
 		return new FitnessFunctionReader("fakefile",br, SharedFactory.getNullLogger());
 
 	}
+
+
+	public static FitnessFunctionReader getInterpolateSexSpecific()
+	{
+		String input=
+				"[interpolate]\n"+
+						"1\t0.0\t0.0\t0.1\t0.10\n" +
+						"1\t0.5\t1.0\t0.2\t0.9\n" +
+						"1\t1.0\t2.0\t0.3\t0.8\n" +
+						"1\t1.5\t3.0\t0.4\t0.7\n" +
+						"1\t2.0\t4.0\t0.5\t0.6\n" +
+						"5\t0.0\t1.2\t0.6\t0.5\n" +
+						"5\t0.5\t1.1\t0.7\t0.4\n" +
+						"5\t1.0\t0.8\t0.8\t0.3\n" +
+						"5\t1.5\t1.2\t0.9\t0.2\n" +
+						"5\t2.0\t1.3\t0.10\t0.1\n";
+
+
+
+		BufferedReader br=new BufferedReader(new StringReader(input));
+		return new FitnessFunctionReader("fakefile",br, SharedFactory.getNullLogger());
+
+	}
 	
 	@Test
 	public void gauss_correctly_identified()
@@ -287,11 +310,18 @@ public class Test_FitnessFunctionReader {
 	{
 		FitnessFunctionContainer ffc=getInterpolate().readFitnessFunction();
 
+		IFitnessCalculator tt=ffc.getFitnessCalculator(1,1);
 
-		assertTrue(ffc.getFitnessCalculator(1,1) instanceof FitnessFunctionArbitraryLandscape);
-		assertTrue(ffc.getFitnessCalculator(10,1) instanceof FitnessFunctionArbitraryLandscape);
-		assertTrue(ffc.getFitnessCalculator(1,10) instanceof FitnessFunctionArbitraryLandscape);
-		assertTrue(ffc.getFitnessCalculator(1,20) instanceof FitnessFunctionArbitraryLandscape);
+
+		assertTrue(((FitnessCalculatorSexSpecific)tt).getMale() instanceof FitnessFunctionArbitraryLandscape);
+		assertTrue(((FitnessCalculatorSexSpecific)tt).getFemale() instanceof FitnessFunctionArbitraryLandscape);
+		assertTrue(((FitnessCalculatorSexSpecific)tt).getHermaphrodite() instanceof FitnessFunctionArbitraryLandscape);
+		tt=ffc.getFitnessCalculator(10,1);
+		assertTrue(((FitnessCalculatorSexSpecific)tt).getMale() instanceof FitnessFunctionArbitraryLandscape);
+		tt=ffc.getFitnessCalculator(1,10);
+		assertTrue(((FitnessCalculatorSexSpecific)tt).getHermaphrodite() instanceof FitnessFunctionArbitraryLandscape);
+		tt=ffc.getFitnessCalculator(1,20);
+		assertTrue(((FitnessCalculatorSexSpecific)tt).getHermaphrodite() instanceof FitnessFunctionArbitraryLandscape);
 
 	}
 
@@ -301,10 +331,41 @@ public class Test_FitnessFunctionReader {
 	{
 		FitnessFunctionContainer ffc=getInterpolate().readFitnessFunction();
 		Sex m= Sex.Male;
-		FitnessFunctionArbitraryLandscape g=(FitnessFunctionArbitraryLandscape)ffc.getFitnessCalculator(1,1);
+		IFitnessCalculator g=ffc.getFitnessCalculator(1,1);
 		assertEquals(g.getFitness(null,0,m),0.0,0.00001);
 		assertEquals(g.getFitness(null,0.5,m),1.0,0.00001);
 		assertEquals(g.getFitness(null,1.7,m),3.4,0.00001);
+	}
+
+	@Test
+	public void interpolate_sex_specific()
+	{
+		/*
+						"1\t0.0\t0.0\t0.1\t0.10\n" +
+						"1\t0.5\t1.0\t0.2\t0.9\n" +
+						"1\t1.0\t2.0\t0.3\t0.8\n" +
+						"1\t1.5\t3.0\t0.4\t0.7\n" +
+						"1\t2.0\t4.0\t0.5\t0.6\n" +
+						"5\t0.0\t1.2\t0.6\t0.5\n" +
+						"5\t0.5\t1.1\t0.7\t0.4\n" +
+						"5\t1.0\t0.8\t0.8\t0.3\n" +
+						"5\t1.5\t1.2\t0.9\t0.2\n" +
+						"5\t2.0\t1.3\t0.10\t0.1\n";
+		 */
+		FitnessFunctionContainer ffc=getInterpolateSexSpecific().readFitnessFunction();
+		Sex m= Sex.Male;
+		IFitnessCalculator g=ffc.getFitnessCalculator(1,1);
+		assertEquals(g.getFitness(null,0.0,m),0.0,0.00001);
+		assertEquals(g.getFitness(null,0.5,m),1.0,0.00001);
+		assertEquals(g.getFitness(null,1.7,m),3.4,0.00001);
+		Sex f= Sex.Female;
+		assertEquals(g.getFitness(null,0.0,f),0.1,0.00001);
+		assertEquals(g.getFitness(null,0.5,f),0.2,0.00001);
+		assertEquals(g.getFitness(null,2.0,f),0.5,0.00001);
+		Sex h= Sex.Hermaphrodite;
+		assertEquals(g.getFitness(null,0.0,h),0.10,0.00001);
+		assertEquals(g.getFitness(null,0.5,h),0.9,0.00001);
+		assertEquals(g.getFitness(null,2.0,h),0.6,0.00001);
 
 	}
 
