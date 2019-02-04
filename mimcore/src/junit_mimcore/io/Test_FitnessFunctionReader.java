@@ -114,6 +114,21 @@ public class Test_FitnessFunctionReader {
 
 	}
 
+	public static FitnessFunctionReader getDirselSexSpecific()
+	{
+		String input=
+				"[dirsel]\n"+
+						"1\t0.5\t1.2\t10\t-0.4\t5\t0.6\t1.3\t11\t-0.5\t6\t0.7\t1.4\t12\t-0.6\t7\n"+
+						"10\t0.5\t1.2\t20\t3\t2\n"+
+						"20\t0.5\t1.2\t30\t3\t10\n";
+
+
+
+		BufferedReader br=new BufferedReader(new StringReader(input));
+		return new FitnessFunctionReader("fakefile",br, SharedFactory.getNullLogger());
+
+	}
+
 	public static FitnessFunctionReader getInterpolate()
 	{
 		String input=
@@ -274,6 +289,38 @@ public class Test_FitnessFunctionReader {
 		assertEquals(g.getS(),10,0.000001);
 		assertEquals(g.getR(),-0.4,0.000001);
 		assertEquals(g.getBeta(),5,0.000001);
+	}
+
+	@Test
+	public void directional_selection_sex_specific() {
+		FitnessFunctionContainer ffc = getDirselSexSpecific().readFitnessFunction();
+
+		//"1\t0.5\t1.2\t10\t-0.4\t5\t0.6\t1.3\t11\t-0.5\t6\t0.7\t1.4\t12\t-0.6\t7\n"+
+		FitnessCalculatorSexSpecific ff = (FitnessCalculatorSexSpecific) ffc.getFitnessCalculator(1, 1);
+
+
+		FitnessFunctionQuantitativeDirectionalSelection m = (FitnessFunctionQuantitativeDirectionalSelection) ff.getMale();
+		FitnessFunctionQuantitativeDirectionalSelection f = (FitnessFunctionQuantitativeDirectionalSelection) ff.getFemale();
+		FitnessFunctionQuantitativeDirectionalSelection h = (FitnessFunctionQuantitativeDirectionalSelection) ff.getHermaphrodite();
+
+		assertEquals(m.getMinFitness(), 0.5, 0.000001);
+		assertEquals(m.getMaxFitness(), 1.2, 0.000001);
+		assertEquals(m.getS(), 10, 0.000001);
+		assertEquals(m.getR(), -0.4, 0.000001);
+		assertEquals(m.getBeta(), 5, 0.000001);
+
+
+		assertEquals(f.getMinFitness(), 0.6, 0.000001);
+		assertEquals(f.getMaxFitness(), 1.3, 0.000001);
+		assertEquals(f.getS(), 11, 0.000001);
+		assertEquals(f.getR(), -0.5, 0.000001);
+		assertEquals(f.getBeta(), 6, 0.000001);
+
+		assertEquals(h.getMinFitness(),0.7,0.000001);
+		assertEquals(h.getMaxFitness(),1.4,0.000001);
+		assertEquals(h.getS(),12,0.000001);
+		assertEquals(h.getR(),-0.6,0.000001);
+		assertEquals(h.getBeta(),7,0.000001);
 	}
 
 
