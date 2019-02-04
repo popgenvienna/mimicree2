@@ -87,8 +87,23 @@ public class Test_FitnessFunctionReader {
 	public static FitnessFunctionReader getDimret()
 	{
 		String input=
-						"[dimret]\n"+
+				"[dimret]\n"+
 						"1\t0.5\t1.2\t10\t3\n"+
+						"10\t0.5\t1.2\t20\t3\n"+
+						"20\t0.5\t1.2\t30\t3\n";
+
+
+
+		BufferedReader br=new BufferedReader(new StringReader(input));
+		return new FitnessFunctionReader("fakefile",br, SharedFactory.getNullLogger());
+
+	}
+
+	public static FitnessFunctionReader getDimretSexSpecific()
+	{
+		String input=
+						"[dimret]\n"+
+						"1\t0.5\t1.2\t10\t3\t0.6\t1.3\t11\t4\t0.7\t1.4\t12\t5\n"+
 						"10\t0.5\t1.2\t20\t3\n"+
 						"20\t0.5\t1.2\t30\t3\n";
 
@@ -232,6 +247,38 @@ public class Test_FitnessFunctionReader {
 		assertEquals(g.getMaxFitness(),1.2,0.000001);
 		assertEquals(g.getAlpha(),10,0.000001);
 		assertEquals(g.getBeta(),3,0.000001);
+	}
+
+
+	@Test
+	public void diminishing_returns_sex_specific()
+	{
+		FitnessFunctionContainer ffc=getDimretSexSpecific().readFitnessFunction();
+		//if (!(o instanceof SNP)) {
+		//SNP tc = (SNP) o;
+		FitnessCalculatorSexSpecific ff=(FitnessCalculatorSexSpecific)ffc.getFitnessCalculator(1,1);
+
+		FitnessFunctionQuantitativeDimRet m=(FitnessFunctionQuantitativeDimRet)ff.getMale();
+		FitnessFunctionQuantitativeDimRet f=(FitnessFunctionQuantitativeDimRet)ff.getFemale();
+		FitnessFunctionQuantitativeDimRet h=(FitnessFunctionQuantitativeDimRet)ff.getHermaphrodite();
+
+
+		assertEquals(m.getMinFitness(),0.5,0.000001);
+		assertEquals(m.getMaxFitness(),1.2,0.000001);
+		assertEquals(m.getAlpha(),10,0.000001);
+		assertEquals(m.getBeta(),3,0.000001);
+
+
+		assertEquals(f.getMinFitness(),0.6,0.000001);
+		assertEquals(f.getMaxFitness(),1.3,0.000001);
+		assertEquals(f.getAlpha(),11,0.000001);
+		assertEquals(f.getBeta(),4,0.000001);
+
+
+		assertEquals(h.getMinFitness(),0.7,0.000001);
+		assertEquals(h.getMaxFitness(),1.4,0.000001);
+		assertEquals(h.getAlpha(),12,0.000001);
+		assertEquals(h.getBeta(),5,0.000001);
 	}
 
 
